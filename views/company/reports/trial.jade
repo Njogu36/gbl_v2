@@ -1,0 +1,558 @@
+doctype html
+html
+  head
+    meta(http-equiv='X-UA-Compatible' content='IE=edge,chrome=1')
+    title Reports | GBL CENTUM
+    meta(content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport')
+    link(rel='shortcut icon', type='image/x-icon', href='/images/icon.png')
+    link(rel='stylesheet' href='/admin/assets/css/bootstrap.min.css')
+    link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i')
+    link(rel='stylesheet' href='/admin/assets/css/ready.css')
+    link(rel='stylesheet' href='/admin/assets/css/demo.css')
+    // DATABLES
+    link(rel="stylesheet", href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css")
+    link(rel="stylesheet", href="https://cdn.datatables.net/buttons/1.6.4/css/buttons.dataTables.min.css")
+  body
+    .wrapper
+      .main-header
+        .logo-header
+          a.logo(href='#')
+            img(src=company.logo,width='70px', alt="")
+          button.navbar-toggler.sidenav-toggler.ml-auto(type='button' data-toggle='collapse' data-target='collapse' aria-controls='sidebar' aria-expanded='false' aria-label='Toggle navigation')
+            span.navbar-toggler-icon
+          button.topbar-toggler.more
+            i.la.la-ellipsis-v
+        nav.navbar.navbar-header.navbar-expand-lg
+          .container-fluid
+            
+            ul.navbar-nav.topbar-nav.ml-md-auto.align-items-center
+              
+              
+              li.nav-item.dropdown
+                a.dropdown-toggle.profile-pic(data-toggle='dropdown' href='#' aria-expanded='false')
+                  img.img-circle(src='/images/user.png' alt='user-img' width='36')
+                  span #{user.first_name} #{user.last_name}
+                ul.dropdown-menu.dropdown-user
+                  
+                
+                  a.dropdown-item(href='/company/log_out')
+                    i.fa.fa-power-off
+                    |  Logout
+                // /.dropdown-user
+      .sidebar
+        .scrollbar-inner.sidebar-wrapper
+          .user
+            .photo
+              img(src='/images/user.png')
+            .info
+              a(data-toggle='collapse' href='#collapseExample' aria-expanded='true')
+                span
+                  | #{user.first_name} #{user.last_name}
+                  span.user-level Company
+                  
+              .clearfix
+              
+                 
+          ul.nav
+            
+            li.nav-item
+              a(href='/company/employees')
+                i.la.la-users
+                p Employees
+                span.badge.badge-primary #{employees.length}
+            li.nav-item
+              a(href='/company/leaves')
+                i.la.la-keyboard-o
+                p Leaves
+                if leaves2.length > 0
+                 span.badge.badge-primary #{leaves2.length}
+            li.nav-item
+              a(href='/company/expenses')
+                i.la.la-th-list
+                p Expenses
+                if expenses2.length > 0
+                 span.badge.badge-primary #{expenses2.length}
+               
+          
+            li.nav-item
+              a(href='/company/reports')
+                i.la.la-signal
+                p Reports
+               
+            if user.role ==='super admin'  
+              li.nav-item
+                a(href='/company/settings')
+                  i.la.la-gear
+                  p Settings
+             
+                
+            
+      .main-panel
+        .content
+          .container-fluid
+            h4.page-title Reports
+            .row
+             .col-md-12
+              != messages('message', locals)
+            .row
+              .col-md-12
+               form.form(action='/company/generate_report' method='POST')
+                .row
+                
+                 .col-md-3
+                  label(for='name') Choose Payment Method
+                  select.form-control(name="payment")
+                   option(value='') Choose Payment Method
+                   option(value='Mobile Money') Mobile Money
+                   option(value='Bank Transfer') Bank Transfer
+                 .col-md-3
+                  label(for='name') Choose Deduction
+                  select.form-control(name='deduct')
+                   option(value='') Choose a deduction
+                   each deduct in deducts
+                     option(value=deduct.title) #{deduct.title}
+                     
+                 .col-md-3
+                  label(for='name') Choose Loan
+                  select.form-control(name='loan')
+                   option(value='') Choose a loan
+                   each loan in loans
+                     option(value=loan.title) #{loan.title}
+                   
+                .row(style='margin-top:5px')
+                 .col-md-3
+                  label(for='name') Choose month
+                  input.form-control(type='month' name='month' required)
+                 .col-md-3
+                  
+                  button.btn.btn-primary.btn-block(style='margin-top:26px') Generate Report
+            .row(style='margin-top:25px')
+
+                .col-md-12(style='margin-bottom:20px')
+                 if table !==0
+                  a.btn.btn-success(style='float:right;margin-right:10px;margin-bottom:10px' onclick='SendEmail();')
+                    i.la.la-file-pdf-o
+                    &nbsp;
+                    | Download PDF
+              
+                 .col-md-12(style='margin-top:20px')
+                      // All
+                      if table === 0
+                        div(style='overflow-x:scroll')
+                          table.table.mytable#pay
+                              thead
+                               tr
+                                th No
+                                th Fullname
+                                th Status
+                                th Month
+                                th Year
+                                th Gross Pay
+                                th Net Pay
+                                th Tax Pay
+                                th Tax Exemption Amount
+                                th Total Relief Amount
+                                th Total Deduction Amount
+                                th Total Loan Amount
+                                th Total Expense Amount
+                                th Total Benefit Amount
+                                th Pension
+                                th Pension Amount
+                                
+                                th Tax Exemption Certificate
+                                th Payment Method
+                                
+                                th Mobile Network
+                                th Mobile Number
+                                th Bank Acc Name
+                                th Bank Acc Number
+                                th Bank Name
+                                th Bank Branch
+                                th Bank Branch Code
+                                th Date
+                                th Confirm
+                                
+                                
+                              tbody
+                               each pay in pays
+                                tr
+                                  td=pay.no
+                                  td #{pay.employee}
+                                  td 
+                                    if pay.status === 'Pending'
+                                      span.badge.badge-dark #{pay.status}
+                                    if pay.status === 'Confirmed'
+                                      span.badge.badge-success #{pay.status}
+                                  td=pay.month
+                                  td=pay.year
+                                  td  #{pay.gross_amount}
+                                  td  #{pay.net_amount}
+                                  td  #{pay.tax_amount}
+                                  td 
+                                   if pay.tax_exemption === true
+                                    | #{pay.tax_exemption_amount}
+                                   if pay.tax_exemption === false
+                                    | ....
+                                  td #{pay.relief_amount}
+                                  td  #{pay.deduction_amount}
+                                  td  #{pay.loan_amount}
+                                  td  #{pay.expense_amount}
+                                  td  #{pay.benefit_amount}
+                                  td #{pay.pension}
+                                  td
+                                   if pay.pension ===true
+                                    | #{pay.employee_pension}
+                                   if pay.pension ===false
+                                    | ....
+                                  td
+                                   if pay.tax_exemption === true
+                                    | #{pay.tax_certificate_number}
+                                   if pay.tax_exemption === false
+                                    | ....
+                                  td=pay.payment_method
+                                  td
+                                   if pay.payment_method === 'Mobile Money'
+                                    | #{pay.payment_details.mobile_network}
+                                   if pay.payment_method !== 'Mobile Money'
+                                    | ....
+                                  td
+                                   if pay.payment_method === 'Mobile Money'
+                                    | #{pay.payment_details.mobile_number}
+                                   if pay.payment_method !== 'Mobile Money'
+                                    | ....
+                                  td
+                                   if pay.payment_method === 'Bank Transfer'
+                                     | #{pay.payment_details.bank_account_name}
+                                   if pay.payment_method !== 'Bank Transfer'
+                                    | ....
+                                  td
+                                   if pay.payment_method === 'Bank Transfer'
+                                    | #{pay.payment_details.bank_account_no}
+                                   if pay.payment_method !== 'Bank Transfer'
+                                    | ....
+                                  td
+                                   if pay.payment_method === 'Bank Transfer'
+                                    | #{pay.payment_details.bank_name}
+                                   if pay.payment_method !== 'Bank Transfer'
+                                    | ....
+                                  td
+                                   if pay.payment_method === 'Bank Transfer'
+                                    | #{pay.payment_details.bank_branch}
+                                   if pay.payment_method !== 'Bank Transfer'
+                                    | ....
+                                  td
+                                   if pay.payment_method === 'Bank Transfer'
+                                    | #{pay.payment_details.bank_branch_code}
+                                   if pay.payment_method !== 'Bank Transfer'
+                                    | ....
+                                  td=pay.date
+                                  td
+                                   a(href="/company/view_pay2/#{pay.id}").btn.btn-primary
+                                    | View Pay
+                                   &nbsp;&nbsp;
+                                 
+
+                                 
+
+                     
+                      // Tax
+                      if table === 1
+                        table.table.mytable#tblCustomers
+                              thead
+                               tr
+                                th No
+                                th Employee
+                                th Status
+                                th KRA PIN
+                                th Tax Code
+                                th Tax Name
+                                th Tax Value
+                                th Amount
+                                th Month
+                                th Year
+                              tbody
+                               each pay in pays
+                                tr
+                                 td #{pay.no}
+                                 td #{pay.employee}
+                                 td
+                                  if pay.status ==='Confirmed'
+                                   span(style='background-color:green;padding:8px;color:white') #{pay.status}
+                                 td #{pay.emp.kra_pin}
+                                 td #{pay.tax_code}
+                                 td #{pay.tax_name}
+                                 td #{pay.tax_value}%
+                                 td #{pay.tax_amount}
+                                 td #{pay.month}
+                                 td #{pay.year}
+                                  
+                                
+
+
+                      // Mobile Money
+                      if table === 2
+                        table.table.mytable#tblCustomers
+                              thead
+                               tr
+                                th No
+                            
+                                th Employee
+                                th Department
+                                th Company
+                                th Status
+                                th Mobile Network
+                                th Mobile Number
+                                th Net Amount
+                                th Month
+                                th Year
+                              tbody
+                               each pay in pays
+                                tr
+                                 td #{pay.no}
+                                 td #{pay.employee}
+                                 td #{pay.emp.hr_details.department}
+                                 td #{pay.emp.hr_details.company}
+                                 td 
+                                  if pay.status ==='Confirmed'
+                                   span(style='background-color:green;padding:8px;color:white') #{pay.status}
+                                 td #{pay.payment_details.mobile_network}
+                                 td #{pay.payment_details.mobile_number}
+                                 td #{pay.net_amount}
+                                 td #{pay.month}
+                                 td #{pay.year}
+                      // Bank Transfer
+                      if table === 3
+                        table.table.mytable#tblCustomers
+                          thead
+                           tr
+                                th No
+                                th Employee
+                                th Department
+                                th Company
+                                th Status
+                                th Bank Acc Name
+                                th Bank Acc Number
+                                th Bank Name
+                                th Bank Branch
+                                th Bank Branch Code
+                                th Net Amount
+                                th Month
+                                th Year
+                          tbody
+                               each pay in pays
+                                tr
+                                 td #{pay.no}
+                                 td #{pay.employee}
+                                 td #{pay.emp.hr_details.department}
+                                 td #{pay.emp.hr_details.company}
+                                 td 
+                                  if pay.status ==='Confirmed'
+                                   span(style='background-color:green;padding:8px;color:white') #{pay.status}
+                                 td #{pay.payment_details.bank_account_name}
+                                 td #{pay.payment_details.bank_account_no}
+                                 td #{pay.payment_details.bank_name}
+                                 td #{pay.payment_details.bank_branch}
+                                 td #{pay.payment_details.bank_branch_code}
+                                 td #{pay.net_amount}
+                                 td #{pay.month}
+                                 td #{pay.year}
+
+                      // Loan
+                      if table === 4
+                        table.table.mytable#tblCustomers
+                          thead
+                           tr
+                                th No
+                                th Employee
+                                th Department
+                                th Company
+                               
+                                th Loan Type
+                                th Account/Bank Name
+                                th Account/Bank Number
+                                th Amount
+                                th Month
+                                th Year
+                          tbody
+                             each ar in arr
+                                tr
+                                 td #{ar.pay.no}
+                                 td #{ar.pay.emp.first_name} #{ar.pay.emp.last_name}
+                                 td #{ar.pay.emp.hr_details.department}
+                                 td #{ar.pay.emp.hr_details.company}
+                                 td #{ar.loan.type}
+                                 td 
+                                  if ar.loan.account_name === ''
+                                   p ....
+                                  if ar.loan.account_name!== ''
+                                   | #{ar.loan.account_name}
+                                 td 
+                                  if ar.loan.account_number === ''
+                                   p ....
+                                  if ar.loan.account_number!== ''
+                                   | #{ar.loan.account_number}
+                                 td #{ar.pay.emp.salary_details.payment_currency} #{ar.loan.amount}
+                                 td #{ar.pay.month}
+                                 td #{ar.pay.year}
+                               
+ 
+                      // Deduct
+                      if table === 5
+                        table.table.mytable#tblCustomers
+                          thead
+                           tr
+                                th No
+                                th Employee
+                                th Department
+                                th Company
+                                th Deduction Type
+                                th Account/Bank Name
+                                th Account/Bank Number
+                                th Amount
+                                th Month
+                                th Year
+                          tbody
+                               each ar in arr
+                                tr
+                                 td #{ar.pay.no}
+                                 td #{ar.pay.emp.first_name} #{ar.pay.emp.last_name}
+                                 td #{ar.pay.emp.hr_details.department}
+                                 td #{ar.pay.emp.hr_details.company}
+                                 td #{ar.deduct.type}
+                                 td 
+                                  if ar.deduct.account_name === ''
+                                   p ....
+                                  if ar.deduct.account_name!== ''
+                                   | #{ar.deduct.account_name}
+                                 td 
+                                  if ar.deduct.account_number === ''
+                                   p ....
+                                  if ar.deduct.account_number!== ''
+                                   | #{ar.deduct.account_number}
+                                 td #{ar.pay.emp.salary_details.payment_currency} #{ar.deduct.amount}
+                                 td #{ar.pay.month}
+                                 td #{ar.pay.year}
+                      // NHIF
+                      if table === 11
+                        table.table.mytable#tblCustomers
+                              thead
+                               tr
+                                th EMPLOYEE CODE
+                                th EMPLOYEE NAME
+                                th MONTH OF CONTRIBUTION
+                                th PAYROLL NO
+                                th LAST NAME
+                                th FIRST NAME
+                                th ID NO
+                                th NHIF NO
+                                th AMOUNT
+                                th TOTAL
+                              tbody
+                               each pay in arr
+                                tr
+                                 td #{pay.pay.emp.hr_details.job_number}
+                                 td #{pay.pay.employee}
+                                 td #{pay.pay.date}
+                                 td #{pay.pay.no}
+                                 td #{pay.pay.emp.last_name}
+                                 td #{pay.pay.emp.first_name}
+                                 td #{pay.pay.emp.id_number}
+                                 td #{pay.deduct.account_number}
+                                 td #{pay.pay.payment_currency} #{pay.amount}
+                                 td #{pay.pay.payment_currency} #{pay.amount}
+                      // NSSF
+                      if table === 12
+                        table.table.mytable#tblCustomers
+                              thead
+                               tr
+                                th PAYROLL NUMBER
+                                th SURNAME
+                                th OTHER NAMES
+                                th ID NO
+                                th NSSF NO
+                                th GROSS PAY
+                                th VOLUNTARY
+                               
+                              tbody
+                               each pay in arr
+                                tr
+                                 td #{pay.pay.no}
+                                 td #{pay.pay.emp.middle_name}
+                                 td #{pay.pay.employee}
+                                 td #{pay.pay.emp.id_number}
+                                 td #{pay.deduct.account_number}
+                                 td #{pay.pay.payment_currency} #{pay.pay.gross_amount}
+                                 td ....
+                                  
+                                
+                            
+                               
+
+
+                  
+                
+              
+           
+            
+        
+   
+    script(src='/admin/assets/js/core/jquery.3.2.1.min.js')
+    script(src='/admin/assets/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js')
+    script(src='/admin/assets/js/core/popper.min.js')
+    script(src='/admin/assets/js/core/bootstrap.min.js')
+    script(src='/admin/assets/js/plugin/chartist/chartist.min.js')
+    script(src='/admin/assets/js/plugin/chartist/plugin/chartist-plugin-tooltip.min.js')
+    
+    script(src='/admin/assets/js/plugin/bootstrap-toggle/bootstrap-toggle.min.js')
+    script(src='/admin/assets/js/plugin/jquery-mapael/jquery.mapael.min.js')
+    script(src='/admin/assets/js/plugin/jquery-mapael/maps/world_countries.min.js')
+    script(src='/admin/assets/js/plugin/chart-circle/circles.min.js')
+    script(src='/admin/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js')
+    script(src='/admin/assets/js/ready.min.js')
+    script(src='/admin/assets/js/demo.js')
+    // DATABLES
+    script(src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js")
+    script(src="https://cdn.datatables.net/buttons/1.6.4/js/dataTables.buttons.min.js")
+    script(src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.flash.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js")
+    script(src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.html5.min.js")
+    script(src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.print.min.js")
+    // PDF
+    script(type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.22/pdfmake.min.js')
+    script(type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js')
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/fonts/Roboto/Roboto-Medium.ttf")
+    script(type='text/javascript').
+        function SendEmail() {
+        html2canvas(document.getElementById('tblCustomers'), {
+        onrendered: function (canvas) {
+           
+        var data = canvas.toDataURL();
+        var docDefinition = {
+        watermark: { text: 'Confirmed', color: 'blue', opacity: 0.3, bold: true, italics: false },
+ 
+        content: [{
+        image: data,
+        width: 500
+        }]
+        };
+        pdfMake.createPdf(docDefinition).download( "Report.pdf");
+        }
+        });
+        }
+
+
+
+
+
+    script.
+       $(document).ready( function () {
+            $('.mytable').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
+            } );
+       })

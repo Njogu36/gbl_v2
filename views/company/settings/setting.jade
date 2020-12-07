@@ -1,0 +1,2286 @@
+doctype html
+html
+  head
+    meta(http-equiv='X-UA-Compatible' content='IE=edge,chrome=1')
+    title Settings | GBL CENTUM
+    meta(content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport')
+    link(rel='shortcut icon', type='image/x-icon', href='/images/icon.png')
+    link(rel='stylesheet' href='/admin/assets/css/bootstrap.min.css')
+    link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i')
+    link(rel='stylesheet' href='/admin/assets/css/ready.css')
+    link(rel='stylesheet' href='/admin/assets/css/demo.css')
+    // DATABLES
+    link(rel="stylesheet", href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css")
+    link(rel="stylesheet", href="https://cdn.datatables.net/buttons/1.6.4/css/buttons.dataTables.min.css")
+    style.
+      .value
+      {
+        display:none
+      }
+      #car_benefit{
+        display:none
+      }
+      #meal_allowance
+      {
+        display:none
+      }
+      #per_diem
+      {
+        display:none
+      }
+      #mobile
+      {
+        display:none
+      }
+      #furniture
+      {
+        display:none
+      }
+      #noncash
+      {
+        display:none
+      }
+      #month
+      {
+        display:none
+      }
+  body
+    .wrapper
+      .main-header
+        .logo-header
+          a.logo(href='#')
+            img(src=company.logo,width='70px', alt="")
+          button.navbar-toggler.sidenav-toggler.ml-auto(type='button' data-toggle='collapse' data-target='collapse' aria-controls='sidebar' aria-expanded='false' aria-label='Toggle navigation')
+            span.navbar-toggler-icon
+          button.topbar-toggler.more
+            i.la.la-ellipsis-v
+        nav.navbar.navbar-header.navbar-expand-lg
+          .container-fluid
+            
+            ul.navbar-nav.topbar-nav.ml-md-auto.align-items-center
+              
+              
+              li.nav-item.dropdown
+                a.dropdown-toggle.profile-pic(data-toggle='dropdown' href='#' aria-expanded='false')
+                  img.img-circle(src='/images/user.png' alt='user-img' width='36')
+                  span #{user.first_name} #{user.last_name}
+                ul.dropdown-menu.dropdown-user
+                  
+                
+                  a.dropdown-item(href='/company/log_out')
+                    i.fa.fa-power-off
+                    |  Logout
+                // /.dropdown-user
+      .sidebar
+        .scrollbar-inner.sidebar-wrapper
+          .user
+            .photo
+              img(src='/images/user.png')
+            .info
+              a(data-toggle='collapse' href='#collapseExample' aria-expanded='true')
+                span
+                  | #{user.first_name} #{user.last_name}
+                  span.user-level Company
+                  
+              .clearfix
+              
+                 
+          ul.nav
+            
+            li.nav-item
+              a(href='/company/employees')
+                i.la.la-users
+                p Employees
+                span.badge.badge-primary #{employees.length}
+            li.nav-item
+              a(href='/company/leaves')
+                i.la.la-keyboard-o
+                p Leaves
+                if leaves2.length > 0
+                 span.badge.badge-primary #{leaves2.length}
+            li.nav-item
+              a(href='/company/expenses')
+                i.la.la-th-list
+                p Expenses
+                if expenses2.length > 0
+                 span.badge.badge-primary #{expenses2.length}
+               
+          
+            li.nav-item
+              a(href='/company/reports')
+                i.la.la-signal
+                p Reports
+            if user.role ==='super admin'  || user.role ==='HR admin'
+              li.nav-item
+                a(href='/company/settings')
+                  i.la.la-gear
+                  p Settings
+             
+                
+            
+      .main-panel
+        .content
+          .container-fluid
+            h4.page-title Settings
+            .row
+             .col-md-12 
+              != messages('message', locals)
+             .col-md-12
+               ul#myTab.nav.nav-tabs(role='tablist')
+                li.nav-item
+                    a#home-tab.nav-link.active(data-toggle='tab' href='#hrm' role='tab' aria-controls='hrm' aria-selected='true') HRM Settings
+                li.nav-item
+                    a#profile-tab.nav-link(data-toggle='tab' href='#payroll' role='tab' aria-controls='payroll' aria-selected='false') Payroll Settings
+                li.nav-item
+                    a#profile-tab.nav-link(data-toggle='tab' href='#companies' role='tab' aria-controls='companies' aria-selected='false') Subsidiaries
+                li.nav-item
+                    a#leaves-tab.nav-link(data-toggle='tab' href='#leaves' role='tab' aria-controls='leaves' aria-selected='false') Leaves
+                li.nav-item
+                    a#expenses-tab.nav-link(data-toggle='tab' href='#expenses' role='tab' aria-controls='expenses' aria-selected='false') Expenses
+                li.nav-item
+                    a#users-tab.nav-link(data-toggle='tab' href='#users' role='tab' aria-controls='users' aria-selected='false') Users
+               #myTabContent.tab-content
+                // HRM 
+                #hrm.tab-pane.fade.show.active(role='tabpanel' aria-labelledby='hrm-tab') 
+                  .row(style='margin-top:20px')
+                    .col-md-12
+                     
+                     ul#myTab.nav.nav-tabs(role='tablist')
+                        li.nav-item
+                            a#job-tab.nav-link.active(data-toggle='tab' href='#job' role='tab' aria-controls='job' aria-selected='true') Job Titles
+                        li.nav-item
+                            a#departments-tab.nav-link(data-toggle='tab' href='#departments' role='tab' aria-controls='departments' aria-selected='false') Departments
+                        li.nav-item
+                            a#regions-tab.nav-link(data-toggle='tab' href='#regions' role='tab' aria-controls='regions' aria-selected='false') Regions
+                        li.nav-item
+                            a#work_shift-tab.nav-link(data-toggle='tab' href='#work_shift' role='tab' aria-controls='work_shift' aria-selected='false') Work Shifts
+                     #myTabContent.tab-content  
+                        // Job Title
+                        #job.tab-pane.fade.show.active(role='tabpanel' aria-labelledby='job-tab')     
+                         .row(style='margin-top:20px')
+                           .col-md-12(style='float:right')
+                             button.btn.btn-primary(data-toggle="modal" data-target="#jobtitle")
+                              i.la.la-plus
+                              &nbsp;
+                              | Add New Job Title
+                         .row(style='margin-top:20px')
+                           .col-md-12
+                             table.table.mytable
+                              thead
+                               tr
+                                th Title
+                                th Created By
+                                th Created On
+                                th Actions
+                              tbody
+                               each job in job_titles
+                                tr
+                                 td=job.title
+                                 td=job.created_by
+                                 td=job.created_on
+                                 td
+                                  a(href="/company/edit_job_title/#{job.id}" data-toggle="modal" data-target="#editJobTitle" data-whatever=job.id)
+                                   i.la.la-edit
+                                  a(href="/company/delete_job_title/#{job.id}") 
+                                   i.la.la-trash(style='color:red')
+
+                        // Department         
+                        #departments.tab-pane.fade.show(role='tabpanel' aria-labelledby='departments-tab')     
+                         .row(style='margin-top:20px')
+                           .col-md-12(style='float:right')
+                             button.btn.btn-primary(data-toggle="modal" data-target="#department")
+                              i.la.la-plus
+                              &nbsp;
+                              | Add New Department
+                         .row(style='margin-top:20px')
+                           .col-md-12
+                             table.table.mytable
+                              thead
+                               tr
+                                th Title
+                                th Created By
+                                th Created On
+                                th Actions
+                              tbody
+                               each department in departments
+                                tr
+                                 td=department.title
+                                 td=department.created_by
+                                 td=department.created_on
+                                 td
+                                  a(href="/company/edit_department_title/#{department.id}" data-toggle="modal" data-target="#editDepartmentTitle" data-whatever=department.id)
+                                   i.la.la-edit
+                                  a(href="/company/delete_department_title/#{department.id}") 
+                                   i.la.la-trash(style='color:red')
+                        
+                        // Regions       
+                        #regions.tab-pane.fade.show(role='tabpanel' aria-labelledby='regions-tab')     
+                         .row(style='margin-top:20px')
+                           .col-md-12(style='float:right')
+                             button.btn.btn-primary(data-toggle="modal" data-target="#region")
+                              i.la.la-plus
+                              &nbsp;
+                              | Add New Region
+                         .row(style='margin-top:20px')
+                           .col-md-12
+                             table.table.mytable
+                              thead
+                               tr
+                                th Name
+                                th Actions
+                              tbody
+                               each region in regions
+                                tr
+                                 td=region.title
+                                 td
+                                  a(href="/company/edit_region_title/#{region.id}" data-toggle="modal" data-target="#editRegionTitle" data-whatever=region.id)
+                                   i.la.la-edit
+                                  a(href="/company/delete_region_title/#{region.id}") 
+                                   i.la.la-trash(style='color:red')
+                                
+                        // Work Shift    
+                        #work_shift.tab-pane.fade.show(role='tabpanel' aria-labelledby='regions-tab')     
+                         .row(style='margin-top:20px')
+                           .col-md-12(style='float:right')
+                             button.btn.btn-primary(data-toggle="modal" data-target="#workshift")
+                              i.la.la-plus
+                              &nbsp;
+                              | Add New Work Shift
+                         .row(style='margin-top:20px')
+                           .col-md-12
+                             table.table.mytable
+                              thead
+                               tr
+                                th Title
+                                th Days
+                                th Start Time
+                                th End Time
+                                th Break Hours
+                                th Work Hours
+                                th Actions
+                              tbody
+                               each shift in shifts
+                                tr
+                                 td=shift.title
+                                 td=shift.days
+                                 td=shift.start_time
+                                 td=shift.end_time
+                                 td=shift.break_hours
+                                 td=shift.work_hours
+                                 td
+                                  a(href="/company/edit_shift_title/#{shift.id}" data-toggle="modal" data-target="#editWorkShiftTitle" data-whatever=shift.id)
+                                   i.la.la-edit
+                                  a(href="/company/delete_shift_title/#{shift.id}") 
+                                   i.la.la-trash(style='color:red')
+                                  
+                                  
+                
+                // PAYROLL
+                #payroll.tab-pane.fade(role='tabpanel' aria-labelledby='payroll-tab') 
+                 .row(style='margin-top:20px')
+                  .col-md-12
+                      ul#myTab.nav.nav-tabs(role='tablist')
+                        li.nav-item
+                            a#deductions-tab.nav-link.active(data-toggle='tab' href='#deductions' role='tab' aria-controls='deductions' aria-selected='true') Deductions
+                        li.nav-item
+                            a#benefits-tab.nav-link(data-toggle='tab' href='#benefits' role='tab' aria-controls='benefits' aria-selected='false') Benefits
+                        li.nav-item
+                            a#loans-tab.nav-link(data-toggle='tab' href='#loans' role='tab' aria-controls='loans' aria-selected='false') Loans
+                        li.nav-item
+                            a#relief-tab.nav-link(data-toggle='tab' href='#relief' role='tab' aria-controls='relief' aria-selected='false') Relief
+                        li.nav-item
+                            a#pension-tab.nav-link(data-toggle='tab' href='#pension' role='tab' aria-controls='pension' aria-selected='false') Pension
+                      #myTabContent.tab-content 
+                        
+                        #deductions.tab-pane.fade.show.active(role='tabpanel' aria-labelledby='deductions-tab')     
+                         .row(style='margin-top:20px')
+                          .col-md-12
+                           button.btn.btn-primary(data-toggle="modal" data-target="#addDeduction")
+                              i.la.la-plus
+                              &nbsp;
+                              | Add Item
+                         .row(style='margin-top:20px')
+                          .col-md-12
+                           table.table.mytable
+                              thead
+                               tr
+                                th Code
+                                th Title
+                                th Status
+                                th Type
+                                th Rates
+                                th Actions
+                              tbody
+                               each deduct in deductions
+                                tr
+                                 td=deduct.code
+                                 td=deduct.title
+                                 td 
+                                  if deduct.status === 'Inactive'
+                                     span.badge.badge-danger #{deduct.status}
+                               
+                                  if deduct.status === 'Active'
+                                     span.badge.badge-primary #{deduct.status}
+                                 td #{deduct.type}
+                                 td
+                                  if deduct.rate ===true
+                                    a(href="/company/view_rates/#{deduct.id}")
+                                     | View Rates
+                                  if deduct.rate===false
+                                    | ....
+                                 td
+                                 
+                                  a(href="/company/edit_deduct_details/#{deduct.id}" data-toggle="modal" data-target="#editDeductDetails" data-whatever=deduct.id)
+                                   i.la.la-edit
+                                  a(href="/company/delete_deduct/#{deduct.id}") 
+                                   i.la.la-trash(style='color:red')
+                                  
+                          
+
+                        #benefits.tab-pane.fade.show(role='tabpanel' aria-labelledby='benefits-tab')
+                         .row(style='margin-top:20px')
+                          .col-md-12
+                           button.btn.btn-primary(data-toggle="modal" data-target="#addBenefit")
+                              i.la.la-plus
+                              &nbsp;
+                              | Add Item
+                         .row(style='margin-top:20px')
+                          .col-md-12
+                           table.table.mytable
+                              thead
+                               tr
+                                th Code
+                                th Title
+                                th Value % / Amount
+                              
+                              
+                                th Status
+                                th Actions
+                              tbody
+                               each benefit in benefits
+                                tr
+                                 td=benefit.code
+                                 td=benefit.title
+                                 td
+                                  if benefit.percentage ===true
+                                   | #{benefit.value}%
+                                  if benefit.percentage ===false
+                                   | #{company.currency} #{benefit.value}
+                                  if benefit.percentage ===undefined
+                                   |....
+                                
+                               
+                                 
+                                 td
+                                  if benefit.status === 'Inactive'
+                                     span.badge.badge-danger #{benefit.status}
+                               
+                                  if benefit.status === 'Active'
+                                     span.badge.badge-primary #{benefit.status}
+                               
+                                 td
+                                  if benefit.title ==='Housing Allowance'
+                                   a(href="/company/house_allowance/#{benefit.id}" style='color:green') Employee Rates
+                                   &nbsp;&nbsp;
+                                  if benefit.title ==='Car Benefit'
+                                   a(href="/company/cc_ratings/#{benefit.id}" style='color:green') CC Ratings
+                                   &nbsp;&nbsp;
+                                  a(href="/company/edit_benefit_details/#{benefit.id}" data-toggle="modal" data-target="#editBenefitDetails" data-whatever=benefit.id)
+                                   i.la.la-edit
+                                  a(href="/company/delete_benefit/#{benefit.id}") 
+                                   i.la.la-trash(style='color:red')
+                                  
+                                  
+
+                        #loans.tab-pane.fade.show(role='tabpanel' aria-labelledby='loans-tab')
+                         .row(style='margin-top:20px')
+                          .col-md-12
+                           button.btn.btn-primary(data-toggle="modal" data-target="#addLoan")
+                              i.la.la-plus
+                              &nbsp;
+                              | Add Loan
+                         .row(style='margin-top:20px')
+                          .col-md-12
+                           table.table.mytable
+                              thead
+                               tr
+                                th Code
+                                th Title
+                               
+                                th Actions
+                              tbody
+                               each loan in loans
+                                tr
+                                 td=loan.code
+                                 td=loan.title
+                                 td 
+                                  a(href="/company/edit_loan_details/#{loan.id}" data-toggle="modal" data-target="#editLoanDetails" data-whatever=loan.id)
+                                   i.la.la-edit
+                                  a(href="/company/delete_loan/#{loan.id}") 
+                                   i.la.la-trash(style='color:red')
+
+                        #relief.tab-pane.fade.show(role='tabpanel' aria-labelledby='relief-tab')      
+                          .row(style='margin-top:20px')
+                            .col-md-12
+                              //-  button.btn.btn-primary(data-toggle="modal" data-target="#addRelief")
+                              //-   i.la.la-plus
+                              //-   &nbsp;
+                              //-   | Add Relief
+                          .row(style='margin-top:20px')
+                            .col-md-12
+                             table.table.mytable
+                              thead
+                               tr
+                                th Item
+                                th Value % / Amount 
+                                th Maximum Amount
+                                th Maximum Mode
+                                th Actions
+                              tbody
+                               
+                               each relief in reliefs
+                                tr 
+                                 td=relief.item
+                                 td 
+                                  if relief.amount===null
+                                   | ....
+                                  if relief.amount !==null
+                                   if relief.percentage ===false
+                                    | #{company.currency} #{relief.amount}
+                                   if relief.percentage ===true
+                                    |  #{relief.amount} %
+                                 td 
+                                   | #{company.currency} #{relief.maximum_amount}
+                                 td #{relief.maximum_mode}
+                                 td
+                                 
+                                    a(href="/company/edit_relief_details/#{relief.id}" data-toggle="modal" data-target="#editReliefDetails" data-whatever=relief.id)
+                                      i.la.la-edit
+                                    a(href="/company/delete_relief/#{relief.id}") 
+                                     i.la.la-trash(style='color:red')
+
+                        #pension.tab-pane.fade.show(role='tabpanel' aria-labelledby='pension-tab')     
+                         
+                         .row(style='margin-top:20px')
+                          .col-md-12
+                           table.table.mytable
+                              thead
+                               tr
+                                th Employee Percentage
+                                th Employer Percentage
+                                th Maximum Amount
+                                th Actions
+                              tbody
+                               
+                                tr
+                                
+                                 td #{pension.employee_percentage}%
+                                 td #{pension.employer_percentage}%
+                                 td #{company.currency} #{pension.maximum_amount}
+                                 
+                                 td
+                                 
+                                  a(href="#" data-toggle="modal" data-target="#editPension" )
+                                   i.la.la-edit
+                                        
+                                  
+
+
+                               
+                             
+
+                        
+                
+
+                // COMPANIES
+                #companies.tab-pane.fade(role='tabpanel' aria-labelledby='companies-tab')
+                  .row(style='margin-top:20px')
+                   .col-md-12(style='float:right')
+                             button.btn.btn-primary(data-toggle="modal" data-target="#addCompany")
+                              i.la.la-plus
+                              &nbsp;
+                              | Add Subsidiary
+                  .row(style='margin-top:20px')
+                    .col-md-12
+                       table.table.mytable
+                              thead
+                               tr
+                                th Name
+                                th Email
+                               
+                                th Mobile No
+                                th Country
+                                th Actions
+                              tbody
+                               each company in companies
+                                tr
+                                 td=company.name
+                                 td=company.email
+                                 
+                                 td=company.phone_no
+                                 td=company.country
+                                 td
+                                  a(href="/company/edit_company_details/#{company.id}" data-toggle="modal" data-target="#editCompanyDetails" data-whatever=company.id)
+                                   i.la.la-edit
+                                  a(href="/company/delete_company/#{company.id}") 
+                                   i.la.la-trash(style='color:red')
+                                                  
+                    
+                   // Expenses
+                #expenses.tab-pane.fade(role='tabpanel' aria-labelledby='users-tab')
+                 .row(style='margin-top:20px')
+                   .col-md-12(style='float:right')
+                             button.btn.btn-primary(data-toggle="modal" data-target="#addExpense")
+                              i.la.la-plus
+                              &nbsp;
+                              | Add New Expense
+                  .row(style='margin-top:20px')
+                    .col-md-12
+                       table.table.mytable
+                              thead
+                               tr
+                                
+                                th Title
+                                th Actions
+                                
+                              tbody
+                               each expense in expenses
+                                tr
+                                 td=expense.title
+                                 td
+                                  a(href="/company/edit_expense_details/#{expense.id}" data-toggle="modal" data-target="#editExpenseDetails" data-whatever=expense.id)
+                                   i.la.la-edit
+                                  a(href="/company/delete_expense/#{expense.id}") 
+                                   i.la.la-trash(style='color:red')
+
+                                
+
+                // Leaves
+                #leaves.tab-pane.fade(role='tabpanel' aria-labelledby='users-tab')
+                 .row(style='margin-top:20px')
+                   .col-md-12(style='float:right')
+                             button.btn.btn-primary(data-toggle="modal" data-target="#addLeave")
+                              i.la.la-plus
+                              &nbsp;
+                              | Add New Leave
+                  .row(style='margin-top:20px')
+                    .col-md-12
+                       table.table.mytable
+                              thead
+                               tr
+                                
+                                th Title
+                                th Actions
+                                
+                              tbody
+                               each leave in leaves
+                                tr
+                                 td=leave.title
+                                 td
+                                  a(href="/company/edit_leave_details/#{leave.id}" data-toggle="modal" data-target="#editLeaveDetails" data-whatever=leave.id)
+                                   i.la.la-edit
+                                  a(href="/company/delete_leave/#{leave.id}") 
+                                   i.la.la-trash(style='color:red')
+
+                                  
+                                 
+                                
+
+                // USERS
+                #users.tab-pane.fade(role='tabpanel' aria-labelledby='users-tab')
+                 .row(style='margin-top:20px')
+                   .col-md-12(style='float:right')
+                             button.btn.btn-primary(data-toggle="modal" data-target="#addAdministrator")
+                              i.la.la-plus
+                              &nbsp;
+                              | Add New Administrator
+                  .row(style='margin-top:20px')
+                    .col-md-12
+                       table.table.mytable
+                              thead
+                               tr
+                                th Firstname
+                                th Lastname
+                                th Email
+                                th Role
+                                th Actions
+                                
+                              tbody
+                               each admin in admins
+                                tr
+                                 td=admin.first_name
+                                 td=admin.last_name
+                                 td=admin.username
+                                 td=admin.role
+                                 td
+                                  if admin.username === 'admin@gbl.com'
+                                   p ....
+                                  if admin.username !=='admin@gbl.com'
+                                    if user.id === admin.id
+                                     a(href="/company/edit_admin_details/#{admin.id}" data-toggle="modal" data-target="#editAdminDetails" data-whatever=admin.id)
+                                      i.la.la-edit
+                                    a(href="/company/delete_admin/#{admin.id}") 
+                                     i.la.la-trash(style='color:red')
+
+                               
+
+                            
+              
+           
+            
+        
+    // MODALS
+    // Pension
+    #editPension.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+     .modal-dialog(role='document')
+        .modal-content
+         .modal-header
+            h5#exampleModalLabel.modal-title Edit Pension
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+             span(aria-hidden='true') ×
+         .modal-body
+           
+            form(action='/company/edit_pension_details/#{pension.id}' method='POST')
+             
+            
+              .form-group
+               label(for="title") Employee Percentage
+               input.form-control#employee(type="number", name="employee",max=10,value=pension.employee_percentage, min=0,step='0.1',required,placeholder='Employee Percentage')
+              .form-group
+                label(for="title") Employer Percentage
+                input.form-control#employer(type="number", name="employer",max=10,value=pension.employer_percentage, min=0,step='0.1',required,placeholder='Employer Percentage')
+              .form-group
+                label(for="title") Maximum Amount
+                input.form-control#employer(type="number", name="amount", value=pension.maximum_amount, min=1,required,placeholder='Maximum Amount')
+               
+             
+              .form-group
+               button.btn.btn-primary Save
+               
+             
+         .modal-footer
+            button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+    // relief
+    #addRelief.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+     .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+            h5#exampleModalLabel.modal-title Add New Relief
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+            form.form(action='/company/add_new_relief',method='POST')
+              .form-group
+               label(for="title") Item
+               input.form-control(type="text", name="item",required,placeholder='Title')
+             
+              .form-group
+               label(for="title") Amount(Monthly)
+               input.form-control(type="number", name="amount",required,placeholder='Relief Amount')
+              .form-group
+                label(for="title") Maximum Amount Annually
+                input.form-control(type="number", name="maximum",required,placeholder='Maximum Amount')
+               
+             
+                  
+            
+              .form-group
+               button.btn.btn-primary Save
+        .modal-footer
+            button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+    #editReliefDetails.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+     .modal-dialog(role='document')
+        .modal-content
+         .modal-header
+            h5#exampleModalLabel.modal-title Edit Relief
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+             span(aria-hidden='true') ×
+         .modal-body
+           
+            form(action='/company/edit_relief_details' method='POST')
+             
+             input#relief_id.form-control(type='hidden' name='id')
+             .form-group
+               label(for="title") Item
+               input.form-control#relief_item(type="text", name="item",required,placeholder='Title')
+              #month
+                .form-group
+                  label(for="title") Value % / Amount
+                  input.form-control#relief_amount(type="number", name="amount",required,placeholder='Relief Amount')
+              .form-group
+                label(for="title") Maximum Amount
+                input.form-control#relief_maximum(type="number", name="maximum",required,placeholder='Maximum Amount')
+               
+             
+             .form-group
+               button.btn.btn-primary Save
+               
+             
+         .modal-footer
+            button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+    
+
+    
+    // Leaves
+    #addLeave.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+     .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+            h5#exampleModalLabel.modal-title Add New Leave
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+            form.form(action='/company/add_new_leave',method='POST')
+              .form-group
+               label(for="title") Title
+               input.form-control(type="text", name="title",required,placeholder='Title')
+             
+                
+            
+              .form-group
+               button.btn.btn-primary Save
+        .modal-footer
+            button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+    #editLeaveDetails.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+     .modal-dialog(role='document')
+        .modal-content
+         .modal-header
+            h5#exampleModalLabel.modal-title Edit Leave
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+             span(aria-hidden='true') ×
+         .modal-body
+           
+            form(action='/company/edit_leave_details' method='POST')
+             
+             input#leave_id.form-control(type='hidden' name='id')
+             .form-group
+               label(for="title") Title
+               input.form-control#leave_title(type="text", name="title",required,placeholder='title')
+             
+             .form-group
+               button.btn.btn-primary Save
+               
+             
+         .modal-footer
+            button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+    
+    // Expenses
+    #addExpense.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+     .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+            h5#exampleModalLabel.modal-title Add New Expense
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+            form.form(action='/company/add_new_expense',method='POST')
+              .form-group
+               label(for="title") Title
+               input.form-control(type="text", name="title",required,placeholder='Title')
+             
+                
+            
+              .form-group
+               button.btn.btn-primary Save
+        .modal-footer
+            button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+    #editExpenseDetails.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+     .modal-dialog(role='document')
+        .modal-content
+         .modal-header
+            h5#exampleModalLabel.modal-title Edit Expense
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+             span(aria-hidden='true') ×
+         .modal-body
+           
+            form(action='/company/edit_expense_details' method='POST')
+             
+              input#expense_id.form-control(type='hidden' name='id')
+              .form-group
+               label(for="title") Title
+               input.form-control#expense_title(type="text", name="title",required,placeholder='title')
+             
+              .form-group
+               button.btn.btn-primary Save
+               
+             
+         .modal-footer
+            button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+    
+    // Loan
+    #addLoan.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+     .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+            h5#exampleModalLabel.modal-title Add New Loan
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+            form.form(action='/company/add_new_loan',method='POST')
+             .form-group
+               label(for="title") Item Code
+               input.form-control(type="text", name="code",required,placeholder='Item Code')
+             .form-group
+               label(for="title") Title
+               input.form-control(type="text", name="title",required,placeholder='Title')
+             
+                
+            
+             .form-group
+               button.btn.btn-primary Save
+        .modal-footer
+            button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+    #editLoanDetails.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+     .modal-dialog(role='document')
+        .modal-content
+         .modal-header
+            h5#exampleModalLabel.modal-title Edit Loan
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+             span(aria-hidden='true') ×
+         .modal-body
+           
+            form(action='/company/edit_loan_details' method='POST')
+             
+             input#loan_id.form-control(type='hidden' name='id')
+             .form-group
+               label(for="title") Item Code
+               input.form-control#loan_code(type="text", name="code",required,placeholder='Code')
+             .form-group
+               label(for="title") Title
+               input.form-control#loan_title(type="text", name="title",required,placeholder='title')
+             
+             .form-group
+               button.btn.btn-primary Save
+               
+             
+         .modal-footer
+            button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+      
+
+
+   
+      
+
+
+    // Benefits
+    #addBenefit.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+     .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+            h5#exampleModalLabel.modal-title Add New Item
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+            form.form(action='/company/add_new_benefit',method='POST')
+             .form-group
+               label(for="title") Item Code
+               input.form-control(type="text", name="code",required,placeholder='Item Code')
+             .form-group
+               label(for="title") Title
+               input.form-control(type="text", name="title",required,placeholder='Title')
+       
+             
+             
+                
+            
+             .form-group
+               button.btn.btn-primary Save
+        .modal-footer
+            button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+    #editBenefitDetails.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+     .modal-dialog(role='document')
+        .modal-content
+         .modal-header
+            h5#exampleModalLabel.modal-title Edit Item
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+             span(aria-hidden='true') ×
+         .modal-body
+           
+            form(action='/company/edit_benefit_details' method='POST')
+             
+             input#benefit_id.form-control(type='hidden' name='id')
+             .form-group
+               label(for="title") Item Code
+               input.form-control#benefit_code(type="text", name="code",required,placeholder='Code')
+             .form-group
+               label(for="title") Title
+               input.form-control#benefit_title(type="text", name="title",required,placeholder='title')
+           
+             
+             #car_benefit
+              .form-group
+               label(for='title') Percentage Value of Cost of the Motor Vehicle %
+               input.form-control#benefit_value_car(type='number' name='amount' min=1 placeholder='Percentage Value of Cost of the Motor Vehicle %')
+
+             #meal_allowance
+              .form-group
+               label(for='title') Excess Amount Per Month
+               input.form-control#benefit_value_meal(type='number' name='amount' min=1 placeholder=' Excess Amount Per Month')
+
+             #per_diem
+              .form-group
+               label(for='title') Excess Amount Per Night
+               input.form-control#benefit_value_per(type='number' name='amount' min=1 placeholder='Excess Amount Per Night' )
+             #mobile
+              .form-group
+               label(for='title') Percentage Value of Total Bill %
+               input.form-control#benefit_value_mobile(type='number' name='amount' min=1 placeholder='Percentage Value of Total Bill %' )
+             #furniture
+              .form-group
+               label(for='title') Percentage Value of Total Furniture Bill %
+               input.form-control#benefit_value_furniture(type='number' name='amount' min=1 placeholder=' Percentage Value of Total Furniture Bill %' )
+             #noncash
+              .form-group
+               label(for='title') Excess Amount Per Month
+               input.form-control#benefit_value_noncash(type='number' name='amount' min=1 placeholder=' Excess Amount Per Month' )
+
+
+                
+             .form-group
+               label(for="status") Status
+               select.form-control(name='status',required)
+                option(value='') Choose one
+                option(value='Active') Active
+                option(value='Inactive') Inactive
+             .form-group
+               button.btn.btn-primary Save
+               
+             
+         .modal-footer
+            button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+      
+
+
+    // deductions
+    #addDeduction.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+     .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+            h5#exampleModalLabel.modal-title Add New Item
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+            form.form(action='/company/add_new_deduct',method='POST')
+             .form-group
+               label(for="title") Item Code
+               input.form-control(type="text", name="code",required,placeholder='Item Code')
+             .form-group
+               label(for="title") Title
+               input.form-control(type="text", name="title",required,placeholder='Title')
+             .form-group
+                label(for="title") Type
+                select.form-control(name="type" required)
+                 option(value='') Choose one option
+                 option(value='After Tax') After Tax
+                 option(value='Before Tax') Before Tax
+             .form-group
+                label(for='') Rates
+                select.form-control(name="rate" required)
+                 option(value='') Choose one option
+                 option(value='True') Has rates
+                 option(value='False') Has no rates
+                 
+
+            
+             .form-group
+               button.btn.btn-primary Save
+        .modal-footer
+            button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+    #editDeductDetails.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+     .modal-dialog(role='document')
+        .modal-content
+         .modal-header
+            h5#exampleModalLabel.modal-title Edit Item
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+             span(aria-hidden='true') ×
+         .modal-body
+           
+            form(action='/company/edit_deduct_details' method='POST')
+             
+             input.deduct_id.form-control(type='hidden' name='id')
+             .form-group
+               label(for="title") Item Code
+               input.form-control#deduct_code(type="text", name="code",required,placeholder='Code')
+             .form-group
+               label(for="title") Title
+               input.form-control#deduct_title(type="text", name="title",required,placeholder='title')
+            
+             .form-group
+               label(for="title") Status
+               select.form-control( name="status",required)
+                option(value='') Choose a status
+                option(value='Active') Active
+                option(value='Inactive') Inactive
+             .form-group
+                label(for="title") Type
+                select.form-control(name="type" required)
+                 option(value='') Choose one option
+                 option(value='Before Tax') Before Tax
+                 option(value='After Tax') After Tax
+             .form-group
+                label(for='') Rates
+                select.form-control(name="rate" required)
+                 option(value='') Choose one option
+                 option(value='True') Has rates
+                 option(value='False') Has no rates
+             .form-group
+               button.btn.btn-primary Save
+               
+             
+         .modal-footer
+            button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+      
+
+    // administrator
+    #addAdministrator.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+     .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+            h5#exampleModalLabel.modal-title Add New Administrator
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+            form.form(action='/company/add_new_administrator',method='POST')
+             .form-group
+               label(for="title") Firstname
+               input.form-control(type="text", name="firstname",required,placeholder='Firstname')
+             .form-group
+               label(for="title") Lastname
+               input.form-control(type="text", name="lastname",required,placeholder='Lastname')
+             .form-group
+               label(for="title") Email
+               input.form-control(type="email", name="email",required,placeholder='Email')
+             .form-group
+               label(for="title") Role
+               select.form-control( name="role",required)
+                option(value='') Choose a role
+                if user.role === 'super admin'
+                  option(value='super admin') Super Administrator
+                option(value='HR admin') HR Administrator
+                option(value='Assistant HR') Assistant HR
+             .form-group
+               label(for="title") Password
+               input.form-control(type="password", name="password",required,placeholder='Password')
+             .form-group
+               label(for="title") Confirm Password
+               input.form-control(type="password", name="password2",required,placeholder='Confirm Password')  
+             .form-group
+               button.btn.btn-primary Save
+        .modal-footer
+            button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+    #editAdminDetails.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+     .modal-dialog(role='document')
+        .modal-content
+         .modal-header
+            h5#exampleModalLabel.modal-title Edit Administrator
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+             span(aria-hidden='true') ×
+         .modal-body
+            h5 Edit Details
+            form(action='/company/edit_admin_details' method='POST')
+             
+             input.admin_id.form-control(type='hidden' name='id')
+             .form-group
+               label(for="title") Firstname
+               input.form-control#admin_firstname(type="text", name="firstname",required)
+             .form-group
+               label(for="title") Lastname
+               input.form-control#admin_lastname(type="text", name="lastname",required)
+             .form-group
+               label(for="title") Email
+               input.form-control#admin_email(type="email", name="email",required)
+             .form-group
+               label(for="title") Role
+               select.form-control( name="role",required)
+                if user.role === 'super admin'
+                  option(value='super admin') Super Administrator
+                option(value='HR admin') HR Administrator
+                option(value='Assistant HR') Assistant HR
+             .form-group
+               button.btn.btn-primary Save
+            h5 Edit Password
+            form(action='/company/edit_admin_password' method='POST')
+             
+             input.admin_id.form-control(type='hidden' name='id')
+             .form-group
+               label(for="title") Password
+               input.form-control(type="password", name="password",required,placeholder='Password')
+             .form-group
+               label(for="title") Confirm Password
+               input.form-control(type="password", name="password2",required,placeholder='Confirm Password')  
+             .form-group
+               button.btn.btn-primary Save
+         .modal-footer
+            button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+      
+
+  
+
+    // Add company
+    #addCompany.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+     .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+            h5#exampleModalLabel.modal-title Add New Company
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+            form.form(action='/company/add_new_company',method='POST')
+             .form-group
+               label(for='title') Company Name
+               input.form-control(type='text' name='name' required placeholder='Name' )
+             .form-group
+               label(for='title') Company Email
+               input.form-control(type='email' name='email' required  placeholder='Email' )
+             
+             .form-group
+               label(for='title') Company Mobile Number
+               input.form-control(type='tel' name='phone_no' placeholder='Mobile Number' )
+             .form-group
+               label(for="country") Choose country
+               select.form-control#country(name='country' required)
+                  option(value='') Choose a country
+                  option(value='Afganistan') Afghanistan
+                  option(value='Albania') Albania
+                  option(value='Algeria') Algeria
+                  option(value='American Samoa') American Samoa
+                  option(value='Andorra') Andorra
+                  option(value='Angola') Angola
+                  option(value='Anguilla') Anguilla
+                  option(value='Antigua & Barbuda') Antigua & Barbuda
+                  option(value='Argentina') Argentina
+                  option(value='Armenia') Armenia
+                  option(value='Aruba') Aruba
+                  option(value='Australia') Australia
+                  option(value='Austria') Austria
+                  option(value='Azerbaijan') Azerbaijan
+                  option(value='Bahamas') Bahamas
+                  option(value='Bahrain') Bahrain
+                  option(value='Bangladesh') Bangladesh
+                  option(value='Barbados') Barbados
+                  option(value='Belarus') Belarus
+                  option(value='Belgium') Belgium
+                  option(value='Belize') Belize
+                  option(value='Benin') Benin
+                  option(value='Bermuda') Bermuda
+                  option(value='Bhutan') Bhutan
+                  option(value='Bolivia') Bolivia
+                  option(value='Bonaire') Bonaire
+                  option(value='Bosnia & Herzegovina') Bosnia & Herzegovina
+                  option(value='Botswana') Botswana
+                  option(value='Brazil') Brazil
+                  option(value='British Indian Ocean Ter') British Indian Ocean Ter
+                  option(value='Brunei') Brunei
+                  option(value='Bulgaria') Bulgaria
+                  option(value='Burkina Faso') Burkina Faso
+                  option(value='Burundi') Burundi
+                  option(value='Cambodia') Cambodia
+                  option(value='Cameroon') Cameroon
+                  option(value='Canada') Canada
+                  option(value='Canary Islands') Canary Islands
+                  option(value='Cape Verde') Cape Verde
+                  option(value='Cayman Islands') Cayman Islands
+                  option(value='Central African Republic') Central African Republic
+                  option(value='Chad') Chad
+                  option(value='Channel Islands') Channel Islands
+                  option(value='Chile') Chile
+                  option(value='China') China
+                  option(value='Christmas Island') Christmas Island
+                  option(value='Cocos Island') Cocos Island
+                  option(value='Colombia') Colombia
+                  option(value='Comoros') Comoros
+                  option(value='Congo') Congo
+                  option(value='Cook Islands') Cook Islands
+                  option(value='Costa Rica') Costa Rica
+                  option(value='Cote DIvoire') Cote DIvoire
+                  option(value='Croatia') Croatia
+                  option(value='Cuba') Cuba
+                  option(value='Curaco') Curacao
+                  option(value='Cyprus') Cyprus
+                  option(value='Czech Republic') Czech Republic
+                  option(value='Denmark') Denmark
+                  option(value='Djibouti') Djibouti
+                  option(value='Dominica') Dominica
+                  option(value='Dominican Republic') Dominican Republic
+                  option(value='East Timor') East Timor
+                  option(value='Ecuador') Ecuador
+                  option(value='Egypt') Egypt
+                  option(value='El Salvador') El Salvador
+                  option(value='Equatorial Guinea') Equatorial Guinea
+                  option(value='Eritrea') Eritrea
+                  option(value='Estonia') Estonia
+                  option(value='Ethiopia') Ethiopia
+                  option(value='Falkland Islands') Falkland Islands
+                  option(value='Faroe Islands') Faroe Islands
+                  option(value='Fiji') Fiji
+                  option(value='Finland') Finland
+                  option(value='France') France
+                  option(value='French Guiana') French Guiana
+                  option(value='French Polynesia') French Polynesia
+                  option(value='French Southern Ter') French Southern Ter
+                  option(value='Gabon') Gabon
+                  option(value='Gambia') Gambia
+                  option(value='Georgia') Georgia
+                  option(value='Germany') Germany
+                  option(value='Ghana') Ghana
+                  option(value='Gibraltar') Gibraltar
+                  option(value='Great Britain') Great Britain
+                  option(value='Greece') Greece
+                  option(value='Greenland') Greenland
+                  option(value='Grenada') Grenada
+                  option(value='Guadeloupe') Guadeloupe
+                  option(value='Guam') Guam
+                  option(value='Guatemala') Guatemala
+                  option(value='Guinea') Guinea
+                  option(value='Guyana') Guyana
+                  option(value='Haiti') Haiti
+                  option(value='Hawaii') Hawaii
+                  option(value='Honduras') Honduras
+                  option(value='Hong Kong') Hong Kong
+                  option(value='Hungary') Hungary
+                  option(value='Iceland') Iceland
+                  option(value='Indonesia') Indonesia
+                  option(value='India') India
+                  option(value='Iran') Iran
+                  option(value='Iraq') Iraq
+                  option(value='Ireland') Ireland
+                  option(value='Isle of Man') Isle of Man
+                  option(value='Israel') Israel
+                  option(value='Italy') Italy
+                  option(value='Jamaica') Jamaica
+                  option(value='Japan') Japan
+                  option(value='Jordan') Jordan
+                  option(value='Kazakhstan') Kazakhstan
+                  option(value='Kenya') Kenya
+                  option(value='Kiribati') Kiribati
+                  option(value='Korea North') Korea North
+                  option(value='Korea Sout') Korea South
+                  option(value='Kuwait') Kuwait
+                  option(value='Kyrgyzstan') Kyrgyzstan
+                  option(value='Laos') Laos
+                  option(value='Latvia') Latvia
+                  option(value='Lebanon') Lebanon
+                  option(value='Lesotho') Lesotho
+                  option(value='Liberia') Liberia
+                  option(value='Libya') Libya
+                  option(value='Liechtenstein') Liechtenstein
+                  option(value='Lithuania') Lithuania
+                  option(value='Luxembourg') Luxembourg
+                  option(value='Macau') Macau
+                  option(value='Macedonia') Macedonia
+                  option(value='Madagascar') Madagascar
+                  option(value='Malaysia') Malaysia
+                  option(value='Malawi') Malawi
+                  option(value='Maldives') Maldives
+                  option(value='Mali') Mali
+                  option(value='Malta') Malta
+                  option(value='Marshall Islands') Marshall Islands
+                  option(value='Martinique') Martinique
+                  option(value='Mauritania') Mauritania
+                  option(value='Mauritius') Mauritius
+                  option(value='Mayotte') Mayotte
+                  option(value='Mexico') Mexico
+                  option(value='Midway Islands') Midway Islands
+                  option(value='Moldova') Moldova
+                  option(value='Monaco') Monaco
+                  option(value='Mongolia') Mongolia
+                  option(value='Montserrat') Montserrat
+                  option(value='Morocco') Morocco
+                  option(value='Mozambique') Mozambique
+                  option(value='Myanmar') Myanmar
+                  option(value='Nambia') Nambia
+                  option(value='Nauru') Nauru
+                  option(value='Nepal') Nepal
+                  option(value='Netherland Antilles') Netherland Antilles
+                  option(value='Netherlands') Netherlands (Holland, Europe)
+                  option(value='Nevis') Nevis
+                  option(value='New Caledonia') New Caledonia
+                  option(value='New Zealand') New Zealand
+                  option(value='Nicaragua') Nicaragua
+                  option(value='Niger') Niger
+                  option(value='Nigeria') Nigeria
+                  option(value='Niue') Niue
+                  option(value='Norfolk Island') Norfolk Island
+                  option(value='Norway') Norway
+                  option(value='Oman') Oman
+                  option(value='Pakistan') Pakistan
+                  option(value='Palau Island') Palau Island
+                  option(value='Palestine') Palestine
+                  option(value='Panama') Panama
+                  option(value='Papua New Guinea') Papua New Guinea
+                  option(value='Paraguay') Paraguay
+                  option(value='Peru') Peru
+                  option(value='Phillipines') Philippines
+                  option(value='Pitcairn Island') Pitcairn Island
+                  option(value='Poland') Poland
+                  option(value='Portugal') Portugal
+                  option(value='Puerto Rico') Puerto Rico
+                  option(value='Qatar') Qatar
+                  option(value='Republic of Montenegro') Republic of Montenegro
+                  option(value='Republic of Serbia') Republic of Serbia
+                  option(value='Reunion') Reunion
+                  option(value='Romania') Romania
+                  option(value='Russia') Russia
+                  option(value='Rwanda') Rwanda
+                  option(value='St Barthelemy') St Barthelemy
+                  option(value='St Eustatius') St Eustatius
+                  option(value='St Helena') St Helena
+                  option(value='St Kitts-Nevis') St Kitts-Nevis
+                  option(value='St Lucia') St Lucia
+                  option(value='St Maarten') St Maarten
+                  option(value='St Pierre & Miquelon') St Pierre & Miquelon
+                  option(value='St Vincent & Grenadines') St Vincent & Grenadines
+                  option(value='Saipan') Saipan
+                  option(value='Samoa') Samoa
+                  option(value='Samoa American') Samoa American
+                  option(value='San Marino') San Marino
+                  option(value='Sao Tome & Principe') Sao Tome & Principe
+                  option(value='Saudi Arabia') Saudi Arabia
+                  option(value='Senegal') Senegal
+                  option(value='Seychelles') Seychelles
+                  option(value='Sierra Leone') Sierra Leone
+                  option(value='Singapore') Singapore
+                  option(value='Slovakia') Slovakia
+                  option(value='Slovenia') Slovenia
+                  option(value='Solomon Islands') Solomon Islands
+                  option(value='Somalia') Somalia
+                  option(value='South Africa') South Africa
+                  option(value='Spain') Spain
+                  option(value='Sri Lanka') Sri Lanka
+                  option(value='Sudan') Sudan
+                  option(value='Suriname') Suriname
+                  option(value='Swaziland') Swaziland
+                  option(value='Sweden') Sweden
+                  option(value='Switzerland') Switzerland
+                  option(value='Syria') Syria
+                  option(value='Tahiti') Tahiti
+                  option(value='Taiwan') Taiwan
+                  option(value='Tajikistan') Tajikistan
+                  option(value='Tanzania') Tanzania
+                  option(value='Thailand') Thailand
+                  option(value='Togo') Togo
+                  option(value='Tokelau') Tokelau
+                  option(value='Tonga') Tonga
+                  option(value='Trinidad & Tobago') Trinidad & Tobago
+                  option(value='Tunisia') Tunisia
+                  option(value='Turkey') Turkey
+                  option(value='Turkmenistan') Turkmenistan
+                  option(value='Turks & Caicos Is') Turks & Caicos Is
+                  option(value='Tuvalu') Tuvalu
+                  option(value='Uganda') Uganda
+                  option(value='United Kingdom') United Kingdom
+                  option(value='Ukraine') Ukraine
+                  option(value='United Arab Erimates') United Arab Emirates
+                  option(value='United States of America') United States of America
+                  option(value='Uraguay') Uruguay
+                  option(value='Uzbekistan') Uzbekistan
+                  option(value='Vanuatu') Vanuatu
+                  option(value='Vatican City State') Vatican City State
+                  option(value='Venezuela') Venezuela
+                  option(value='Vietnam') Vietnam
+                  option(value='Virgin Islands (Brit)') Virgin Islands (Brit)
+                  option(value='Virgin Islands (USA)') Virgin Islands (USA)
+                  option(value='Wake Island') Wake Island
+                  option(value='Wallis & Futana Is') Wallis & Futana Is
+                  option(value='Yemen') Yemen
+                  option(value='Zaire') Zaire
+                  option(value='Zambia') Zambia
+                  option(value='Zimbabwe') Zimbabwe
+
+             .form-group
+               button.btn.btn-primary Save
+        .modal-footer
+            button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+    #editCompanyDetails.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+     .modal-dialog(role='document')
+        .modal-content
+         .modal-header
+            h5#exampleModalLabel.modal-title Edit Company Title
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+             span(aria-hidden='true') ×
+         .modal-body
+            form(action='/company/edit_company_details' method='POST')
+             
+             input#company_id.form-control(type='hidden' name='id')
+             .form-group
+               label(for='title') Company Name
+               input.form-control#company_name(type='text' name='name' required placeholder='Name' )
+             .form-group
+               label(for='title') Company Email
+               input.form-control#company_email(type='email' name='email' required  placeholder='Email' )
+            
+             .form-group
+               label(for='title') Company Mobile Number
+               input.form-control#company_phone_no(type='tel' name='phone_no' placeholder='Mobile Number' )
+             .form-group
+               label(for="country") Choose country
+               select.form-control#company_country(name='country' required)
+                  option(value='') Choose a country
+                  option(value='Afganistan') Afghanistan
+                  option(value='Albania') Albania
+                  option(value='Algeria') Algeria
+                  option(value='American Samoa') American Samoa
+                  option(value='Andorra') Andorra
+                  option(value='Angola') Angola
+                  option(value='Anguilla') Anguilla
+                  option(value='Antigua & Barbuda') Antigua & Barbuda
+                  option(value='Argentina') Argentina
+                  option(value='Armenia') Armenia
+                  option(value='Aruba') Aruba
+                  option(value='Australia') Australia
+                  option(value='Austria') Austria
+                  option(value='Azerbaijan') Azerbaijan
+                  option(value='Bahamas') Bahamas
+                  option(value='Bahrain') Bahrain
+                  option(value='Bangladesh') Bangladesh
+                  option(value='Barbados') Barbados
+                  option(value='Belarus') Belarus
+                  option(value='Belgium') Belgium
+                  option(value='Belize') Belize
+                  option(value='Benin') Benin
+                  option(value='Bermuda') Bermuda
+                  option(value='Bhutan') Bhutan
+                  option(value='Bolivia') Bolivia
+                  option(value='Bonaire') Bonaire
+                  option(value='Bosnia & Herzegovina') Bosnia & Herzegovina
+                  option(value='Botswana') Botswana
+                  option(value='Brazil') Brazil
+                  option(value='British Indian Ocean Ter') British Indian Ocean Ter
+                  option(value='Brunei') Brunei
+                  option(value='Bulgaria') Bulgaria
+                  option(value='Burkina Faso') Burkina Faso
+                  option(value='Burundi') Burundi
+                  option(value='Cambodia') Cambodia
+                  option(value='Cameroon') Cameroon
+                  option(value='Canada') Canada
+                  option(value='Canary Islands') Canary Islands
+                  option(value='Cape Verde') Cape Verde
+                  option(value='Cayman Islands') Cayman Islands
+                  option(value='Central African Republic') Central African Republic
+                  option(value='Chad') Chad
+                  option(value='Channel Islands') Channel Islands
+                  option(value='Chile') Chile
+                  option(value='China') China
+                  option(value='Christmas Island') Christmas Island
+                  option(value='Cocos Island') Cocos Island
+                  option(value='Colombia') Colombia
+                  option(value='Comoros') Comoros
+                  option(value='Congo') Congo
+                  option(value='Cook Islands') Cook Islands
+                  option(value='Costa Rica') Costa Rica
+                  option(value='Cote DIvoire') Cote DIvoire
+                  option(value='Croatia') Croatia
+                  option(value='Cuba') Cuba
+                  option(value='Curaco') Curacao
+                  option(value='Cyprus') Cyprus
+                  option(value='Czech Republic') Czech Republic
+                  option(value='Denmark') Denmark
+                  option(value='Djibouti') Djibouti
+                  option(value='Dominica') Dominica
+                  option(value='Dominican Republic') Dominican Republic
+                  option(value='East Timor') East Timor
+                  option(value='Ecuador') Ecuador
+                  option(value='Egypt') Egypt
+                  option(value='El Salvador') El Salvador
+                  option(value='Equatorial Guinea') Equatorial Guinea
+                  option(value='Eritrea') Eritrea
+                  option(value='Estonia') Estonia
+                  option(value='Ethiopia') Ethiopia
+                  option(value='Falkland Islands') Falkland Islands
+                  option(value='Faroe Islands') Faroe Islands
+                  option(value='Fiji') Fiji
+                  option(value='Finland') Finland
+                  option(value='France') France
+                  option(value='French Guiana') French Guiana
+                  option(value='French Polynesia') French Polynesia
+                  option(value='French Southern Ter') French Southern Ter
+                  option(value='Gabon') Gabon
+                  option(value='Gambia') Gambia
+                  option(value='Georgia') Georgia
+                  option(value='Germany') Germany
+                  option(value='Ghana') Ghana
+                  option(value='Gibraltar') Gibraltar
+                  option(value='Great Britain') Great Britain
+                  option(value='Greece') Greece
+                  option(value='Greenland') Greenland
+                  option(value='Grenada') Grenada
+                  option(value='Guadeloupe') Guadeloupe
+                  option(value='Guam') Guam
+                  option(value='Guatemala') Guatemala
+                  option(value='Guinea') Guinea
+                  option(value='Guyana') Guyana
+                  option(value='Haiti') Haiti
+                  option(value='Hawaii') Hawaii
+                  option(value='Honduras') Honduras
+                  option(value='Hong Kong') Hong Kong
+                  option(value='Hungary') Hungary
+                  option(value='Iceland') Iceland
+                  option(value='Indonesia') Indonesia
+                  option(value='India') India
+                  option(value='Iran') Iran
+                  option(value='Iraq') Iraq
+                  option(value='Ireland') Ireland
+                  option(value='Isle of Man') Isle of Man
+                  option(value='Israel') Israel
+                  option(value='Italy') Italy
+                  option(value='Jamaica') Jamaica
+                  option(value='Japan') Japan
+                  option(value='Jordan') Jordan
+                  option(value='Kazakhstan') Kazakhstan
+                  option(value='Kenya') Kenya
+                  option(value='Kiribati') Kiribati
+                  option(value='Korea North') Korea North
+                  option(value='Korea Sout') Korea South
+                  option(value='Kuwait') Kuwait
+                  option(value='Kyrgyzstan') Kyrgyzstan
+                  option(value='Laos') Laos
+                  option(value='Latvia') Latvia
+                  option(value='Lebanon') Lebanon
+                  option(value='Lesotho') Lesotho
+                  option(value='Liberia') Liberia
+                  option(value='Libya') Libya
+                  option(value='Liechtenstein') Liechtenstein
+                  option(value='Lithuania') Lithuania
+                  option(value='Luxembourg') Luxembourg
+                  option(value='Macau') Macau
+                  option(value='Macedonia') Macedonia
+                  option(value='Madagascar') Madagascar
+                  option(value='Malaysia') Malaysia
+                  option(value='Malawi') Malawi
+                  option(value='Maldives') Maldives
+                  option(value='Mali') Mali
+                  option(value='Malta') Malta
+                  option(value='Marshall Islands') Marshall Islands
+                  option(value='Martinique') Martinique
+                  option(value='Mauritania') Mauritania
+                  option(value='Mauritius') Mauritius
+                  option(value='Mayotte') Mayotte
+                  option(value='Mexico') Mexico
+                  option(value='Midway Islands') Midway Islands
+                  option(value='Moldova') Moldova
+                  option(value='Monaco') Monaco
+                  option(value='Mongolia') Mongolia
+                  option(value='Montserrat') Montserrat
+                  option(value='Morocco') Morocco
+                  option(value='Mozambique') Mozambique
+                  option(value='Myanmar') Myanmar
+                  option(value='Nambia') Nambia
+                  option(value='Nauru') Nauru
+                  option(value='Nepal') Nepal
+                  option(value='Netherland Antilles') Netherland Antilles
+                  option(value='Netherlands') Netherlands (Holland, Europe)
+                  option(value='Nevis') Nevis
+                  option(value='New Caledonia') New Caledonia
+                  option(value='New Zealand') New Zealand
+                  option(value='Nicaragua') Nicaragua
+                  option(value='Niger') Niger
+                  option(value='Nigeria') Nigeria
+                  option(value='Niue') Niue
+                  option(value='Norfolk Island') Norfolk Island
+                  option(value='Norway') Norway
+                  option(value='Oman') Oman
+                  option(value='Pakistan') Pakistan
+                  option(value='Palau Island') Palau Island
+                  option(value='Palestine') Palestine
+                  option(value='Panama') Panama
+                  option(value='Papua New Guinea') Papua New Guinea
+                  option(value='Paraguay') Paraguay
+                  option(value='Peru') Peru
+                  option(value='Phillipines') Philippines
+                  option(value='Pitcairn Island') Pitcairn Island
+                  option(value='Poland') Poland
+                  option(value='Portugal') Portugal
+                  option(value='Puerto Rico') Puerto Rico
+                  option(value='Qatar') Qatar
+                  option(value='Republic of Montenegro') Republic of Montenegro
+                  option(value='Republic of Serbia') Republic of Serbia
+                  option(value='Reunion') Reunion
+                  option(value='Romania') Romania
+                  option(value='Russia') Russia
+                  option(value='Rwanda') Rwanda
+                  option(value='St Barthelemy') St Barthelemy
+                  option(value='St Eustatius') St Eustatius
+                  option(value='St Helena') St Helena
+                  option(value='St Kitts-Nevis') St Kitts-Nevis
+                  option(value='St Lucia') St Lucia
+                  option(value='St Maarten') St Maarten
+                  option(value='St Pierre & Miquelon') St Pierre & Miquelon
+                  option(value='St Vincent & Grenadines') St Vincent & Grenadines
+                  option(value='Saipan') Saipan
+                  option(value='Samoa') Samoa
+                  option(value='Samoa American') Samoa American
+                  option(value='San Marino') San Marino
+                  option(value='Sao Tome & Principe') Sao Tome & Principe
+                  option(value='Saudi Arabia') Saudi Arabia
+                  option(value='Senegal') Senegal
+                  option(value='Seychelles') Seychelles
+                  option(value='Sierra Leone') Sierra Leone
+                  option(value='Singapore') Singapore
+                  option(value='Slovakia') Slovakia
+                  option(value='Slovenia') Slovenia
+                  option(value='Solomon Islands') Solomon Islands
+                  option(value='Somalia') Somalia
+                  option(value='South Africa') South Africa
+                  option(value='Spain') Spain
+                  option(value='Sri Lanka') Sri Lanka
+                  option(value='Sudan') Sudan
+                  option(value='Suriname') Suriname
+                  option(value='Swaziland') Swaziland
+                  option(value='Sweden') Sweden
+                  option(value='Switzerland') Switzerland
+                  option(value='Syria') Syria
+                  option(value='Tahiti') Tahiti
+                  option(value='Taiwan') Taiwan
+                  option(value='Tajikistan') Tajikistan
+                  option(value='Tanzania') Tanzania
+                  option(value='Thailand') Thailand
+                  option(value='Togo') Togo
+                  option(value='Tokelau') Tokelau
+                  option(value='Tonga') Tonga
+                  option(value='Trinidad & Tobago') Trinidad & Tobago
+                  option(value='Tunisia') Tunisia
+                  option(value='Turkey') Turkey
+                  option(value='Turkmenistan') Turkmenistan
+                  option(value='Turks & Caicos Is') Turks & Caicos Is
+                  option(value='Tuvalu') Tuvalu
+                  option(value='Uganda') Uganda
+                  option(value='United Kingdom') United Kingdom
+                  option(value='Ukraine') Ukraine
+                  option(value='United Arab Erimates') United Arab Emirates
+                  option(value='United States of America') United States of America
+                  option(value='Uraguay') Uruguay
+                  option(value='Uzbekistan') Uzbekistan
+                  option(value='Vanuatu') Vanuatu
+                  option(value='Vatican City State') Vatican City State
+                  option(value='Venezuela') Venezuela
+                  option(value='Vietnam') Vietnam
+                  option(value='Virgin Islands (Brit)') Virgin Islands (Brit)
+                  option(value='Virgin Islands (USA)') Virgin Islands (USA)
+                  option(value='Wake Island') Wake Island
+                  option(value='Wallis & Futana Is') Wallis & Futana Is
+                  option(value='Yemen') Yemen
+                  option(value='Zaire') Zaire
+                  option(value='Zambia') Zambia
+                  option(value='Zimbabwe') Zimbabwe
+
+             .form-group
+               button.btn.btn-primary Save
+         .modal-footer
+            button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+          
+    // job title
+    #jobtitle.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+     .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+            h5#exampleModalLabel.modal-title Add New Job Title
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+            form.form(action='/company/add_new_job_title',method='POST')
+             .form-group
+               label(for='title') Job Title
+               input.form-control(type='text' name='title' required placeholder='Title' )
+             .form-group
+               button.btn.btn-primary Save
+        .modal-footer
+            button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+    #editJobTitle.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+     .modal-dialog(role='document')
+        .modal-content
+         .modal-header
+            h5#exampleModalLabel.modal-title Edit Job Title
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+             span(aria-hidden='true') ×
+         .modal-body
+            form(action='/company/edit_job_title' method='POST')
+             
+             input#job_id.form-control(type='hidden' name='id')
+             .form-group
+                label.col-form-label(for='message-text') Title
+                input.form-control#job_title(type='text' name='title' required placeholder='Title')
+             .form-group
+               button.btn.btn-primary Save
+         .modal-footer
+            button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+          
+    
+    // Department
+    #department.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+     .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+            h5#exampleModalLabel.modal-title Add New Department Title
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+            form.form(action='/company/add_new_department_title',method='POST')
+             .form-group
+               label(for='title') Department Title
+               input.form-control(type='text' name='title' required placeholder='Title' )
+             .form-group
+               button.btn.btn-primary Save
+        .modal-footer
+            button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+    #editDepartmentTitle.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+     .modal-dialog(role='document')
+        .modal-content
+         .modal-header
+            h5#exampleModalLabel.modal-title Edit Department Title
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+             span(aria-hidden='true') ×
+         .modal-body
+            form(action='/company/edit_department_title' method='POST')
+             
+             input#department_id.form-control(type='hidden' name='id')
+             .form-group
+                label.col-form-label(for='message-text') Title
+                input.form-control#department_title(type='text' name='title' required placeholder='Title')
+             .form-group
+               button.btn.btn-primary Save
+         .modal-footer
+            button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+            
+    // Regions
+    #region.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+     .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+            h5#exampleModalLabel.modal-title Add New Region Title
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+            form.form(action='/company/add_new_region_title',method='POST')
+             .form-group
+               label(for='title') Region Title
+               input.form-control(type='text' name='title' required placeholder='Title' )
+             .form-group
+               button.btn.btn-primary Save
+        .modal-footer
+            button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+    #editRegionTitle.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+     .modal-dialog(role='document')
+        .modal-content
+         .modal-header
+            h5#exampleModalLabel.modal-title Edit Region Title
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+             span(aria-hidden='true') ×
+         .modal-body
+            form(action='/company/edit_region_title' method='POST')
+             
+             input#region_id.form-control(type='hidden' name='id')
+             .form-group
+                label.col-form-label(for='message-text') Title
+                input.form-control#region_title(type='text' name='title' required placeholder='Title')
+             .form-group
+               button.btn.btn-primary Save
+         .modal-footer
+            button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+
+    // Shifts
+    #workshift.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+     .modal-dialog(role='document')
+        .modal-content
+         .modal-header
+            h5#exampleModalLabel.modal-title Add New Work Shift
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+             span(aria-hidden='true') ×
+         .modal-body
+            form(action='/company/add_new_work_shift',method='POST')
+             .form-group
+               label(for='title') Title
+               input.form-control(type='text' name='title' required placeholder='Title' )
+             .form-group
+               lable(for='start_time') Start Time
+               input.form-control(type="time", name="start_time",required)
+             .form-group
+               lable(for='end_time') End Time
+               input.form-control(type="time", name="end_time",required)
+             .form-group
+               lable(for='end_time') Break Hours
+               input.form-control(type="number", name="break_hours",required,min=1)
+             
+             .form-group
+                label(for='exampleFormControlSelect2') Choose Days
+                select#exampleFormControlSelect2.form-control(multiple='',name='days' ,required)
+                    option(value='Sunday') Sunday
+                    option(value='Monday') Monday
+                    option(value='Tuesday') Tuesday
+                    option(value='Wednesday') Wednesday
+                    option(value='Thursday') Thursday
+                    option(value='Friday') Friday
+                    option(value='Saturday') Saturday
+
+             .form-group
+               button.btn.btn-primary Save
+         .modal-footer
+            button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+    #editWorkShiftTitle.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+     .modal-dialog(role='document')
+        .modal-content
+         .modal-header
+            h5#exampleModalLabel.modal-title Edit Working Shift 
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+             span(aria-hidden='true') ×
+         .modal-body
+            form(action='/company/edit_work_shift' method='POST')
+             
+             input#shift_id.form-control(type='hidden' name='id')
+             .form-group
+               label(for='title') Title
+               input.form-control#shift_title(type='text' name='title' required placeholder='Title' )
+             .form-group
+               lable(for='start_time') Start Time
+               input.form-control#shift_start_time(type="time", name="start_time",required)
+             .form-group
+               lable(for='end_time') End Time
+               input.form-control#shift_end_time(type="time", name="end_time",required)
+             .form-group
+               lable(for='end_time') Break Hours
+               input.form-control#shift_break_hours(type="number", name="break_hours",required,min=1)
+             
+             .form-group
+                label(for='exampleFormControlSelect2') Choose Days
+                select.form-control(multiple='',name='days' ,required)
+                    option(value='Sunday') Sunday
+                    option(value='Monday') Monday
+                    option(value='Tuesday') Tuesday
+                    option(value='Wednesday') Wednesday
+                    option(value='Thursday') Thursday
+                    option(value='Friday') Friday
+                    option(value='Saturday') Saturday
+             .form-group
+               button.btn.btn-primary Save
+         .modal-footer
+            button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+
+
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js')
+    script(src='/admin/assets/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js')
+    script(src='/admin/assets/js/core/popper.min.js')
+    script(src='/admin/assets/js/core/bootstrap.min.js')
+    script(src='/admin/assets/js/plugin/chartist/chartist.min.js')
+    script(src='/admin/assets/js/plugin/chartist/plugin/chartist-plugin-tooltip.min.js')
+    
+    script(src='/admin/assets/js/plugin/bootstrap-toggle/bootstrap-toggle.min.js')
+    script(src='/admin/assets/js/plugin/jquery-mapael/jquery.mapael.min.js')
+    script(src='/admin/assets/js/plugin/jquery-mapael/maps/world_countries.min.js')
+    script(src='/admin/assets/js/plugin/chart-circle/circles.min.js')
+    script(src='/admin/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js')
+    script(src='/admin/assets/js/ready.min.js')
+    script(src='/admin/assets/js/demo.js')
+    script(src='/admin/assets/js/tab.js')
+
+    // DATABLES
+    script(src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js")
+    script(src="https://cdn.datatables.net/buttons/1.6.4/js/dataTables.buttons.min.js")
+    script(src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.flash.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js")
+    script(src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.html5.min.js")
+    script(src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.print.min.js")
+   
+    script.
+       $(document).ready( function () {
+             $('.mytable').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
+            } );
+            // EDITS
+             
+            $('.taxable').change(function(){
+              const value = $(this).val();
+              if(value==='')
+              {
+                  $('.value').css({"display":"none"})
+              }
+              if(value==='True')
+              {
+                $('.value').css({"display":"block"})
+              }
+              if(value==='False')
+              {
+                  $('.value').css({"display":"none"})
+              }
+            })
+            // job
+            $('#editJobTitle').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget) // Button that triggered the modal
+                var recipient = button.data('whatever') // Extract info from data-* attributes
+                var title = ''
+                $.get('/company/get_job_title/'+recipient, function( data ) {
+                   title=data.title
+                })
+                setTimeout(()=>{
+                 var modal = $(this)
+                   modal.find('.modal-body #job_title').val(title)
+                   modal.find('.modal-body #job_id').val(recipient)
+                },1000)
+                
+                
+            })
+
+            // department
+            $('#editDepartmentTitle').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget) // Button that triggered the modal
+                var recipient = button.data('whatever') // Extract info from data-* attributes
+                var title = ''
+                $.get('/company/get_department_title/'+recipient, function( data ) {
+                   title=data.title
+                })
+                setTimeout(()=>{
+                 var modal = $(this)
+                   modal.find('.modal-body #department_title').val(title)
+                   modal.find('.modal-body #department_id').val(recipient)
+                },1000)
+                
+                
+            })
+
+             // region
+            $('#editRegionTitle').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget) // Button that triggered the modal
+                var recipient = button.data('whatever') // Extract info from data-* attributes
+                var title = ''
+                $.get('/company/get_region_title/'+recipient, function( data ) {
+                   title=data.title
+                })
+                setTimeout(()=>{
+                 var modal = $(this)
+                   modal.find('.modal-body #region_title').val(title)
+                   modal.find('.modal-body #region_id').val(recipient)
+                },1000)
+                
+                
+            })
+
+             // work shift hours
+            $('#editWorkShiftTitle').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget) // Button that triggered the modal
+                var recipient = button.data('whatever') // Extract info from data-* attributes
+                var shift = {}
+                $.get('/company/get_shift_data/'+recipient, function( data ) {
+                   shift=data.shift
+                })
+                setTimeout(()=>{
+                 var modal = $(this)
+                   modal.find('.modal-body #shift_id').val(recipient)
+                   modal.find('.modal-body #shift_title').val(shift.title)
+                   modal.find('.modal-body #shift_start_time').val(shift.start_time)
+                   modal.find('.modal-body #shift_end_time').val(shift.end_time)
+                   modal.find('.modal-body #shift_break_hours').val(shift.break_hours)
+                   
+                },1000)
+                
+                
+            })
+
+
+            // Company Details editCompanyDetails
+            $('#editCompanyDetails').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget) // Button that triggered the modal
+                var recipient = button.data('whatever') // Extract info from data-* attributes
+                var company = {}
+                $.get('/company/get_company_details/'+recipient, function( data ) {
+                   company=data.company
+                })
+                setTimeout(()=>{
+                 var modal = $(this)
+                   modal.find('.modal-body #company_id').val(recipient)
+                   modal.find('.modal-body #company_name').val(company.name)
+                   modal.find('.modal-body #company_email').val(company.email)
+                 
+                   modal.find('.modal-body #company_phone_no').val(company.phone_no)
+                   modal.find('.modal-body #company.country').val(company.country)
+                   
+                },1000)
+                
+                
+            })
+
+            // Tax Details
+            $('#editTaxDetails').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget) // Button that triggered the modal
+                var recipient = button.data('whatever') // Extract info from data-* attributes
+                console.log(recipient)
+                var tax = {}
+                $.get('/company/get_tax_details/'+recipient, function( data ) {
+                  console.log(data)
+                   tax=data.tax
+                })
+                setTimeout(()=>{
+                 var modal = $(this)
+                   modal.find('.modal-body #tax_id').val(recipient)
+                   modal.find('.modal-body #tax_code').val(tax.code)
+                   modal.find('.modal-body #tax_name').val(tax.name)
+                   modal.find('.modal-body #tax_value').val(tax.value)
+                    
+                },1000)
+                
+                
+            })
+
+            // Admin Details
+            $('#editAdminDetails').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget) // Button that triggered the modal
+                var recipient = button.data('whatever') // Extract info from data-* attributes
+                console.log(recipient)
+                var admin = {}
+                $.get('/company/get_admin_details/'+recipient, function( data ) {
+                  console.log(data)
+                   admin=data.admin
+                })
+                setTimeout(()=>{
+                 var modal = $(this)
+                   modal.find('.modal-body .admin_id').val(recipient)
+                   modal.find('.modal-body #admin_firstname').val(admin.first_name)
+                   modal.find('.modal-body #admin_lastname').val(admin.last_name)
+                   modal.find('.modal-body #admin_email').val(admin.username)
+                    
+                },1000)
+                
+                
+            })
+
+            // Deduct Details
+            $('#editDeductDetails').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget) // Button that triggered the modal
+                var recipient = button.data('whatever') // Extract info from data-* attributes
+                console.log(recipient)
+                var deduct = {}
+                $.get('/company/get_deduct_details/'+recipient, function( data ) {
+                 
+                   deduct=data.deduct
+                })
+                setTimeout(()=>{
+                 var modal = $(this)
+                   modal.find('.modal-body .deduct_id').val(recipient)
+                   modal.find('.modal-body #deduct_title').val(deduct.title)
+                   modal.find('.modal-body #deduct_code').val(deduct.code)
+                 
+                },1000)
+                
+                
+            })
+
+            // Benefit Details
+            $('#editBenefitDetails').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget) // Button that triggered the modal
+                var recipient = button.data('whatever') // Extract info from data-* attributes
+                console.log(recipient)
+                var benefit = {}
+                $.get('/company/get_benefit_details/'+recipient, function( data ) {
+                 
+                   benefit=data.benefit
+                })
+                setTimeout(()=>{
+                 var modal = $(this)
+                   modal.find('.modal-body #benefit_id').val(recipient)
+                   modal.find('.modal-body #benefit_title').val(benefit.title)
+                   modal.find('.modal-body #benefit_code').val(benefit.code)
+                   
+
+                    if(benefit.title ==='Car Benefit')
+                    {
+                      modal.find('.modal-body #benefit_value_car').val(benefit.value)
+                      $('#car_benefit').css({"display":"block"})
+                      $('#per_diem').css({"display":"none"})
+                      $('#meal_allowance').css({"display":"none"})
+                      $('#mobile').css({"display":"none"})
+                       $('#furniture').css({"display":"none"})
+                       $('#noncash').css({"display":"none"})
+                    }
+                    else if(benefit.title ==='Meal Allowance')
+                    {
+                        modal.find('.modal-body #benefit_value_meal').val(benefit.value)
+                      $('#car_benefit').css({"display":"none"})
+                      $('#meal_allowance').css({"display":"block"})
+                      $('#per_diem').css({"display":"none"})
+                      $('#mobile').css({"display":"none"})
+                       $('#furniture').css({"display":"none"})
+                       $('#noncash').css({"display":"none"})
+                    }
+                    else if(benefit.title ==='Per Diem')
+                    {
+                        modal.find('.modal-body #benefit_value_per').val(benefit.value)
+                       $('#car_benefit').css({"display":"none"})
+                       $('#meal_allowance').css({"display":"none"})
+                       $('#per_diem').css({"display":"block"})
+                       $('#mobile').css({"display":"none"})
+                       $('#furniture').css({"display":"none"})
+                       $('#noncash').css({"display":"none"})
+                    }
+                    else if(benefit.title ==='Mobile Benefit')
+                    {
+                        modal.find('.modal-body #benefit_value_mobile').val(benefit.value)
+                       $('#car_benefit').css({"display":"none"})
+                       $('#meal_allowance').css({"display":"none"})
+                       $('#per_diem').css({"display":"none"})
+                       $('#mobile').css({"display":"block"})
+                       $('#furniture').css({"display":"none"})
+                       $('#noncash').css({"display":"none"})
+                    }
+                    else if(benefit.title ==='Furniture Allowance')
+                    {
+                        modal.find('.modal-body #benefit_value_furniture').val(benefit.value)
+                       $('#car_benefit').css({"display":"none"})
+                       $('#meal_allowance').css({"display":"none"})
+                       $('#per_diem').css({"display":"none"})
+                       $('#mobile').css({"display":"none"})
+                       $('#furniture').css({"display":"block"})
+                       $('#noncash').css({"display":"none"})
+                    }
+                    else if(benefit.title ==='Non Cash Allowances')
+                    {
+                        modal.find('.modal-body #benefit_value_noncash').val(benefit.value)
+                       $('#car_benefit').css({"display":"none"})
+                       $('#meal_allowance').css({"display":"none"})
+                       $('#per_diem').css({"display":"none"})
+                       $('#mobile').css({"display":"none"})
+                       $('#furniture').css({"display":"none"})
+                       $('#noncash').css({"display":"block"})
+                    }
+                    
+                   
+                 
+                },1000) 
+            })
+
+            // Loan Details
+            $('#editLoanDetails').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget) // Button that triggered the modal
+                var recipient = button.data('whatever') // Extract info from data-* attributes
+                console.log(recipient)
+                var loan = {}
+                $.get('/company/get_loan_details/'+recipient, function( data ) {
+                 
+                   loan=data.loan
+                })
+                setTimeout(()=>{
+                 var modal = $(this)
+                   modal.find('.modal-body #loan_id').val(recipient)
+                   modal.find('.modal-body #loan_title').val(loan.title)
+                   modal.find('.modal-body #loan_code').val(loan.code)
+                 
+                },1000) 
+            })
+
+             // Bank Details
+            $('#editBankDetails').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget) // Button that triggered the modal
+                var recipient = button.data('whatever') // Extract info from data-* attributes
+                console.log(recipient)
+                var bank = {}
+                $.get('/company/get_bank_details/'+recipient, function( data ) {
+                 
+                   bank=data.bank
+                })
+                setTimeout(()=>{
+                 var modal = $(this)
+                   modal.find('.modal-body #bank_id').val(recipient)
+                   modal.find('.modal-body #bank_title').val(bank.title)
+                 
+                 
+                },1000) 
+            })
+
+            // Expense
+            $('#editExpenseDetails').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget) // Button that triggered the modal
+                var recipient = button.data('whatever') // Extract info from data-* attributes
+                console.log(recipient)
+                var expense = {}
+                $.get('/company/get_expense_details/'+recipient, function( data ) {
+                 
+                   expense=data.expense
+                })
+                setTimeout(()=>{
+                 var modal = $(this)
+                   modal.find('.modal-body #expense_id').val(recipient)
+                   modal.find('.modal-body #expense_title').val(expense.title)
+                 
+                 
+                },1000) 
+            })
+
+
+            // Leaves
+            $('#editLeaveDetails').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget) // Button that triggered the modal
+                var recipient = button.data('whatever') // Extract info from data-* attributes
+                console.log(recipient)
+                var leave = {}
+                $.get('/company/get_leave_details/'+recipient, function( data ) {
+                 
+                   leave=data.leave
+                })
+                setTimeout(()=>{
+                 var modal = $(this)
+                   modal.find('.modal-body #leave_id').val(recipient)
+                   modal.find('.modal-body #leave_title').val(leave.title)
+                 
+                 
+                },1000) 
+            })
+
+            // Reliefs
+            $('#editReliefDetails').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget) // Button that triggered the modal
+                var recipient = button.data('whatever') // Extract info from data-* attributes
+                console.log(recipient)
+                var relief = {}
+                $.get('/company/get_relief_details/'+recipient, function( data ) {
+                 
+                   relief=data.relief
+                })
+                setTimeout(()=>{
+                 var modal = $(this)
+                   modal.find('.modal-body #relief_id').val(recipient)
+                 modal.find('.modal-body #relief_item').val(relief.item)
+                 if(relief.amount!==null)
+                 {
+                     $('#month').css({"display":"block"})
+                 modal.find('.modal-body #relief_amount').val(relief.amount)
+                 }
+                 
+                 modal.find('.modal-body #relief_maximum').val(relief.maximum_amount)
+                 
+                 
+                 
+                },1000) 
+            })
+
+        });
+    script.
+     
+     jQuery(document).ready(function() {
+          var changeTab = function(id) {
+              // Show/Hide Tabs
+              jQuery('.tab-content #' + id).show().siblings().hide();
+
+              // Change/remove current tab to active
+              jQuery('.tab-content #' + id + ':visible').addClass("active").siblings().removeClass('active');
+          };
+
+          jQuery('.tabs .tab-links a').on('click', function(e)  {
+              e.preventDefault();
+              // Here you will get the tab id, comming from the clicked hyperlink
+              var currentAttrValue = jQuery(this).attr('href').split("#")[1];
+              // Change/remove current tab to active
+              jQuery(this).parents("li").addClass("active").siblings().removeClass('active');
+              changeTab(currentAttrValue);
+          });
+        
+          var tab = document.location.href.split("#");
+          if(tab.length > 0) {
+            var id = tab[1];
+            jQuery('.tabs .tab-links a[href="#' + id + '"]').click();
+            window.addEventListener("load",function() {
+              jQuery(window).scrollTop(0);
+            },true);
+          }
+      });
+      

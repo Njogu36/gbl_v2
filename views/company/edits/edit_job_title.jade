@@ -1,0 +1,153 @@
+doctype html
+html
+  head
+    meta(http-equiv='X-UA-Compatible' content='IE=edge,chrome=1')
+    title Edit Job Title - #{job.title} | GBL CENTUM
+    meta(content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport')
+    link(rel='shortcut icon', type='image/x-icon', href='/images/icon.png')
+    link(rel='stylesheet' href='/admin/assets/css/bootstrap.min.css')
+    link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i')
+    link(rel='stylesheet' href='/admin/assets/css/ready.css')
+    link(rel='stylesheet' href='/admin/assets/css/demo.css')
+  body
+    .wrapper
+      .main-header
+        .logo-header
+          a.logo(href='#')
+            img(src="/images/logo.png",width='70px', alt="")
+          button.navbar-toggler.sidenav-toggler.ml-auto(type='button' data-toggle='collapse' data-target='collapse' aria-controls='sidebar' aria-expanded='false' aria-label='Toggle navigation')
+            span.navbar-toggler-icon
+          button.topbar-toggler.more
+            i.la.la-ellipsis-v
+        nav.navbar.navbar-header.navbar-expand-lg
+          .container-fluid
+            
+            ul.navbar-nav.topbar-nav.ml-md-auto.align-items-center
+              
+              
+              li.nav-item.dropdown
+                a.dropdown-toggle.profile-pic(data-toggle='dropdown' href='#' aria-expanded='false')
+                  img.img-circle(src='/images/user.png' alt='user-img' width='36')
+                  span #{user.first_name} #{user.last_name}
+                ul.dropdown-menu.dropdown-user
+                  
+                
+                  a.dropdown-item(href='/company/log_out')
+                    i.fa.fa-power-off
+                    |  Logout
+                // /.dropdown-user
+      .sidebar
+        .scrollbar-inner.sidebar-wrapper
+          .user
+            .photo
+              img(src='/images/user.png')
+            .info
+              a(data-toggle='collapse' href='#collapseExample' aria-expanded='true')
+                span
+                  | #{user.first_name} #{user.last_name}
+                  span.user-level Administrator
+                  
+              .clearfix
+              
+                 
+          ul.nav
+            li.nav-item.active
+              a(href='/company/dashboard')
+                i.la.la-dashboard
+                p Dashboard
+                span.badge.badge-count 5
+            li.nav-item
+              a(href='/company/employees')
+                i.la.la-users
+                p Employees
+                span.badge.badge-count 14
+            li.nav-item
+              a(href='#')
+                i.la.la-keyboard-o
+                p Leaves
+                span.badge.badge-count 50
+            li.nav-item
+              a(href='/company/payroll')
+                i.la.la-th
+                p Payroll
+            li.nav-item
+              a(href='/company/reports')
+                i.la.la-signal
+                p Reports
+               
+            if user.role ==='super admin'  
+              li.nav-item
+                a(href='/company/settings')
+                  i.la.la-gear
+                  p Settings
+             
+                
+            
+      .main-panel
+        .content
+          .container-fluid
+            h4.page-title Dashboard
+            .row
+              .col-md-3
+                .card.card-stats.card-warning
+                  .card-body
+                    .row
+                      .col-5
+                        .icon-big.text-center
+                          i.la.la-users
+                      .col-7.d-flex.align-items-center
+                        .numbers
+                          p.card-category Employees
+                          h4.card-title 1,294
+              .col-md-3
+                .card.card-stats.card-success
+                  .card-body
+                    .row
+                      .col-5
+                        .icon-big.text-center
+                          i.la.la-bar-chart
+                      .col-7.d-flex.align-items-center
+                        .numbers
+                          p.card-category Leaves
+                          h4.card-title $ 1,345
+              .col-md-3
+                .card.card-stats.card-danger
+                  .card-body
+                    .row
+                      .col-5
+                        .icon-big.text-center
+                          i.la.la-newspaper-o
+                      .col-7.d-flex.align-items-center
+                        .numbers
+                          p.card-category Subscribers
+                          h4.card-title 1303
+              .col-md-3
+                .card.card-stats.card-primary
+                  .card-body
+                    .row
+                      .col-5
+                        .icon-big.text-center
+                          i.la.la-check-circle
+                      .col-7.d-flex.align-items-center
+                        .numbers
+                          p.card-category Order
+                          h4.card-title 576
+              
+           
+            
+        
+   
+    script(src='/admin/assets/js/core/jquery.3.2.1.min.js')
+    script(src='/admin/assets/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js')
+    script(src='/admin/assets/js/core/popper.min.js')
+    script(src='/admin/assets/js/core/bootstrap.min.js')
+    script(src='/admin/assets/js/plugin/chartist/chartist.min.js')
+    script(src='/admin/assets/js/plugin/chartist/plugin/chartist-plugin-tooltip.min.js')
+    
+    script(src='/admin/assets/js/plugin/bootstrap-toggle/bootstrap-toggle.min.js')
+    script(src='/admin/assets/js/plugin/jquery-mapael/jquery.mapael.min.js')
+    script(src='/admin/assets/js/plugin/jquery-mapael/maps/world_countries.min.js')
+    script(src='/admin/assets/js/plugin/chart-circle/circles.min.js')
+    script(src='/admin/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js')
+    script(src='/admin/assets/js/ready.min.js')
+    script(src='/admin/assets/js/demo.js')

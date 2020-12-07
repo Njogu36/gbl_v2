@@ -1,0 +1,340 @@
+doctype html
+html
+  head
+    meta(http-equiv='X-UA-Compatible' content='IE=edge,chrome=1')
+    title Profile | GBL CENTUM
+    meta(content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport')
+    link(rel='shortcut icon', type='image/x-icon', href='/images/icon.png')
+    link(rel='stylesheet' href='/admin/assets/css/bootstrap.min.css')
+    link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i')
+    link(rel='stylesheet' href='/admin/assets/css/ready.css')
+    link(rel='stylesheet' href='/admin/assets/css/demo.css')
+    // DATABLES
+    link(rel="stylesheet", href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css")
+    link(rel="stylesheet", href="https://cdn.datatables.net/buttons/1.6.4/css/buttons.dataTables.min.css")
+  body
+    .wrapper
+      .main-header
+        .logo-header
+          a.logo(href='#')
+            img(src="/images/logo.png",width='70px', alt="")
+          button.navbar-toggler.sidenav-toggler.ml-auto(type='button' data-toggle='collapse' data-target='collapse' aria-controls='sidebar' aria-expanded='false' aria-label='Toggle navigation')
+            span.navbar-toggler-icon
+          button.topbar-toggler.more
+            i.la.la-ellipsis-v
+        nav.navbar.navbar-header.navbar-expand-lg
+          .container-fluid
+            
+            ul.navbar-nav.topbar-nav.ml-md-auto.align-items-center
+              
+              
+              li.nav-item.dropdown
+                a.dropdown-toggle.profile-pic(data-toggle='dropdown' href='#' aria-expanded='false')
+                  img.img-circle(src=user.files.passport_photo alt='user-img' width='36')
+                  span #{user.first_name} #{user.last_name}
+                ul.dropdown-menu.dropdown-user
+                  
+                
+                  a.dropdown-item(href='/log_out')
+                    i.fa.fa-power-off
+                    |  Logout
+                // /.dropdown-user
+      .sidebar
+        .scrollbar-inner.sidebar-wrapper
+          .user
+            .photo
+              img(src=user.files.passport_photo)
+            .info
+              a(data-toggle='collapse' href='#collapseExample' aria-expanded='true')
+                span
+                  | #{user.first_name} #{user.last_name}
+                  span.user-level #{user.hr_details.job_title}
+                  span.caret
+              .clearfix
+              #collapseExample.collapse.in(aria-expanded='true' style='')
+                ul.nav
+                  
+                  li
+                    a(href='/profile')
+                      span.link-collapse View Profile
+                  li
+                    a(href='/edit_profile')
+                      span.link-collapse Edit Profile
+                 
+          ul.nav
+            
+           
+            li.nav-item
+              a(href='/leaves')
+                i.la.la-keyboard-o
+                p Leaves
+               
+            li.nav-item
+              a(href='/expenses')
+                i.la.la-th
+                p Expenses
+            li.nav-item
+              a(href='/history')
+                i.la.la-history
+                p Payment History
+               
+            
+             
+                
+            
+      .main-panel
+        .content
+          .container-fluid
+            h4.page-title Profile
+            // Personal Details
+            .row
+             .col-md-12
+              .card
+                .card-header
+                  .card-title Personal Details
+                .card-body
+                 .row
+                   .col-md-4(style='text-align:center')
+                     img(src=user.files.passport_photo,width='50%', alt="")
+                     .row(style='margin-top:10px')
+                      .col-md-12
+                       a(href="/edit_profile" ).btn.btn-default.btn-block 
+                        i.la.la-edit
+                        &nbsp;
+                        | Edit user
+                   .col-md-4
+                    p Fullname: #{user.first_name} #{user.last_name}
+                    p Email: #{user.username}
+                    p Job Number: #{user.hr_details.job_number}
+                    p Job title: #{user.hr_details.job_title}
+                    p user Type: #{user.salary_details.user_type}
+                    p Department: #{user.hr_details.department}
+                    if user.status === 'Active'
+                     p Status: 
+                      span.badge.badge-primary Active
+                    if user.status ==='Terminated'
+                     p Status: 
+                      span.badge.badge-danger Terminated
+                    p Gross Pay: #{user.salary_details.payment_currency} #{user.salary_details.monthly_salary} per month
+                    p Income Tax Type: #{user.salary_details.income_tax}
+                    p Payment Type: #{user.salary_details.payment_type}
+                   .col-md-4
+                    p Region: #{user.hr_details.region}
+                    if user.manager === false
+                     if user.hr_details.reports_to !==''
+                      p Reports to: #{user.hr_details.reports_to}
+                    if user.manager === true
+                     p Head of #{user.hr_details.head_of_department}
+                    p Date of Employment: #{user.hr_details.date_of_employment}
+                    p Contract Start Date: #{user.hr_details.contract_start_date}
+                    p Contract End Date: #{user.hr_details.contract_end_date}
+                    p Contract Duration: #{user.hr_details.contract_duration} year(s)
+                    p Level of Education: #{user.education.level_of_education}
+                    p Institution: #{user.education.university}
+
+
+            // Deductions
+            .row
+             .col-md-12
+              .card
+                .card-header
+                  .card-title Deductions
+                .card-body
+                   table.table.mytable
+                              thead
+                               tr
+                                th Type
+                                th Amount (#{user.salary_details.payment_currency})
+                                th Account Name
+                                th Account Number
+                                th Status
+                                th Added On
+                              
+                              tbody
+                               each deduct in deducts
+                                tr
+                                 td=deduct.type
+                                 td #{user.salary_details.payment_currency} #{deduct.amount}
+                                 td
+                                  if deduct.account_name === ''
+                                   p ....
+                                  if deduct.account_name !== ''
+                                   p #{deduct.account_name}
+                                 td
+                                  if deduct.account_number === ''
+                                   p ....
+                                  if deduct.account_number !== ''
+                                   p #{deduct.account_number}
+                                 
+                                 td
+                                  if deduct.status === 'Active'
+                                    span.badge.badge-success Active
+                                  if deduct.status === 'Inactive'
+                                   span.badge.badge-danger Inactive
+                                 td=deduct.added_on
+                               
+
+            // Loans
+            .row
+             .col-md-12
+              .card
+                .card-header
+                  .card-title Loans
+                .card-body
+                 table.table.mytable
+                              thead
+                               tr
+                                th Type
+                                th Amount (#{user.salary_details.payment_currency})
+                                th Account Name
+                                th Account Number
+                                th Status
+                                th Added On
+                               
+                              tbody
+                               each loan in loans
+                                tr
+                                 td=loan.type
+                                 td #{user.salary_details.payment_currency} #{loan.amount}
+                                 td
+                                  if loan.account_name === ''
+                                   p ....
+                                  if loan.account_name !== ''
+                                   p #{loan.account_name}
+                                 td
+                                  if loan.account_number === ''
+                                   p ....
+                                  if loan.account_number !== ''
+                                   p #{loan.account_number}
+                                 td
+                                  if loan.status === 'Active'
+                                    span.badge.badge-success Active
+                                  if loan.status === 'Inactive'
+                                   span.badge.badge-danger Inactive
+                                 td=loan.added_on
+                               
+            // Benefit
+            .row
+             .col-md-12
+              .card
+                .card-header
+                  .card-title Benefits
+                .card-body
+                   table.table.mytable
+                              thead
+                               tr
+                                th Type
+                                th Amount (#{user.salary_details.payment_currency})
+                                th Status
+                                th Added On
+                               
+                              tbody
+                               each benefit in benefits
+                                tr
+                                 td=benefit.type
+                                 td #{user.salary_details.payment_currency} #{benefit.amount}
+                                 td 
+                                  if benefit.status === 'Active'
+                                    span.badge.badge-success Active
+                                  if benefit.status === 'Inactive'
+                                   span.badge.badge-danger Inactive
+                                 td=benefit.added_on
+            if user.salary_details.tax_exemption_val === true
+                .card 
+                  .card-header
+                    .card-title Tax Exemption
+                  .card-body
+                    .row
+                     .col-md-12
+                       table.table.mytable
+                              thead
+                               tr
+                                
+                                th Certificate No
+                                th Exemption Amount
+                                th Approved
+                                
+                              tbody
+                               tr
+                                td=user.salary_details.tax_exemption.exemption_certificate_no
+                                td #{user.salary_details.payment_currency} #{user.salary_details.tax_exemption.disability_exemption_amount}
+                                td
+                                 if user.salary_details.tax_exemption.approval === true
+                                  span.badge.badge-success True
+                                 if user.salary_details.tax_exemption.approval ===false
+                                  span.badge.badge-danger False
+                                
+             
+                               
+
+
+
+            // Files
+            .row
+             .col-md-12
+              .card
+                .card-header
+                  .card-title Files
+                .card-body
+                  .row
+                    .col-md-12
+                      a(href=user.files.resume_letter target='_blank' download).btn.btn-success
+                        i.la.la-download
+                        &nbsp;
+                        | Resume Letter
+                      &nbsp;
+                      
+                      a(href=user.files.cover_letter target='_blank' download).btn.btn-success
+                        i.la.la-download
+                        &nbsp;
+                        | Cover Letter
+                      &nbsp;
+                      a(href=user.files.certificate target='_blank' download).btn.btn-success
+                        i.la.la-download
+                        &nbsp;
+                        | Certificate
+                
+              
+           
+            
+        
+   
+    script(src='/admin/assets/js/core/jquery.3.2.1.min.js')
+    script(src='/admin/assets/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js')
+    script(src='/admin/assets/js/core/popper.min.js')
+    script(src='/admin/assets/js/core/bootstrap.min.js')
+    script(src='/admin/assets/js/plugin/chartist/chartist.min.js')
+    script(src='/admin/assets/js/plugin/chartist/plugin/chartist-plugin-tooltip.min.js')
+    
+    script(src='/admin/assets/js/plugin/bootstrap-toggle/bootstrap-toggle.min.js')
+    script(src='/admin/assets/js/plugin/jquery-mapael/jquery.mapael.min.js')
+    script(src='/admin/assets/js/plugin/jquery-mapael/maps/world_countries.min.js')
+    script(src='/admin/assets/js/plugin/chart-circle/circles.min.js')
+    script(src='/admin/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js')
+    script(src='/admin/assets/js/ready.min.js')
+    script(src='/admin/assets/js/demo.js')
+
+     // DATABLES
+    script(src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js")
+    script(src="https://cdn.datatables.net/buttons/1.6.4/js/dataTables.buttons.min.js")
+    script(src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.flash.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js")
+    script(src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.html5.min.js")
+    script(src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.print.min.js")
+   
+
+
+
+
+
+    script.
+       $(document).ready( function () {
+            $('.mytable').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
+            } );
+       })

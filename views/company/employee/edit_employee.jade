@@ -1,0 +1,931 @@
+doctype html
+html
+  head
+    meta(http-equiv='X-UA-Compatible' content='IE=edge,chrome=1')
+    title Edit Employee | GBL CENTUM
+    meta(content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport')
+    link(rel='shortcut icon', type='image/x-icon', href='/images/icon.png')
+    link(rel='stylesheet' href='/admin/assets/css/bootstrap.min.css')
+    link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i')
+    link(rel='stylesheet' href='/admin/assets/css/ready.css')
+    link(rel='stylesheet' href='/admin/assets/css/demo.css')
+    // WP FORMS
+    style.
+     .file-upload {
+        background-color: #ffffff;
+        width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      .file-upload-btn {
+        width: 100%;
+        margin: 0;
+        color: #fff;
+        background: #1FB264;
+        border: none;
+        padding: 10px;
+        border-radius: 4px;
+        border-bottom: 4px solid #15824B;
+        transition: all .2s ease;
+        outline: none;
+        text-transform: uppercase;
+        font-weight: 700;
+      }
+
+      .file-upload-btn:hover {
+        background: #1AA059;
+        color: #ffffff;
+        transition: all .2s ease;
+        cursor: pointer;
+      }
+
+      .file-upload-btn:active {
+        border: 0;
+        transition: all .2s ease;
+      }
+
+      .file-upload-content {
+        display: none;
+        text-align: center;
+      }
+
+      .file-upload-input {
+        position: absolute;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        outline: none;
+        opacity: 0;
+        cursor: pointer;
+      }
+
+      .file-upload-input2 {
+        position: absolute;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        outline: none;
+        opacity: 0;
+        cursor: pointer;
+      }
+      .file-upload-input3 {
+        position: absolute;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        outline: none;
+        opacity: 0;
+        cursor: pointer;
+      }
+
+      .image-upload-wrap {
+        margin-top: 20px;
+        border: 4px dashed #1FB264;
+        position: relative;
+      }
+
+      .image-dropping,
+      .image-upload-wrap:hover {
+        background-color: #1FB264;
+        border: 4px dashed #ffffff;
+      }
+
+      .image-title-wrap {
+        padding: 0 15px 15px 15px;
+        color: #222;
+      }
+
+      .drag-text {
+        text-align: center;
+      }
+
+      .drag-text h5 {
+        font-weight: 100;
+        text-transform: uppercase;
+        color: #15824B;
+        padding: 60px 0;
+      }
+
+      .file-upload-image {
+        max-height: 200px;
+        max-width: 200px;
+        margin: auto;
+        padding: 20px;
+      }
+
+      .remove-image {
+        width: 200px;
+        margin: 0;
+        color: #fff;
+        background: #cd4535;
+        border: none;
+        padding: 10px;
+        border-radius: 4px;
+        border-bottom: 4px solid #b02818;
+        transition: all .2s ease;
+        outline: none;
+        text-transform: uppercase;
+        font-weight: 700;
+      }
+
+      .remove-image:hover {
+        background: #c13b2a;
+        color: #ffffff;
+        transition: all .2s ease;
+        cursor: pointer;
+      }
+
+      .remove-image:active {
+        border: 0;
+        transition: all .2s ease;
+      }
+      #bank
+      {
+       display:none
+      }
+      #mobile
+      {
+        display:none
+      }
+
+  body
+    .wrapper
+      .main-header
+        .logo-header
+          a.logo(href='#')
+            img(src=company.logo,width='70px', alt="")
+          button.navbar-toggler.sidenav-toggler.ml-auto(type='button' data-toggle='collapse' data-target='collapse' aria-controls='sidebar' aria-expanded='false' aria-label='Toggle navigation')
+            span.navbar-toggler-icon
+          button.topbar-toggler.more
+            i.la.la-ellipsis-v
+        nav.navbar.navbar-header.navbar-expand-lg
+          .container-fluid
+            
+            ul.navbar-nav.topbar-nav.ml-md-auto.align-items-center
+              
+              
+              li.nav-item.dropdown
+                a.dropdown-toggle.profile-pic(data-toggle='dropdown' href='#' aria-expanded='false')
+                  img.img-circle(src='/images/user.png' alt='user-img' width='36')
+                  span #{user.first_name} #{user.last_name}
+                ul.dropdown-menu.dropdown-user
+                  
+                
+                  a.dropdown-item(href='/company/log_out')
+                    i.fa.fa-power-off
+                    |  Logout
+                // /.dropdown-user
+      .sidebar
+        .scrollbar-inner.sidebar-wrapper
+          .user
+            .photo
+              img(src='/images/user.png')
+            .info
+              a(data-toggle='collapse' href='#collapseExample' aria-expanded='true')
+                span
+                  | #{user.first_name} #{user.last_name}
+                  span.user-level Company
+                  
+              .clearfix
+              
+                 
+          ul.nav
+            
+            li.nav-item
+              a(href='/company/employees')
+                i.la.la-users
+                p Employees
+                span.badge.badge-primary #{employees.length}
+            li.nav-item
+              a(href='/company/leaves')
+                i.la.la-keyboard-o
+                p Leaves
+                if leaves2.length > 0
+                 span.badge.badge-primary #{leaves2.length}
+            li.nav-item
+              a(href='/company/expenses')
+                i.la.la-th-list
+                p Expenses
+                if expenses2.length > 0
+                 span.badge.badge-primary #{expenses2.length}
+            
+            li.nav-item
+              a(href='/company/reports')
+                i.la.la-signal
+                p Reports
+               
+            if user.role ==='super admin'  || user.role ==='HR admin'  
+              li.nav-item
+                a(href='/company/settings')
+                  i.la.la-gear
+                  p Settings
+             
+                
+            
+      .main-panel
+        .content(style='margin-bottom:300px')
+          .container-fluid
+            h4.page-title 
+             a(href="/company/view_employee/#{employee.id}").badge.badge-primary 
+               i.la.la-angle-left
+             &nbsp;
+             | Edit Employee - #{employee.first_name} #{employee.middle_name} #{employee.last_name}
+            
+            .row
+             .col-md-12(style='margin-top:20px')
+              != messages('message', locals)
+             .col-md-12(style='margin-top:20px')
+              form.form(action='/company/edit_employee/#{employee.id}',method='POST',enctype='multipart/form-data')
+
+               // Personal Details
+               .card
+                .card-header
+                  .card-title 1. Personal Details
+                .card-body
+                 .row
+                  .col-md-4
+                   .form-group
+                      label(for='email') First Name
+                      input#email.form-control(type='text' placeholder='Enter First Name' name='first_name' value=employee.first_name required)
+                  .col-md-4
+                   .form-group
+                      label(for='email') Middle Name (optional)
+                      input#email.form-control(type='text' placeholder='Enter Middle Name' name='middle_name' value=employee.middle_name)
+                         
+                  .col-md-4
+                   .form-group
+                      label(for='email') Last Name
+                      input#email.form-control(type='text' placeholder='Enter Last Name' name='last_name' required value=employee.last_name)
+                 .row
+                  .col-md-4
+                   .form-group
+                      label(for='email') Gender
+                      select.form-control(name='gender',required)
+                       option(value=employee.gender) #{employee.gender}
+                        each gender in [{name:'Male'},{name:'Female'}]
+                         if gender.name !== employee.gender
+                           option(value=gender.name) #{gender.name}
+                        
+                  .col-md-4
+                   .form-group
+                      label(for='email') Date of Birth
+                      input#email.form-control(type='date' placeholder='Date of Birth' name='dob' value=employee.dob required)
+                         
+                  .col-md-4
+                   .form-group
+                      label(for='email') National ID No / Passport No
+                      input#email.form-control(type='text' placeholder='National ID No / Passport No' value=employee.id_number name='id_number' required)
+                  
+                 .row
+                  .col-md-4
+                   .form-group
+                      label(for='email') KRA Pin No
+                      input.form-control(type='text' placeholder=' KRA Pin No' required value=employee.kra_pin name='kra_pin' )
+                  
+                  .col-md-4
+                   .form-group
+                      label(for='email') NSSF No
+                      input.form-control(type='text'  placeholder='NSSF No' name='nssf_no' value=employee.nssf_no)
+                    
+                  .col-md-4
+                   .form-group
+                      label(for='email') NHIF No
+                      input#email.form-control(type='text' placeholder='NHIF No' name='nhif_no' value=employee.nhif_no)
+                 .row
+                  .col-md-4
+                   .form-group
+                      label(for='email') Choose Resident
+                      select.form-control(name='resident',required)
+                       option(value=employee.resident_type) #{employee.resident_type}
+                        each res in [{name:'Non-resident'},{name:'Resident'}]
+                         if res.name !== employee.resident_type
+                           option(value=res.name) #{res.name}
+                 
+               
+               // Salary Details
+               
+          
+               // HR Details
+               .card 
+                .card-header
+                 .card-title 2. HR Details
+                .card-body
+                 .row
+                  .col-md-4
+                    .form-group
+                      label(for='number') Job Number
+                      input.form-control(type='text' placeholder='Job Number' name='job_number' required value=employee.hr_details.job_number)
+                  .col-md-4
+                    .form-group
+                      label(for='number') Job Title
+                      select.form-control(name='job_title' required)
+                       option(value=employee.hr_details.job_title) #{employee.hr_details.job_title}
+                       each job in jobs
+                        if job.title !== employee.hr_details.job_title 
+                         option(value=job.title) #{job.title}
+                      
+                  .col-md-4
+                    .form-group
+                      label(for='date') Date of Employment
+                      input.form-control(type='date' name='date_of_employment' value=employee.hr_details.date_of_employment)
+                 .row
+                  .col-md-3
+                    .form-group
+                      label(for='number') Subsidiary
+                      select.form-control(name='subsidiary' required)
+                       if employee.hr_details.company === ''
+                        option(value='') Choose one option
+
+                       if employee.hr_details.company !=='' 
+                        option(value=employee.hr_details.company) #{employee.hr_details.company}
+                       each company in companies
+                        if company.name !== employee.hr_details.company
+                         option(value=company.name) #{company.name}
+                  .col-md-3
+                    .form-group
+                      label(for='number') Department
+                      select.form-control(name='department' required)
+                       option(value=employee.hr_details.department) #{employee.hr_details.department}
+                       each department in departments
+                        if department.title !== employee.hr_details.department
+                         option(value=department.title) #{department.title}
+                  .col-md-3
+                    .form-group
+                      label(for='number') Head of
+                      select.form-control(name='head_of_department' )
+                       option(value=employee.hr_details.head_of_department) #{employee.hr_details.head_of_department}
+                       each department in departments
+                        if department.title !== employee.hr_details.head_of_department
+                         option(value=department.title) #{department.title}
+                  .col-md-3
+                    .form-group
+                      label(for='date') Reports to
+                      select.form-control(name='reports_to' )
+                       
+                       if employees.length < 1
+                        option No managers found.
+                       if employees.length > 0
+                        if employee.hr_details.reports_to ===''
+                         option(value='') Choose one option
+                        
+                        if employee.hr_details.reports_to !==''
+                          option(value=employee.hr_details.reports_to) #{employee.hr_details.reports_to}
+                          each manager in managers
+                           if employee.hr_details.reports_to !== manager.first_name+ ' '+manager.last_name
+                            option(value='#{manager.first_name} #{manager.last_name}') #{manager.first_name} #{manager.last_name}
+                      
+                 
+                 .row
+                  .col-md-3
+                   .form-group
+                    label(for='region') Region
+                    select.form-control(name="region",required)
+                     option(value=employee.hr_details.region) #{employee.hr_details.region}
+                     each region in regions
+                      if region.title !== employee.hr_details.region
+                       option(value=region.title) #{region.title}
+                  .col-md-3
+                   .form-group
+                    label(for='region') Contract Start Date
+                    input.form-control(name='contract_start_date' type='date' required value=employee.hr_details.contract_start_date)
+                  .col-md-3
+                   .form-group
+                    label(for='region') Contract End Date
+                    input.form-control(name='contract_end_date' type='date' required value=employee.hr_details.contract_end_date)
+                  .col-md-3
+                   .form-group
+                    label(for='region') Contract Duration (years)
+                    input.form-control(name='contract_duration' type='number' min=1 placeholder='Contract Duration' required value=employee.hr_details.contract_duration)
+               
+               // Education Details
+               .card
+                .card-header
+                 .card-title 3. Education Details
+                .card-body
+                 .row
+                  .col-md-4
+                   .form-group
+                    label(for='') Institution
+                    input.form-control(type='text' placeholder='Institution' name='university' value=employee.education.university)
+                  .col-md-4
+                   .form-group
+                    label(for='') Level of education
+                    select.form-control( name='level_of_education')
+                      if employee.education.level_of_education === ''
+                       option(value='') Choose level of education
+                      if employee.education.level_of_education !== ''
+                       option(value=employee.education.level_of_education) #{employee.education.level_of_education}
+                      each level in [{level:'Certificate'},{level:'Graduate diploma'},{level:'Bachelor’s degree'},{level:'Master’s degree'},{level:'Doctorate'} ]
+                       if level.level !== employee.education.level_of_education
+                        option(value=level.level) #{level.level}
+                       
+                  .col-md-4
+                   .form-group
+                    label(for='') GPA 
+                    input.form-control(type='number' placeholder='GPA' name='gpa' value=employee.education.gpa)
+                 .row
+                  .col-md-4
+                    .form-group
+                      label(for='') Course
+                      input.form-control(type="text" placeholder='Course' name='course' value=employee.education.course )
+                  
+               // Contact Details
+               .card
+                .card-header
+                 .card-title 4. Contact Details
+                .card-body
+                 .row
+                  .col-md-4
+                   .form-group
+                     label(for='email') Official Email
+                     input.form-control(type='email' placeholder='Official Email' name='official_email' value=employee.contact_details.official_email required)
+                  .col-md-4
+                   .form-group
+                     label(for='email') Personal Email
+                     input.form-control(type='email' placeholder='Personal Email' name='personal_email' value=employee.contact_details.personal_email required)
+                  .col-md-4
+                   .form-group
+                     label(for='email') Country
+                     select.form-control(name='country' required)
+                            option(value='') Choose a country
+                            option(value='Afganistan') Afghanistan
+                            option(value='Albania') Albania
+                            option(value='Algeria') Algeria
+                            option(value='American Samoa') American Samoa
+                            option(value='Andorra') Andorra
+                            option(value='Angola') Angola
+                            option(value='Anguilla') Anguilla
+                            option(value='Antigua & Barbuda') Antigua & Barbuda
+                            option(value='Argentina') Argentina
+                            option(value='Armenia') Armenia
+                            option(value='Aruba') Aruba
+                            option(value='Australia') Australia
+                            option(value='Austria') Austria
+                            option(value='Azerbaijan') Azerbaijan
+                            option(value='Bahamas') Bahamas
+                            option(value='Bahrain') Bahrain
+                            option(value='Bangladesh') Bangladesh
+                            option(value='Barbados') Barbados
+                            option(value='Belarus') Belarus
+                            option(value='Belgium') Belgium
+                            option(value='Belize') Belize
+                            option(value='Benin') Benin
+                            option(value='Bermuda') Bermuda
+                            option(value='Bhutan') Bhutan
+                            option(value='Bolivia') Bolivia
+                            option(value='Bonaire') Bonaire
+                            option(value='Bosnia & Herzegovina') Bosnia & Herzegovina
+                            option(value='Botswana') Botswana
+                            option(value='Brazil') Brazil
+                            option(value='British Indian Ocean Ter') British Indian Ocean Ter
+                            option(value='Brunei') Brunei
+                            option(value='Bulgaria') Bulgaria
+                            option(value='Burkina Faso') Burkina Faso
+                            option(value='Burundi') Burundi
+                            option(value='Cambodia') Cambodia
+                            option(value='Cameroon') Cameroon
+                            option(value='Canada') Canada
+                            option(value='Canary Islands') Canary Islands
+                            option(value='Cape Verde') Cape Verde
+                            option(value='Cayman Islands') Cayman Islands
+                            option(value='Central African Republic') Central African Republic
+                            option(value='Chad') Chad
+                            option(value='Channel Islands') Channel Islands
+                            option(value='Chile') Chile
+                            option(value='China') China
+                            option(value='Christmas Island') Christmas Island
+                            option(value='Cocos Island') Cocos Island
+                            option(value='Colombia') Colombia
+                            option(value='Comoros') Comoros
+                            option(value='Congo') Congo
+                            option(value='Cook Islands') Cook Islands
+                            option(value='Costa Rica') Costa Rica
+                            option(value='Cote DIvoire') Cote DIvoire
+                            option(value='Croatia') Croatia
+                            option(value='Cuba') Cuba
+                            option(value='Curaco') Curacao
+                            option(value='Cyprus') Cyprus
+                            option(value='Czech Republic') Czech Republic
+                            option(value='Denmark') Denmark
+                            option(value='Djibouti') Djibouti
+                            option(value='Dominica') Dominica
+                            option(value='Dominican Republic') Dominican Republic
+                            option(value='East Timor') East Timor
+                            option(value='Ecuador') Ecuador
+                            option(value='Egypt') Egypt
+                            option(value='El Salvador') El Salvador
+                            option(value='Equatorial Guinea') Equatorial Guinea
+                            option(value='Eritrea') Eritrea
+                            option(value='Estonia') Estonia
+                            option(value='Ethiopia') Ethiopia
+                            option(value='Falkland Islands') Falkland Islands
+                            option(value='Faroe Islands') Faroe Islands
+                            option(value='Fiji') Fiji
+                            option(value='Finland') Finland
+                            option(value='France') France
+                            option(value='French Guiana') French Guiana
+                            option(value='French Polynesia') French Polynesia
+                            option(value='French Southern Ter') French Southern Ter
+                            option(value='Gabon') Gabon
+                            option(value='Gambia') Gambia
+                            option(value='Georgia') Georgia
+                            option(value='Germany') Germany
+                            option(value='Ghana') Ghana
+                            option(value='Gibraltar') Gibraltar
+                            option(value='Great Britain') Great Britain
+                            option(value='Greece') Greece
+                            option(value='Greenland') Greenland
+                            option(value='Grenada') Grenada
+                            option(value='Guadeloupe') Guadeloupe
+                            option(value='Guam') Guam
+                            option(value='Guatemala') Guatemala
+                            option(value='Guinea') Guinea
+                            option(value='Guyana') Guyana
+                            option(value='Haiti') Haiti
+                            option(value='Hawaii') Hawaii
+                            option(value='Honduras') Honduras
+                            option(value='Hong Kong') Hong Kong
+                            option(value='Hungary') Hungary
+                            option(value='Iceland') Iceland
+                            option(value='Indonesia') Indonesia
+                            option(value='India') India
+                            option(value='Iran') Iran
+                            option(value='Iraq') Iraq
+                            option(value='Ireland') Ireland
+                            option(value='Isle of Man') Isle of Man
+                            option(value='Israel') Israel
+                            option(value='Italy') Italy
+                            option(value='Jamaica') Jamaica
+                            option(value='Japan') Japan
+                            option(value='Jordan') Jordan
+                            option(value='Kazakhstan') Kazakhstan
+                            option(value='Kenya') Kenya
+                            option(value='Kiribati') Kiribati
+                            option(value='Korea North') Korea North
+                            option(value='Korea Sout') Korea South
+                            option(value='Kuwait') Kuwait
+                            option(value='Kyrgyzstan') Kyrgyzstan
+                            option(value='Laos') Laos
+                            option(value='Latvia') Latvia
+                            option(value='Lebanon') Lebanon
+                            option(value='Lesotho') Lesotho
+                            option(value='Liberia') Liberia
+                            option(value='Libya') Libya
+                            option(value='Liechtenstein') Liechtenstein
+                            option(value='Lithuania') Lithuania
+                            option(value='Luxembourg') Luxembourg
+                            option(value='Macau') Macau
+                            option(value='Macedonia') Macedonia
+                            option(value='Madagascar') Madagascar
+                            option(value='Malaysia') Malaysia
+                            option(value='Malawi') Malawi
+                            option(value='Maldives') Maldives
+                            option(value='Mali') Mali
+                            option(value='Malta') Malta
+                            option(value='Marshall Islands') Marshall Islands
+                            option(value='Martinique') Martinique
+                            option(value='Mauritania') Mauritania
+                            option(value='Mauritius') Mauritius
+                            option(value='Mayotte') Mayotte
+                            option(value='Mexico') Mexico
+                            option(value='Midway Islands') Midway Islands
+                            option(value='Moldova') Moldova
+                            option(value='Monaco') Monaco
+                            option(value='Mongolia') Mongolia
+                            option(value='Montserrat') Montserrat
+                            option(value='Morocco') Morocco
+                            option(value='Mozambique') Mozambique
+                            option(value='Myanmar') Myanmar
+                            option(value='Nambia') Nambia
+                            option(value='Nauru') Nauru
+                            option(value='Nepal') Nepal
+                            option(value='Netherland Antilles') Netherland Antilles
+                            option(value='Netherlands') Netherlands (Holland, Europe)
+                            option(value='Nevis') Nevis
+                            option(value='New Caledonia') New Caledonia
+                            option(value='New Zealand') New Zealand
+                            option(value='Nicaragua') Nicaragua
+                            option(value='Niger') Niger
+                            option(value='Nigeria') Nigeria
+                            option(value='Niue') Niue
+                            option(value='Norfolk Island') Norfolk Island
+                            option(value='Norway') Norway
+                            option(value='Oman') Oman
+                            option(value='Pakistan') Pakistan
+                            option(value='Palau Island') Palau Island
+                            option(value='Palestine') Palestine
+                            option(value='Panama') Panama
+                            option(value='Papua New Guinea') Papua New Guinea
+                            option(value='Paraguay') Paraguay
+                            option(value='Peru') Peru
+                            option(value='Phillipines') Philippines
+                            option(value='Pitcairn Island') Pitcairn Island
+                            option(value='Poland') Poland
+                            option(value='Portugal') Portugal
+                            option(value='Puerto Rico') Puerto Rico
+                            option(value='Qatar') Qatar
+                            option(value='Republic of Montenegro') Republic of Montenegro
+                            option(value='Republic of Serbia') Republic of Serbia
+                            option(value='Reunion') Reunion
+                            option(value='Romania') Romania
+                            option(value='Russia') Russia
+                            option(value='Rwanda') Rwanda
+                            option(value='St Barthelemy') St Barthelemy
+                            option(value='St Eustatius') St Eustatius
+                            option(value='St Helena') St Helena
+                            option(value='St Kitts-Nevis') St Kitts-Nevis
+                            option(value='St Lucia') St Lucia
+                            option(value='St Maarten') St Maarten
+                            option(value='St Pierre & Miquelon') St Pierre & Miquelon
+                            option(value='St Vincent & Grenadines') St Vincent & Grenadines
+                            option(value='Saipan') Saipan
+                            option(value='Samoa') Samoa
+                            option(value='Samoa American') Samoa American
+                            option(value='San Marino') San Marino
+                            option(value='Sao Tome & Principe') Sao Tome & Principe
+                            option(value='Saudi Arabia') Saudi Arabia
+                            option(value='Senegal') Senegal
+                            option(value='Seychelles') Seychelles
+                            option(value='Sierra Leone') Sierra Leone
+                            option(value='Singapore') Singapore
+                            option(value='Slovakia') Slovakia
+                            option(value='Slovenia') Slovenia
+                            option(value='Solomon Islands') Solomon Islands
+                            option(value='Somalia') Somalia
+                            option(value='South Africa') South Africa
+                            option(value='Spain') Spain
+                            option(value='Sri Lanka') Sri Lanka
+                            option(value='Sudan') Sudan
+                            option(value='Suriname') Suriname
+                            option(value='Swaziland') Swaziland
+                            option(value='Sweden') Sweden
+                            option(value='Switzerland') Switzerland
+                            option(value='Syria') Syria
+                            option(value='Tahiti') Tahiti
+                            option(value='Taiwan') Taiwan
+                            option(value='Tajikistan') Tajikistan
+                            option(value='Tanzania') Tanzania
+                            option(value='Thailand') Thailand
+                            option(value='Togo') Togo
+                            option(value='Tokelau') Tokelau
+                            option(value='Tonga') Tonga
+                            option(value='Trinidad & Tobago') Trinidad & Tobago
+                            option(value='Tunisia') Tunisia
+                            option(value='Turkey') Turkey
+                            option(value='Turkmenistan') Turkmenistan
+                            option(value='Turks & Caicos Is') Turks & Caicos Is
+                            option(value='Tuvalu') Tuvalu
+                            option(value='Uganda') Uganda
+                            option(value='United Kingdom') United Kingdom
+                            option(value='Ukraine') Ukraine
+                            option(value='United Arab Erimates') United Arab Emirates
+                            option(value='United States of America') United States of America
+                            option(value='Uraguay') Uruguay
+                            option(value='Uzbekistan') Uzbekistan
+                            option(value='Vanuatu') Vanuatu
+                            option(value='Vatican City State') Vatican City State
+                            option(value='Venezuela') Venezuela
+                            option(value='Vietnam') Vietnam
+                            option(value='Virgin Islands (Brit)') Virgin Islands (Brit)
+                            option(value='Virgin Islands (USA)') Virgin Islands (USA)
+                            option(value='Wake Island') Wake Island
+                            option(value='Wallis & Futana Is') Wallis & Futana Is
+                            option(value='Yemen') Yemen
+                            option(value='Zaire') Zaire
+                            option(value='Zambia') Zambia
+                            option(value='Zimbabwe') Zimbabwe
+                  
+                 .row
+                   .col-md-4
+                     .form-group
+                      label(for='phone') Mobile Phone No
+                      input.form-control(type='tel',placeholder='Mobile Phone No',name='mobile_phone_no',required ,value=employee.contact_details.mobile_phone_no)
+                   .col-md-4
+                     .form-group
+                        label(for='phone') Official Phone No
+                        input.form-control(type='tel',placeholder='Official Phone No',name='official_phone_no',required ,value=employee.contact_details.official_phone_no)
+                    
+                   .col-md-4
+                     .form-group
+                        label(for='phone') City/Town
+                        input.form-control(type='text',placeholder='City/Town',name='city',required value=employee.contact_details.city)
+                 .row
+                   .col-md-4
+                     .form-group
+                       label(for='') County/Province/State
+                       input.form-control(type='text',placeholder='County/Province/State',name='county',required value=employee.contact_details.county)
+                   .col-md-4
+                     .form-group
+                       label(for='') Address
+                       input.form-control(type='text',placeholder='Address', name='address',required value=employee.contact_details.address)
+                   
+                   .col-md-4
+                     .form-group
+                       label(for='') Zip/Postal Code
+                       input.form-control(type='text',placeholder='Zip/Postal Code', name='zip_code',required value=employee.contact_details.zip_code)
+                   
+               // Next of Kin & Social Media
+               .row
+                
+                     
+                     
+                .col-md-6  
+                  .card
+                   .card-header
+                     .card-title Social Media Accounts
+                   .card-body
+                    .row
+                     .col-md-12
+                      .form-group
+                        label(for='name') 
+                          i.la.la-linkedin
+                          &nbsp;
+                          | LinkedIn
+                        input.form-control(type='url' name='linkedin' placeholder='Linkedin' value=employee.contact_details.social_media.linkedin)
+                    .row
+                     .col-md-12
+                      .form-group
+                        label(for='name') 
+                          i.la.la-twitter
+                          &nbsp;
+                          | Twitter
+                        input.form-control(type='url' name='twitter' placeholder='Twitter' value=employee.contact_details.social_media.twitter) 
+                .col-md-6
+                  .card
+                   .card-header
+                     .card-title Self Care Login Email
+                   .card-body
+                    .row
+                     .col-md-12
+                      .form-group
+                        label(for='name') Email
+                          
+                        input.form-control(type='email' name='login_email' placeholder='Email' value=employee.username)
+                   
+               
+
+               // Files
+               .card
+                .card-header
+                 .card-title 5. Files
+                .card-body 
+                 .row
+                  .col-md-3
+                   .form-group
+                    label(for='') Cover Letter
+                    input.form-control(type='file' name='cover_letter' accept='.doc, .docx, .pdf' )
+                      
+                    
+            
+                  .col-md-3
+                    .form-group
+                     label(for='') Resume Letter
+                     input.form-control(type='file' name='resume_letter' accept='.doc, .docx, .pdf' )
+                      
+                    
+                     
+                  .col-md-3
+                    .form-group
+                      label(for='') Certificate
+                      input.form-control(type='file' name='certificate' accept='.doc, .docx, .pdf' )
+                      
+                    
+                     
+                  .col-md-3
+                    .form-group
+                      label(for='') Passport Photo
+                      input.form-control(type='file' name='passport_photo' accept='.png, .jpeg, .jpg' )
+                  
+               // Save
+               .row
+                 .col-md-4
+                  button.btn.btn-primary Update
+   
+    script(src='/admin/assets/js/core/jquery.3.2.1.min.js')
+    script(src='/admin/assets/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js')
+    script(src='/admin/assets/js/core/popper.min.js')
+    script(src='/admin/assets/js/core/bootstrap.min.js')
+    script(src='/admin/assets/js/plugin/chartist/chartist.min.js')
+    script(src='/admin/assets/js/plugin/chartist/plugin/chartist-plugin-tooltip.min.js')
+    
+    script(src='/admin/assets/js/plugin/bootstrap-toggle/bootstrap-toggle.min.js')
+    script(src='/admin/assets/js/plugin/jquery-mapael/jquery.mapael.min.js')
+    script(src='/admin/assets/js/plugin/jquery-mapael/maps/world_countries.min.js')
+    script(src='/admin/assets/js/plugin/chart-circle/circles.min.js')
+    script(src='/admin/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js')
+    script(src='/admin/assets/js/ready.min.js')
+    script(src='/admin/assets/js/demo.js')
+    script.
+      $(document).ready(()=>{
+        $('#payment_option').change(function() {
+            const value = $(this).val();
+            
+            if(value==='')
+            {
+              $('#mobile').css({"display":"none"})
+              $('#bank').css({"display":"none"})
+            }
+            if(value==='Bank Transfer')
+            {
+               $('#mobile').css({"display":"none"})
+               $('#bank').css({"display":"block"})
+            }
+            if(value==='Mobile Money')
+            {
+              $('#mobile').css({"display":"block"})
+              $('#bank').css({"display":"none"})
+            }
+        });
+      })
+    script.
+      // Jquery Dependency
+      $(document).ready( function () {
+        $("input[data-type='currency']").on({
+            keyup: function() {
+              formatCurrency($(this));
+            },
+            blur: function() { 
+              formatCurrency($(this), "blur");
+            }
+        });
+
+
+        function formatNumber(n) {
+          // format number 1000000 to 1,234,567
+          return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        }
+
+
+        function formatCurrency(input, blur) {
+          // appends $ to value, validates decimal side
+          // and puts cursor back in right position.
+          
+          // get input value
+          var input_val = input.val();
+          
+          // don't validate empty input
+          if (input_val === "") { return; }
+          
+          // original length
+          var original_len = input_val.length;
+
+          // initial caret position 
+          var caret_pos = input.prop("selectionStart");
+            
+          // check for decimal
+          if (input_val.indexOf(".") >= 0) {
+
+            // get position of first decimal
+            // this prevents multiple decimals from
+            // being entered
+            var decimal_pos = input_val.indexOf(".");
+
+            // split number by decimal point
+            var left_side = input_val.substring(0, decimal_pos);
+            var right_side = input_val.substring(decimal_pos);
+
+            // add commas to left side of number
+            left_side = formatNumber(left_side);
+
+            // validate right side
+            right_side = formatNumber(right_side);
+            
+            // On blur make sure 2 numbers after decimal
+            if (blur === "blur") {
+              right_side += "00";
+            }
+            
+            // Limit decimal to only 2 digits
+            right_side = right_side.substring(0, 2);
+
+            // join number by .
+            input_val = "KES " + left_side ;
+
+          } else {
+            // no decimal entered
+            // add commas to number
+            // remove all non-digits
+            input_val = formatNumber(input_val);
+            input_val = input_val;
+            
+            // final formatting
+            if (blur === "blur") {
+              input_val += ".00";
+            }
+          }
+          
+          // send updated string to input
+          input.val(input_val);
+
+          // put caret back in the right position
+          var updated_len = input_val.length;
+          caret_pos = updated_len - original_len + caret_pos;
+          input[0].setSelectionRange(caret_pos, caret_pos);
+        }
+      })
+
+   

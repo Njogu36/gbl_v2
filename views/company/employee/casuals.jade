@@ -1,0 +1,624 @@
+doctype html
+html
+  head
+    meta(http-equiv='X-UA-Compatible' content='IE=edge,chrome=1')
+    title Casual Employees | GBL CENTUM
+    meta(content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport')
+    link(rel='shortcut icon', type='image/x-icon', href='/images/icon.png')
+    link(rel='stylesheet' href='/admin/assets/css/bootstrap.min.css')
+    link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i')
+    link(rel='stylesheet' href='/admin/assets/css/ready.css')
+    link(rel='stylesheet' href='/admin/assets/css/demo.css')
+
+    // DATABLES
+    link(rel="stylesheet", href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css")
+    link(rel="stylesheet", href="https://cdn.datatables.net/buttons/1.6.4/css/buttons.dataTables.min.css")
+    style.
+      .nhif
+      {
+        background-color:green;
+        color:white;
+      }
+      .nssf
+      {
+          background-color:orange;
+          color:white;
+      }
+      .nita
+      {
+        background-color:blue;
+        color:white;
+      }
+      .first_half
+      {
+        background-color:gray;
+        color:white;
+       
+      }
+      .second_half
+      {
+           background-color:gray;
+           color:white;
+          
+      } 
+     
+    
+     
+
+
+
+
+  body
+    .wrapper
+      .main-header
+        .logo-header
+          a.logo(href='#')
+            img(src=company.logo,width='70px', alt="")
+          button.navbar-toggler.sidenav-toggler.ml-auto(type='button' data-toggle='collapse' data-target='collapse' aria-controls='sidebar' aria-expanded='false' aria-label='Toggle navigation')
+            span.navbar-toggler-icon
+          button.topbar-toggler.more
+            i.la.la-ellipsis-v
+        nav.navbar.navbar-header.navbar-expand-lg
+          .container-fluid
+            
+            ul.navbar-nav.topbar-nav.ml-md-auto.align-items-center
+              
+              
+              li.nav-item.dropdown
+                a.dropdown-toggle.profile-pic(data-toggle='dropdown' href='#' aria-expanded='false')
+                  img.img-circle(src='/images/user.png' alt='user-img' width='36')
+                  span #{user.first_name} #{user.last_name}
+                ul.dropdown-menu.dropdown-user
+                  
+                
+                  a.dropdown-item(href='/company/log_out')
+                    i.fa.fa-power-off
+                    |  Logout
+                // /.dropdown-user
+      .sidebar
+        .scrollbar-inner.sidebar-wrapper
+          .user
+            .photo
+              img(src='/images/user.png')
+            .info
+              a(data-toggle='collapse' href='#collapseExample' aria-expanded='true')
+                span
+                  | #{user.first_name} #{user.last_name}
+                  span.user-level Company
+                  
+              .clearfix
+             
+                 
+          ul.nav
+            
+            li.nav-item
+              a(href='/company/employees')
+                i.la.la-users
+                p Employees
+                span.badge.badge-primary #{employees.length}
+            li.nav-item
+              a(href='/company/leaves')
+                i.la.la-keyboard-o
+                p Leaves
+                if leaves2.length > 0
+                 span.badge.badge-primary #{leaves2.length}
+            li.nav-item
+              a(href='/company/expenses')
+                i.la.la-th-list
+                p Expenses
+                if expenses2.length > 0
+                 span.badge.badge-primary #{expenses2.length}
+               
+            
+            li.nav-item
+              a(href='/company/reports')
+                i.la.la-signal
+                p Reports
+               
+            if user.role ==='super admin'  || user.role ==='HR admin' 
+              li.nav-item
+                a(href='/company/settings')
+                  i.la.la-gear
+                  p Settings
+             
+                
+            
+      .main-panel
+        .content
+          .container-fluid
+            h4.page-title 
+             a(href="/company/employees").badge.badge-primary
+              i.la.la-angle-left
+
+             &nbsp;
+             | Casual Employees
+            
+            .row(style='margin-top:20px')
+                    .col-md-12(style='margin-bottom:5px')
+                        != messages('message', locals)
+                    .col-md-12(style='float:right')
+                            
+                             a(href="/company/mid_month" style='float:left;margin-right:5px' ).btn.btn-primary
+                              i.la.la-calculator
+                              &nbsp;
+                              |  Calculate 1st Half Payments [ #{month} ]
+                             &nbsp;
+                             a(href="/company/end_month" style='float:left' ).btn.btn-primary
+                              i.la.la-calculator
+                              &nbsp;
+                              |  Calculate 2nd Half Payments [ #{month} ]
+                             
+                             &nbsp;
+                            
+                             
+                             a(href="#" style='float:right' data-toggle="modal" data-target="#settings").btn.btn-primary
+                              i.la.la-gear
+                              &nbsp;
+                              |  Settings
+                             
+ 
+                             .btn-group
+                              button.btn.btn-success.dropdown-toggle( href='#' data-toggle='dropdown' )
+                                | Choose Week
+                              .dropdown-menu(aria-labelledby='dropdownMenu2' id='dropDownMenu2')
+                          
+                                a.dropdown-item(href='/company/get_week/'+1) Week 1
+                                a.dropdown-item(href='/company/get_week/'+2) Week 2
+                                a.dropdown-item(href='/company/get_week/'+3) Week 3
+                                a.dropdown-item(href='/company/get_week/'+4) Week 4
+                                a.dropdown-item(href='/company/get_week/'+5) Week 5
+                             &nbsp;
+                             .btn-group
+                              button.btn.btn-dark.dropdown-toggle( href='#' data-toggle='dropdown' )
+                                  | Filter Hours
+                              .dropdown-menu(aria-labelledby='dropdownMenuButton' id='dropdownMenuButton')
+                                each department in departments
+                                 if department.casual === true
+                                  a.dropdown-item(href='/company/get_department/#{department.id}') #{department.title}
+                              &nbsp;&nbsp;
+                             
+                                
+                                            
+
+
+
+                     
+            .row(style='margin-top:20px')
+                    
+                    .col-md-12(style='overflow-x:scroll;margin-top:40px')
+                     if hour ===true
+                        h5 #{department.title} Department Attendance
+                     if week ===true
+                      h5 Week #{week_no}
+                     if amount===true
+                      table.table.mytable
+                              thead
+                               tr
+                                  th
+                                  th Firstname
+                                  th Lastname
+                                  th Job Title
+                                
+                                  th Department
+                                  th National ID No
+                                  th NHIF No
+                                  th NSSF No
+                                  th KRA Pin
+                                  th Mobile No
+                                  th Month
+                                  th Year
+                                  th View Comments
+                                  // First Phase
+                                  each ar,index in arr
+                                   if  index <= setting.mid_day
+                                    th #{ar}
+                                
+                                  th
+                                  th Bonus
+                                  th Back Pay
+                                  th(class='first_half') Gross Pay 1st Half
+                                  th(class='nhif') NHIF
+                                  th(class='nssf') NSSF
+                                  th Net Pay of 1st Half
+                                  th(class='nita') NITA
+
+                                  // Second Phase
+                                  each ar,index in arr
+                                   if  index > setting.mid_day && index <= setting.end_day
+                                    th #{ar}
+                                  th
+                                  
+                                  th Bonus
+                                  th Back Pay
+                                  th(class='second_half') Gross Pay 2nd Half
+                                  th Total Month's Gross Pay
+                                  th Tax Payable
+                                  th Personal Relief
+                                  th Tax Deducted
+                                  
+                                  th(class='nhif') TOTAL NHIF
+                                  th(class='nssf') NSSF
+                                  th(class='nhif') Payable NHIF
+                                  th Net Payable of End Month
+                                  th(class='nita') NITA
+                                
+                              
+                                
+                                
+                              tbody
+                               each casual in casualPayments
+                                if casual.month === month
+                                  tr
+                                      td
+                                        img(src=casual.employee.files.passport_photo width='50px')
+                                      // uploads/passport_photos/passport_photo1605203016379.jpeg
+                                      td 
+                                        a(href="/company/view_employee/#{casual.employee._id}") #{casual.employee.first_name}
+                                      td 
+                                        a(href="/company/view_employee/#{casual.employee._id}") #{casual.employee.last_name}
+                                      td=casual.employee.hr_details.job_title
+                                    
+                                      td=casual.employee.hr_details.department
+                                      td=casual.employee.id_number
+                                      td=casual.employee.nhif_no
+                                      td=casual.employee.nssf_no
+                                      td=casual.employee.kra_pin
+                                      td=casual.employee.contact_details.mobile_phone_no
+                                      td=casual.month
+                                      td=casual.year
+                                      td
+                                       if casual.comments.length < 1
+                                        span ....
+                                       if casual.comments.length > 0
+                                        a(href="#" data-toggle='modal' data-target='#comment' data-whatever=casual.id)
+                                         i.la.la-eye(style='color:green')
+                                      
+                                      each data,index in casual.data_amount
+                                        if index <= setting.mid_day
+                                          if data.length < 1
+                                            td 0
+                                          if data.length > 0
+                                            if data === '-'
+                                              td ....
+
+                                            if data !== '-'
+                                             td  #{data[0].sum}
+                                      td -
+                                  
+                                  
+                                      td  #{casual.bonus_1st}
+                                      td #{casual.back_pay_1st}
+                                      td(class='first_half') #{casual.gross_amount_1st}
+                                      td(class='nhif') #{casual.nhif_1st}
+                                      td(class='nssf') #{casual.nssf_1st}
+                                      td #{casual.gross_amount_1st- (casual.nhif_1st+casual.nssf_1st)}
+                                      td(class='nita') #{casual.nita}
+                                      each data,index in casual.data_amount
+                                       if index > setting.mid_day && index <= setting.end_day
+                                        if data.length < 1
+                                          td 0
+                                        if data.length > 0
+                                          if data === '-'
+                                            td ....
+
+                                          if data !== '-'
+                                           td  #{data[0].sum}
+                                      td -
+                                  
+                                      
+                                      td #{casual.bonus_2nd}
+                                      td #{casual.back_pay_2nd}
+                                      td(class='second_half') #{casual.gross_amount_2nd}
+                                      td #{casual.total_month_gross}
+                                      td #{casual.tax_payable}
+                                      td #{casual.personal_relief}
+                                      td #{casual.tax_deducted}
+                                      
+                                      td(class='nhif')  #{parseInt(casual.nhif_1st) + parseInt(casual.nhif_2nd)}
+                                      td(class='nssf') #{casual.nssf_2nd}
+                                      td(class='nhif') #{casual.nhif_2nd} 
+                                      td #{casual.gross_amount_2nd - ((casual.nhif_2nd+casual.nssf_2nd))}
+                                      td(class='nita') #{casual.nita2}
+                              
+
+                     if week === true
+                       table.table.mytable
+                              thead
+                               tr
+                                th
+                                th Firstname
+                                th Lastname
+                                th Job Title
+                                th Department
+                                th National ID No
+                                th NHIF No
+                                th NSSF No
+                                th KRA Pin
+                                th Mobile No
+                                th Month
+                                th Year
+                                if week ===true
+                                 th Week
+                                
+                                each ar in arr
+                                 th #{ar}
+                                
+                                
+                                
+                              
+                                
+                                
+                              tbody
+                               each casual in casualPayments
+                                if casual.month ===month
+                               
+                                 tr
+                                  td
+                                    img(src=casual.employee.files.passport_photo width='50px')
+                                  // uploads/passport_photos/passport_photo1605203016379.jpeg
+                                  td 
+                                   a(href="/company/view_employee/#{casual.employee._id}") #{casual.employee.first_name}
+                                  td 
+                                    a(href="/company/view_employee/#{casual.employee._id}") #{casual.employee.last_name}
+                                  td=casual.employee.hr_details.job_title
+                                 
+                                  td=casual.employee.hr_details.department
+                                  td=casual.employee.id_number
+                                  td=casual.employee.nhif_no
+                                  td=casual.employee.nssf_no
+                                  td=casual.employee.kra_pin
+                                  td=casual.employee.contact_details.mobile_phone_no
+                                  td=casual.month
+                                  td=casual.year
+                                  if week ===true
+                                   td Week #{week_no}
+                                 
+                                  if week ===true
+                                   td
+                                  
+                                  
+                                   each data,index in casual.data_amount
+                                    if index >= start && index <= end
+                                      if data.length < 1
+                                        td 0
+                                      if data.length > 0
+                                        if data === '-'
+                                          td ....
+
+                                        
+                                        if typeof data[0] === 'object'
+                                           td #{data[0].sum}
+                                       
+                                   
+                                   
+                                  
+                              
+
+
+                     if hour ===true
+                       table.table.mytable
+                              thead
+                               tr
+                                th
+                                th Firstname
+                                th Lastname
+                                th Job Title
+                               
+                                th National ID No
+                                th NHIF No
+                                th NSSF No
+                                th KRA Pin
+                                th Mobile No
+                                th Month
+                                th Year
+                              
+                              
+                                each ar in arr
+                                 th #{ar}
+                              
+                                
+                                
+                              
+                                
+                                
+                              tbody
+                               each casual in casualPayments
+                                if casual.month ===month
+                               
+                                 tr
+                                  td
+                                    img(src=casual.employee.files.passport_photo width='50px')
+                                  // uploads/passport_photos/passport_photo1605203016379.jpeg
+                                  td 
+                                   a(href="/company/view_employee/#{casual.employee._id}") #{casual.employee.first_name}
+                                  td 
+                                    a(href="/company/view_employee/#{casual.employee._id}") #{casual.employee.last_name}
+                                  td=casual.employee.hr_details.job_title
+                                 
+                                  td=casual.employee.id_number
+                                  td=casual.employee.nhif_no
+                                  td=casual.employee.nssf_no
+                                  td=casual.employee.kra_pin
+                                  td=casual.employee.contact_details.mobile_phone_no
+                                  td=casual.month
+                                  td=casual.year
+                                  td
+                                  if hour ===true
+                                    
+                                    each data in casual.data_hours
+                                     if data.length < 1
+                                      td 0
+                                     if data.length > 0
+                                      if data === '-'
+                                        td ....
+
+                                      if data !== '-'
+                                       each d in data
+                                        if d.department === department.title
+                                         td  #{d.hours}
+                                  
+                                   
+                                  
+                              
+                                
+              
+              
+           
+    #comment.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+     .modal-dialog.modal-lg(role='document')
+        .modal-content
+         .modal-header
+            h5#exampleModalLabel.modal-title View Comments
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+             span(aria-hidden='true') ×
+         .modal-body
+           #mycomments
+            
+         .modal-footer
+            button.btn.btn-secondary(type='button' data-dismiss='modal') Close      
+    // Suspended
+    #settings.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+     .modal-dialog.modal-lg(role='document')
+      .modal-content
+        .modal-header
+            h5#exampleModalLabel.modal-title Settings 
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+          .row
+           .col-md-12
+            ul#myTab.nav.nav-tabs(role='tablist')
+                li.nav-item
+                    a#departments-tab.nav-link.active(data-toggle='tab' href='#department' role='tab' aria-controls='departments' aria-selected='true') Departments
+                li.nav-item
+                    a#days-tab.nav-link(data-toggle='tab' href='#days' role='tab' aria-controls='days' aria-selected='false') Hours & Days
+            #myTabContent.tab-content
+                // HRM 
+                #department.tab-pane.fade.show.active(role='tabpanel' aria-labelledby='hrm-tab') 
+                  form.form(action='/company/casual_departments',method='POST')
+                    
+                      
+                    .form-group
+                      label(for="title") Choose Departments
+                      select.form-control(name='department' required)
+                       option(value='') Choose department
+                       each department in departments
+                        option(value=department.title) #{department.title}
+                    .form-group
+                      label(for='email') Department Email
+                      input.form-control(type='email' required name='email' placeholder='Department Email')
+                    .form-group
+                      label(for='email') Password
+                      input.form-control(type='password' required name='password' placeholder='Password')
+                    .form-group
+                      button.btn.btn-primary Save
+                  hr
+                  ul.list-group
+                   each department in departments
+                    if department.casual ===true
+                     li.list-group-item
+                      p #{department.title}
+                       a(href="/company/casual_erase/#{department.id}" style='float:right')
+                        i.la.la-trash(style='color:red')
+                
+                  
+                #days.tab-pane.fade.show(role='tabpanel' aria-labelledby='days-tab') 
+                  form.form(action='/company/edit_settings',method='POST')
+                    
+                      
+                    .form-group
+                      label(for="title") Day of Mid Month (every month)
+                      input.form-control(type='number' name='mid_month'  min=1 max=31 placeholder='Day of Mid Month' value=setting.mid_day required)
+                    .form-group
+                      label(for="title") Day of the End Month (every month)
+                      input.form-control(type='number'  name='end_month' min=1 max=31 placeholder='Day of the End Month' value=setting.end_day required)
+                    .form-group
+                      label(for="title") Maximum hours a day
+                      input.form-control(type='number'  name='hours' min=1 max=10 placeholder='Maximum hours a day' value=setting.hours required)
+                      
+                   
+                  
+                    .form-group
+                      button.btn.btn-primary Save
+                 
+                
+          
+                  
+          
+        .modal-footer
+            button.btn.btn-secondary(type='button' data-dismiss='modal') Close   
+   
+    script(src='/admin/assets/js/core/jquery.3.2.1.min.js')
+    script(src='/admin/assets/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js')
+    script(src='/admin/assets/js/core/popper.min.js')
+    script(src='/admin/assets/js/core/bootstrap.min.js')
+    script(src='/admin/assets/js/plugin/chartist/chartist.min.js')
+    script(src='/admin/assets/js/plugin/chartist/plugin/chartist-plugin-tooltip.min.js')
+    
+    script(src='/admin/assets/js/plugin/bootstrap-toggle/bootstrap-toggle.min.js')
+    script(src='/admin/assets/js/plugin/jquery-mapael/jquery.mapael.min.js')
+    script(src='/admin/assets/js/plugin/jquery-mapael/maps/world_countries.min.js')
+    script(src='/admin/assets/js/plugin/chart-circle/circles.min.js')
+    script(src='/admin/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js')
+    script(src='/admin/assets/js/ready.min.js')
+    script(src='/admin/assets/js/demo.js')
+
+    // DATABLES
+    script(src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js")
+    script(src="https://cdn.datatables.net/buttons/1.6.4/js/dataTables.buttons.min.js")
+    script(src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.flash.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js")
+    script(src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.html5.min.js")
+    script(src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.print.min.js")
+   
+
+
+
+
+
+    script.
+       $(document).ready( function () {
+            $('.mytable').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
+            } );
+
+            $('#comment').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget) // Button that triggered the modal
+                var recipient = button.data('whatever') // Extract info from data-* attributes
+                var comments = []
+                let name =''
+               
+                $.get('/company/get_comments/'+recipient, function( data ) {
+                   comments=data.comments
+                   name= data.casual.employee.first_name + ' '+data.casual.employee.last_name
+                })
+                
+                 
+                setTimeout(()=>{
+                  let data = comments.map((item)=>{
+                    return `
+                    <li class='list-group-item'>
+                    <p>${item.comment} </p>
+                    <p style='font-weight:bold'>Bonus Amount: <span class='mydiv'>${item.bonus}</span></p>  
+                    <p style='font-weight:bold'>Back Pay Amount: <span class='mydiv'>${item.back_pay}</span></p> 
+                    <p style='font-weight:bold'>Added On: ${item.added_on}</p> 
+                   
+                    </li>
+                    `
+                  })
+                  console.log(data)
+                  
+                   let list = ` <p style='font-weight:bold'>Employee: ${name}</p><ul class='list-group'>${data}</ul>`
+                 var modal = $(this)
+                   document.getElementById('mycomments').innerHTML = list
+                },1000)
+                
+                
+            })
+       })
+

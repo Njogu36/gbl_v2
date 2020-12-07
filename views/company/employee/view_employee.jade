@@ -1,0 +1,1613 @@
+doctype html
+html
+  head
+    meta(http-equiv='X-UA-Compatible' content='IE=edge,chrome=1')
+    title View Employee | GBL CENTUM
+    meta(content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport')
+    link(rel='shortcut icon', type='image/x-icon', href='/images/icon.png')
+    link(rel='stylesheet' href='/admin/assets/css/bootstrap.min.css')
+    link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i')
+    link(rel='stylesheet' href='/admin/assets/css/ready.css')
+    link(rel='stylesheet' href='/admin/assets/css/demo.css')
+
+    // DATABLES
+    link(rel="stylesheet", href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css")
+    link(rel="stylesheet", href="https://cdn.datatables.net/buttons/1.6.4/css/buttons.dataTables.min.css")
+    style.
+     #pay{
+         border-collapse: separate;
+      border-spacing: 10px; /* cellspacing */
+      *border-collapse: expression('separate', cellSpacing = '10px');
+     }
+     #pay th #pay td
+     {
+       width:50px
+     }
+     #bank
+      {
+       display:none
+      }
+      #mobile
+      {
+        display:none
+      }
+      #carbenefit
+      {
+        display:none
+      }
+      #mealbenefit
+      {
+        display:none
+      }
+     #perdiem
+     {
+       display:none
+     }
+     #mobile_benefit
+     {
+       display:none
+     }
+     #furniture_benefit
+     {
+       display:none
+     }
+     #nonecash
+     {
+       display:none
+     }
+     #static {
+       display:none
+     }
+     #houseallowance
+     {
+       display:none
+     }
+     #insurance_relief
+     {
+       display:none
+     }
+     #other
+     {
+      display:none
+     }
+   
+     .currSign:before { 
+            content: '#{company.currency} '; 
+     } 
+    
+  body
+    .wrapper
+      .main-header
+        .logo-header
+          a.logo(href='#')
+            img(src=company.logo,width='70px', alt="")
+          button.navbar-toggler.sidenav-toggler.ml-auto(type='button' data-toggle='collapse' data-target='collapse' aria-controls='sidebar' aria-expanded='false' aria-label='Toggle navigation')
+            span.navbar-toggler-icon
+          button.topbar-toggler.more
+            i.la.la-ellipsis-v
+        nav.navbar.navbar-header.navbar-expand-lg
+          .container-fluid
+            
+            ul.navbar-nav.topbar-nav.ml-md-auto.align-items-center
+              
+              
+              li.nav-item.dropdown
+                a.dropdown-toggle.profile-pic(data-toggle='dropdown' href='#' aria-expanded='false')
+                  img.img-circle(src='/images/user.png' alt='user-img' width='36')
+                  span #{user.first_name} #{user.last_name}
+                ul.dropdown-menu.dropdown-user
+                  
+                
+                  a.dropdown-item(href='/company/log_out')
+                    i.fa.fa-power-off
+                    |  Logout
+                // /.dropdown-user
+      .sidebar
+        .scrollbar-inner.sidebar-wrapper
+          .user
+            .photo
+              img(src='/images/user.png')
+            .info
+              a(data-toggle='collapse' href='#collapseExample' aria-expanded='true')
+                span
+                  | #{user.first_name} #{user.last_name}
+                  span.user-level Company
+                  
+              .clearfix
+              
+                 
+          ul.nav
+           
+            li.nav-item
+              a(href='/company/employees')
+                i.la.la-users
+                p Employees
+                span.badge.badge-primary #{employees.length}
+            li.nav-item
+              a(href='/company/leaves')
+                i.la.la-keyboard-o
+                p Leaves
+                if leaves2.length > 0
+                 span.badge.badge-primary #{leaves2.length}
+            li.nav-item
+              a(href='/company/expenses')
+                i.la.la-th-list
+                p Expenses
+                if expenses2.length > 0
+                 span.badge.badge-primary #{expenses2.length}
+             
+            
+            li.nav-item
+              a(href='/company/reports')
+                i.la.la-signal
+                p Reports
+            if user.role ==='super admin'  || user.role ==='HR admin'  
+             li.nav-item
+              a(href='/company/settings')
+                i.la.la-gear
+                p Settings
+             
+                
+            
+      .main-panel
+        .content
+          .container-fluid
+            .row
+             .col-md-12(style='margin-top:20px')
+              != messages('message', locals)
+            .row
+              .col-md-12
+               if employee.salary_details.bank_details.length < 1
+                .alert.alert-danger Kindly add your payment details.
+                  
+                
+            h4.page-title 
+             a.badge.badge-primary(href='#' onclick="history.back()")
+              i.la.la-angle-left
+             &nbsp;&nbsp;
+             i.la.la-user
+             &nbsp;
+             | #{employee.first_name} #{employee.last_name} 
+             a(href="/company/delete_employee/#{employee.id}" style='float:right').btn.btn-danger Delete Employee
+           
+             .dropdown(style='float:right;margin-right:8px')
+              button#dropdownMenuButton.btn.btn-primary.dropdown-toggle(type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
+                | Change Employee Status
+              .dropdown-menu(aria-labelledby='dropdownMenuButton')
+                a.dropdown-item(href='/company/activate_employee/#{employee.id}') Active
+                a.dropdown-item(href='/company/terminate_employee/#{employee.id}') Terminate
+                a.dropdown-item(href='#' data-toggle="modal" data-target="#Suspended") Suspended
+                
+               
+             &nbsp;
+
+            .row
+             .col-md-12
+              .card 
+                .card-header
+                  .card-title Employee Details
+                .card-body
+                  .row
+                   .col-md-4(style='text-align:center')
+                    img(src=employee.files.passport_photo, alt="",width='50%')
+                    .row(style='margin-top:10px')
+                     .col-md-6
+                       a(href="/company/edit_employee/#{employee.id}" style='float:right').btn.btn-default 
+                        i.la.la-edit
+                        &nbsp;
+                        | Edit Employee
+                      
+                       
+                     .col-md-6
+                      if employee.salary_details.employee_type !=='Casual Employee'
+                       a(href="/company/calculate_pay/#{employee.id}" style='float:left').btn.btn-primary
+                        i.la.la-calculator
+                        &nbsp;
+                        | Calculate #{month} Pay
+                      if employee.salary_details.employee_type ==='Casual Employee'
+                       a(href="#}" style='float:left' data-toggle="modal" data-target="#casual").btn.btn-primary
+                        i.la.la-plus
+                        &nbsp;
+                        | Add Today's Pay (#{today})
+                      
+                   .col-md-4
+                    p Fullname: #{employee.first_name} #{employee.last_name}
+                    p Email: #{employee.username}
+                    p Phone No: #{employee.contact_details.official_phone_no}
+                    p Job Number: #{employee.hr_details.job_number}
+                    p Job title: #{employee.hr_details.job_title}
+                    p Employee Type: #{employee.salary_details.employee_type}
+                    p Department: #{employee.hr_details.department}
+                    if employee.status === 'Active'
+                     p Status: 
+                      span.badge.badge-primary Active
+                    if employee.status ==='Terminated'
+                     p Status: 
+                      span.badge.badge-danger Terminated
+                    if employee.status ==='Suspended'
+                     p Status: 
+                      span.badge.badge-dark Suspended
+                    p Gross Pay: 
+                     span.mydiv(style='font-weight:bold') #{employee.salary_details.salary}  
+                     |  #{employee.salary_details.salary_type}
+                     a(href="#"  data-toggle="modal" data-target="#editSalary") 
+                      i.la.la-edit
+                      &nbsp;
+                      | Edit
+                    p Income Tax Type: #{employee.salary_details.income_tax}
+                    p Payment Type: #{employee.salary_details.payment_type}
+                   .col-md-4
+                    p Resident: 
+                     span.badge.badge-dark #{employee.resident_type}
+                    p Region: #{employee.hr_details.region}
+                    if employee.manager === false
+                     if employee.hr_details.reports_to !==''
+                      p Reports to: #{employee.hr_details.reports_to}
+                    if employee.manager === true
+                     p Head of #{employee.hr_details.head_of_department}
+                    p Date of Employment: #{employee.hr_details.date_of_employment}
+                    p Contract Start Date: #{employee.hr_details.contract_start_date}
+                    p Contract End Date: #{employee.hr_details.contract_end_date}
+                    p Contract Duration: #{employee.hr_details.contract_duration} year(s)
+                    p Level of Education: #{employee.education.level_of_education}
+                    p Institution: #{employee.education.university}
+                    a(href="" data-toggle="modal" data-target="#nextkin") View Next of Kin
+              
+              // Benefits
+              if employee.employee_type !=='Casual Employee'
+               .card
+                .card-header(style='background-color:gray')
+                 .card-title(style='color:white;font-weight:bolder') Benefits
+                  &nbsp;
+                  span.badge.badge-dark #{employee_benefits.length}
+                  if employee.status ==='Active'
+                
+                    button.btn.btn-primary(style='float:right' data-toggle="modal" data-target="#addBenefit") 
+                      i.la.la-plus
+                      &nbsp;
+                      | Add Item
+                .card-body
+                          table.table.mytable
+                              thead
+                               tr
+                                th Title
+                                th Amount (#{employee.salary_details.payment_currency})
+                                th Status
+                                th Type
+                                
+                                th Added On
+                                if employee.status === 'Active'
+                                 th Actions
+                              tbody
+                               each benefit in employee_benefits
+                                tr
+                                 td=benefit.type
+                                 td 
+                                  span.mydiv(style='font-weight:bold') #{benefit.amount}
+                                 td 
+                                  if benefit.status === 'Active'
+                                    span.badge.badge-success Active
+                                  if benefit.status === 'Inactive'
+                                   span.badge.badge-danger Inactive
+                                 td
+                                  | #{benefit.post}
+                                 
+                                 td=benefit.added_on
+                                 if employee.status === 'Active'
+                                  td
+                                   if benefit.status === 'Active'
+                                    a(href="/company/deactivate_benefit/#{employee.id}/#{benefit.id}").btn.btn-danger Deactivate
+                                   if benefit.status === 'Inactive'
+                                    a(href="/company/activate_benefit/#{employee.id}/#{benefit.id}").btn.btn-primary Activate
+                                   &nbsp;&nbsp;
+                                   a(href="/company/delete_benefit/#{employee.id}/#{benefit.id}")
+                                    i.la.la-trash(style='color:red')
+              // Deductions
+              if employee.employee_type !=='Casual Employee'
+               .card
+                .card-header(style='background-color:gray')
+                 .card-title(style='color:white;font-weight:bolder') Deductions
+                  &nbsp;
+                  span.badge.badge-dark #{employee_deducts.length}
+                  if employee.status ==='Active'
+                
+                    button.btn.btn-primary(style='float:right' data-toggle="modal" data-target="#addDeduct") 
+                      i.la.la-plus
+                      &nbsp;
+                      | Add Item
+                .card-body
+                          table.table.mytable
+                              thead
+                               tr
+                                th Type
+                                th Amount (#{employee.salary_details.payment_currency})
+                                th Account/Bank Name
+                                th Account/Bank Number
+                                th Type
+                                th Status
+                                th Added On
+                                if employee.status === 'Active'
+                                 th Actions
+                              tbody
+                               each deduct in employee_deducts
+                                tr
+                                 td=deduct.type
+                                 td 
+                                  span.mydiv(style='font-weight:bold') #{deduct.amount}
+                                 td
+                                  if deduct.account_name === ''
+                                   p ....
+                                  if deduct.account_name !== ''
+                                   p #{deduct.account_name}
+                                 td
+                                  if deduct.account_number === ''
+                                   p ....
+                                  if deduct.account_number !== ''
+                                   p #{deduct.account_number}
+                                 td #{deduct.tax}
+                                 td
+                                  if deduct.status === 'Active'
+                                    span.badge.badge-success Active
+                                  if deduct.status === 'Inactive'
+                                   span.badge.badge-danger Inactive
+                                 td=deduct.added_on
+                                 if employee.status === 'Active'
+                                  td
+                                   if deduct.status === 'Active'
+                                    a(href="/company/deactivate_deduct/#{employee.id}/#{deduct.id}").btn.btn-danger Deactivate
+                                   if deduct.status === 'Inactive'
+                                    a(href="/company/activate_deduct/#{employee.id}/#{deduct.id}").btn.btn-primary Activate
+                                   &nbsp;&nbsp;
+                                   a(href="/company/delete_deduct/#{employee.id}/#{deduct.id}")
+                                    i.la.la-trash(style='color:red')
+
+
+              // Loans
+              if employee.employee_type !=='Casual Employee'
+               .card
+                .card-header(style='background-color:gray')
+                  .card-title(style='color:white;font-weight:bolder') Loans
+                   &nbsp;
+                   span.badge.badge-dark #{employee_loans.length}
+                   if employee.status ==='Active'
+                    button.btn.btn-primary(style='float:right' data-toggle="modal" data-target="#addLoan") 
+                      i.la.la-plus
+                      &nbsp;
+                      | Add Item
+                .card-body
+                          table.table.mytable
+                              thead
+                               tr
+                                th Type
+                                th Loan Amount (#{employee.salary_details.payment_currency})
+                                th Amount (#{employee.salary_details.payment_currency}) (Monthly)
+                                th Start Date
+                                th End Date
+                              
+                                th Account/Bank Name
+                                th Account/Bank Number
+                                th Status
+                                th Added On
+                                if employee.status==='Active'
+                                 th Actions
+                              tbody
+                               each loan in employee_loans
+                                tr
+                                 td=loan.type
+                                 td #{employee.salary_details.payment_currency} #{loan.loan_amount}
+                                 td 
+                                  span.mydiv(style='font-weight:bold') #{loan.amount}
+                                 td #{loan.start_date}
+                                 td #{loan.end_date}
+                                 td
+                                  if loan.account_name === ''
+                                   p ....
+                                  if loan.account_name !== ''
+                                   p #{loan.account_name}
+                                 td
+                                  if loan.account_number === ''
+                                   p ....
+                                  if loan.account_number !== ''
+                                   p #{loan.account_number}
+                                
+                                 td
+                                  if loan.status === 'Active'
+                                    span.badge.badge-success Active
+                                  if loan.status === 'Inactive'
+                                   span.badge.badge-danger Inactive
+                                 td=loan.added_on
+                                 if employee.status === 'Active'
+                                  td
+                                    if loan.status === 'Active'
+                                     a(href="/company/deactivate_loan/#{employee.id}/#{loan.id}").btn.btn-danger Deactivate
+                                    if loan.status === 'Inactive'
+                                     a(href="/company/activate_loan/#{employee.id}/#{loan.id}").btn.btn-primary Activate
+                                    &nbsp;&nbsp;
+                                    a(href="/company/delete_loan/#{employee.id}/#{loan.id}")
+                                     i.la.la-trash(style='color:red')
+              
+              
+                 
+              
+              // Relief
+              if employee.resident_type ==='Resident'
+               if employee.employee_type !=='Casual Employee'
+                .card
+                 .card-header(style='background-color:gray')
+                  .card-title(style='color:white;font-weight:bolder') Relief
+                   &nbsp;
+                   span.badge.badge-dark #{reliefs.length}
+                   if employee.status ==='Active' && employee.resident_type ==='Resident'
+                
+                    button.btn.btn-primary(style='float:right' data-toggle="modal" data-target="#addRelief") 
+                      i.la.la-plus
+                      &nbsp;
+                      | Add Item
+                 .card-body
+                  .row
+                   .col-md-12
+                    table.table.mytable
+                     thead
+                      tr
+                        th Title
+                        th Amount(monthly)
+                        
+                        th Status
+                        th Action
+                     
+                     tbody
+                      each relief in reliefs
+                       tr
+                        td=relief.title
+                        td 
+                         span.mydiv(style='font-weight:bold') #{relief.amount}
+                        td
+                                    if relief.status === 'Active'
+                                      span.badge.badge-success Active
+                                    if relief.status === 'Inactive'
+                                      span.badge.badge-danger Inactive
+                        td
+                                    if relief.status === 'Active'
+                                      a(href="/company/deactivate_relief/#{employee.id}/#{relief.id}").btn.btn-danger Deactivate
+                                    if relief.status === 'Inactive'
+                                      a(href="/company/activate_relief/#{employee.id}/#{relief.id}").btn.btn-primary Activate
+                                      &nbsp;&nbsp;
+                                    a(href="/company/delete_relief/#{employee.id}/#{relief.id}")
+                                      i.la.la-trash(style='color:red')
+                      
+              // Expenses
+              if employee.employee_type !=='Casual Employee'
+               .card
+                .card-header(style='background-color:gray')
+                  .card-title(style='color:white;font-weight:bolder') Expenses
+                   &nbsp;
+                   span.badge.badge-dark #{expenses.length}
+                
+                .card-body
+                        table.table.mytable
+                              thead
+                               tr
+                                
+                                th Employee
+                                th Type
+                                th Amount (#{employee.salary_details.payment_currency})
+                                th Receipt
+                                th Status
+                                th Added On
+                                if employee.status === 'Active'
+                                 th Actions
+                                
+                                
+                              tbody
+                               each expense in expenses
+                                tr
+                                 td=expense.employee
+                                 td=expense.type
+                                 td 
+                                  span.mydiv(style='font-weight:bold') #{expense.amount}
+                                 td
+                                  a(href=expense.receipt download)
+                                   i.la.la-download
+                                   &nbsp;
+                                   | Download Receipt
+                                 
+                                 td
+                                  if expense.status ==='Pending'
+                                   span.badge.badge-dark #{expense.status}
+                                  if expense.status ==='Active'
+                                   span.badge.badge-success #{expense.status}
+                                  if expense.status ==='Declined'
+                                   span.badge.badge-danger #{expense.status}
+                                  if expense.status === 'Paid'
+                                   span.badge.badge-info #{expense.status}
+                                 td=expense.added_on
+                                 if employee.status === 'Active'
+                                  td 
+                                   if expense.status ==='Active'
+                                    p ....
+                                   if expense.status ==='Paid'
+                                    p ....
+                                   
+                                   if expense.status ==='Declined'
+                                    p ....
+                                   if expense.status === 'Pending'
+                                    a(href="/company/accept_expense/#{employee.id}/#{expense.id}").btn.btn-primary
+                                      | Accept Expense
+                                    &nbsp;
+
+                                    a(href="/company/decline_expense/#{employee.id}/#{expense.id}").btn.btn-danger Decline Expense
+              
+              
+                
+
+              // Tax Exemption
+              if employee.employee_type !=='Casual Employee'
+               if employee.salary_details.tax_exemption_val === true
+                .card 
+                  .card-header(style='background-color:gray')
+                    .card-title(style='color:white;font-weight:bolder') Tax Exemption
+                  .card-body
+                   if employee.salary_details.tax_exemption_val === false
+                    .row
+                     .col-md-12(style='text-align:center')
+                       p No tax exemption found.
+             
+                   if employee.salary_details.tax_exemption_val === true
+             
+                    .row
+                     .col-md-12
+                      
+                       table.table.mytable
+                              thead
+                               tr
+                                
+                                th Certificate No
+                                th Exemption Amount
+                                th Approved
+                                th Actions
+                              tbody
+                               tr
+                                td=employee.salary_details.tax_exemption.exemption_certificate_no
+                                td 
+                                 span.mydiv(style='font-weight:bold') #{employee.salary_details.tax_exemption.disability_exemption_amount}
+                                td
+                                 if employee.salary_details.tax_exemption.approval === true
+                                  span.badge.badge-success True
+                                 if employee.salary_details.tax_exemption.approval ===false
+                                  span.badge.badge-danger False
+                                td
+                                 if employee.salary_details.tax_exemption.approval === true
+                                  a(href="/company/decline_exemption/#{employee.id}").btn.btn-danger Decline
+                                 
+                                 if employee.salary_details.tax_exemption.approval ===false
+                                  a(href="/company/accept_exemption/#{employee.id}").btn.btn-primary Accept
+                
+                                 
+             
+                                
+
+                      
+
+                      
+
+
+              if employee.employee_type !=='Casual Employee'
+               .card
+                .card-header(style='background-color:gray')
+                  .card-title(style='color:white;font-weight:bolder') Pension
+                .card-body
+                    if employee.pension ===false
+                     div(style='text-align:center')
+                      p No item found.
+                    if employee.pension ===true
+                      table.table
+                              thead
+                               tr
+                                
+                                th Amount (#{employee.salary_details.payment_currency})
+                                th Mode
+                                
+                              tbody
+                               tr
+                                td 
+                                 span.mydiv(style='font-weight:bold') #{employee.pension_amount}
+                                td Montly
+                  
+              // Payment Details
+              .card
+               .card-header(style='background-color:gray')
+                .card-title(style='color:white;font-weight:bolder') Payment Details 
+               .card-body  
+                      .row
+                       .col-md-12
+                  
+                         select.form-control(id='payment_option' name='payment_type' required)
+                          option(value='') Choose one payment option
+                          option(value='Bank Transfer') Bank Transfer
+                          option(value='Mobile Money') Mobile Money
+                      hr
+                      #mobile
+                       form(action="/company/add_mobile_details/#{employee.id}", method="POST")
+                        .row
+                         .col-md-4
+                          .form-group
+                            label(for="") Mobile Network
+                            select.form-control(name='mobile_network')
+                              option(value='') Choose Mobile Network
+                              option(value='Airtel') Airtel
+                              option(value='Safaricom') Safaricom
+                              option(value='Telkom') Telkom
+                         .col-md-4
+                          .form-group
+                            label(for="") Mobile Number
+                            input.form-control(type='tel' name='mobile_number' placeholder='Mobile Number 2547********' )
+                         .col-md-4
+                           .form-group
+                            br
+                            button.btn.btn-primary Save
+                        hr
+                      
+                      #bank
+                       form(action="/company/add_bank_details/#{employee.id}" method='POST')
+                        .row
+                          .col-md-4
+                            .form-group
+                              label(for='email') Bank Account Name
+                              input.form-control(type="text" name='bank_account_name' placeholder='Bank Account Name' value='#{employee.first_name} #{employee.middle_name} #{employee.last_name}')
+                                  
+                          .col-md-4
+                            .form-group
+                              
+                              label(for='email') Bank Account No
+                              input.form-control(type="number"  name='bank_account_no' placeholder='Bank Account Number')
+                              
+                          .col-md-4
+                            .form-group
+                              label(for='email') Bank Name
+                              select.form-control(name='bank_name')
+                                  option(value='') Choose Bank
+                                  each bank in banks
+                                   option(value=bank.title) #{bank.title} bank
+                            
+                          .col-md-4
+                           .form-group
+                            label(for='email') Bank Branch
+                            input.form-control(type="text" name='bank_branch' placeholder='Bank Branch')
+                            
+                          .col-md-4
+                           .form-group
+                            label(for='email') Bank Branch Code
+                            input.form-control(type="text" name='bank_branch_code' placeholder='Bank Branch Code') 
+                          .col-md-4
+                            .form-group
+                              br
+                              button.btn.btn-primary Save 
+                       hr
+                      .row(style='margin-top:20px')
+                       .col-md-12
+                         table.table.mytable#pay
+                              thead
+                               tr
+                                th Type
+                                th Mobile Network
+                                th Mobile Number
+                                th Bank Name
+                                th Bank Account Name
+                                th Bank Account Number
+                                th Bank Branch
+                                th Bank Branch Code
+                                th Status
+                                th Actions
+                              tbody
+                               each pay in employee.salary_details.bank_details
+                                tr
+                                 td #{pay.type}
+                                 td 
+                                  if pay.type === 'Mobile Money'
+                                   | #{pay.mobile_network}
+                                  if pay.type === 'Bank Transfer'
+                                   | ....
+                                 td
+                                  if pay.type === 'Mobile Money'
+                                   | #{pay.mobile_number}
+                                  if pay.type === 'Bank Transfer'
+                                   | ....
+                                 td
+                                  if pay.type === 'Mobile Money'
+                                   | ....
+                                  if pay.type === 'Bank Transfer'
+                                   | #{pay.bank_name}
+                                 td
+                                  if pay.type === 'Mobile Money'
+                                   | ....
+                                  if pay.type === 'Bank Transfer'
+                                   | #{pay.bank_account_name}
+                                 td
+                                  if pay.type === 'Mobile Money'
+                                   | ....
+                                  if pay.type === 'Bank Transfer'
+                                   | #{pay.bank_account_no}
+                                 td
+                                  if pay.type === 'Mobile Money'
+                                   | ....
+                                  if pay.type === 'Bank Transfer'
+                                   | #{pay.bank_branch}
+                                 td
+                                  if pay.type === 'Mobile Money'
+                                   | ....
+                                  if pay.type === 'Bank Transfer'
+                                   | #{pay.bank_branch_code}
+                                 td
+                                  if pay.status !== 'Primary'
+                                   | ....
+                                  if pay.status === 'Primary'
+                                   span.badge.badge-primary Primary
+                                 td
+                                  if pay.status !=='Primary'
+                                   a(href="/company/make_primary/#{employee.id}/#{pay.no}").btn.btn-primary Make Primary
+                                   &nbsp;
+                                   a(href="/company/delete_payment/#{employee.id}/#{pay.no}")
+                                    i.la.la-trash(style='color:red')
+                                  if pay.status === 'Primary'
+                                   | ....
+              if employee.employee_type !== 'Casual Employee'                    
+               #payments
+                .card
+                 .card-header(style='background-color:gray')
+                  .card-title(style='color:white;font-weight:bolder') Payment History
+                 .card-body
+                   .row
+                    .col-md-12(style='overflow-x:scroll')
+                      table.table.mytable#pay
+                              thead
+                               tr
+                                th No
+                                
+                                th Status
+                                th Month
+                                th Year
+                                th Basic Amount
+                                th Total Post Benefit
+                                th Total Expense Amount
+                                th Total Gross Amount
+                                th 1st Deductions
+                                th Pension
+                                th Pension Amount
+                                th Taxable Amount
+                                th Income Tax Type
+                                th Total Tax
+                                th Tax Exemption Certificate
+                                th Tax Exemption Amount
+                                th Total Relief Amount
+                                th PAYE
+                                th Total Deduction Amount
+                                th Total Loan Amount
+                                th Total Pre Benefits
+                                th Net Amount
+                                th NITA
+                                th Payment Method
+                                th Mobile Network
+                                th Mobile Number
+                                th Bank Acc Name
+                                th Bank Acc Number
+                                th Bank Name
+                                th Bank Branch
+                                th Bank Branch Code
+                                th Date
+                                th Confirm
+                                th Action
+                                
+                                
+                              tbody
+                               each pay in pays
+                                tr
+                                  td=pay.no
+                              
+                                  td 
+                                    if pay.status === 'Pending'
+                                      span.badge.badge-dark #{pay.status}
+                                    if pay.status === 'Confirmed'
+                                      span.badge.badge-success #{pay.status}
+                                  td=pay.month
+                                  td=pay.year
+                                  td  #{pay.gross_amount}
+                                  td  #{pay.post_benefits}
+                                  td  #{pay.expense_amount}
+                                  td  #{pay.total_gross_amount}
+                                  td  #{pay.before_deductions_total}
+                                  td  #{pay.pension}
+                                  td
+                                   if pay.pension ===true
+                                    | #{pay.employee_pension}
+                                   if pay.pension ===false
+                                    | ....
+                                  td #{pay.taxable_amount}
+                                  td  #{pay.income_tax}
+                                  td #{pay.tax_amount}
+                                  td 
+                                   if pay.tax_exemption === true
+                                    | #{pay.tax_certificate_number}
+                                   if pay.tax_exemption === false
+                                    | ....
+                                  td 
+                                   if pay.tax_exemption === true
+                                    | #{pay.tax_exemption_amount}
+                                   if pay.tax_exemption === false
+                                    | ....
+                                  
+                                  td  #{pay.relief_amount}
+                                  td  #{pay.PAYE}
+                                  td  #{pay.deduction_amount}
+                                  td  #{pay.loan_amount}
+                                  td  #{pay.pre_benefits}
+                                  td  #{pay.net_amount}
+                                  td  #{pay.nita}
+                                  td=pay.payment_method
+                                  td
+                                   if pay.payment_method === 'Mobile Money'
+                                    | #{pay.payment_details.mobile_network}
+                                   if pay.payment_method !== 'Mobile Money'
+                                    | ....
+                                  td
+                                   if pay.payment_method === 'Mobile Money'
+                                    | #{pay.payment_details.mobile_number}
+                                   if pay.payment_method !== 'Mobile Money'
+                                    | ....
+                                  td
+                                   if pay.payment_method === 'Bank Transfer'
+                                     | #{pay.payment_details.bank_account_name}
+                                   if pay.payment_method !== 'Bank Transfer'
+                                    | ....
+                                  td
+                                   if pay.payment_method === 'Bank Transfer'
+                                    | #{pay.payment_details.bank_account_no}
+                                   if pay.payment_method !== 'Bank Transfer'
+                                    | ....
+                                  td
+                                   if pay.payment_method === 'Bank Transfer'
+                                    | #{pay.payment_details.bank_name}
+                                   if pay.payment_method !== 'Bank Transfer'
+                                    | ....
+                                  td
+                                   if pay.payment_method === 'Bank Transfer'
+                                    | #{pay.payment_details.bank_branch}
+                                   if pay.payment_method !== 'Bank Transfer'
+                                    | ....
+                                  td
+                                   if pay.payment_method === 'Bank Transfer'
+                                    | #{pay.payment_details.bank_branch_code}
+                                   if pay.payment_method !== 'Bank Transfer'
+                                    | ....
+                                  td=pay.date
+                                  td
+                                   a(href="/company/view_pay/#{employee.id}/#{pay.id}").btn.btn-primary
+                                    | View Pay
+                                   &nbsp;&nbsp;
+                                  td
+                                    
+                                   if pay.status === 'Confirmed'
+                                    p ....
+                                   if pay.status === 'Pending'
+                                    a(href="/company/delete_pay/#{employee.id}/#{pay.id}")
+                                     i.la.la-trash(style='color:red')
+              // Files
+              .card
+               .card-header(style='background-color:gray')
+                .card-title(style='color:white;font-weight:bolder') File Details
+               .card-body
+                .row
+                 .col-md-12
+                  a(href=employee.files.resume_letter target='_blank' download).btn.btn-success
+                   i.la.la-download
+                   &nbsp;
+                   | Resume Letter
+                  &nbsp;
+                  
+                  a(href=employee.files.cover_letter target='_blank' download).btn.btn-success
+                   i.la.la-download
+                   &nbsp;
+                   | Cover Letter
+                  &nbsp;
+                  a(href=employee.files.certificate target='_blank' download).btn.btn-success
+                   i.la.la-download
+                   &nbsp;
+                   | Certificate
+
+
+    // Suspended
+    #casual.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+     .modal-dialog.modal-lg(role='document')
+      .modal-content
+        .modal-header
+            h5#exampleModalLabel.modal-title Add Today's Pay (#{today})
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+          .row
+           .col-md-12
+            form.form(action='/company/add_today_pay/#{employee.id}',method='POST')
+              
+                
+              .form-group
+               label(for="title") Amount: #{employee.salary_details.payment_currency} #{employee.salary_details.salary}
+               input.form-control(type='hidden' name='salary' value=employee.salary_details.salary min=1 placeholder='Salary')
+              .form-group
+               label(for="title") Date: #{today}
+               input.form-control(type='hidden' value=today name='date')
+              
+              .form-group
+               label(for="title") Bonus Amount (optional)
+               input.form-control(type='number' name='bonus' value=0 placeholder='Bonus Amount' min=0 )
+              .form-group
+               label(for="title") Back Pay (optional)
+               input.form-control(type='number' name='back_pay' value=0 placeholder='Back Pay' min=0 )
+              .form-group
+                label(for='date') Choose Date
+                input.form-control(type='date' name='date2' required)
+              .form-group
+               label(for="title") Comment
+               textarea.form-control( name="comment", cols="20", rows="10")
+              if attendances.length >0 
+               .form-group
+                ul.list-group
+                  each attendance in attendances
+                   li.list-group-item
+                    span #{attendance.department}: #{attendance.hours} hour(s).
+                p(style='font-weight:bold;margin-top:20px') Total Hours: #{total_hours} / #{setting.hours}
+                 
+                
+              if attendances.length <1
+               div(style='text-align:center')
+                p No attendances found.
+            
+              .form-group
+               button.btn.btn-primary Save
+          
+                  
+          
+        .modal-footer
+            button.btn.btn-secondary(type='button' data-dismiss='modal') Close  
+    // Suspended
+    #Suspended.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+     .modal-dialog.modal-lg(role='document')
+      .modal-content
+        .modal-header
+            h5#exampleModalLabel.modal-title Suspension Details
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+          .row
+           .col-md-12
+            form.form(action='/company/suspension/#{employee.id}',method='POST')
+              
+                
+              .form-group
+               label(for="title") Amount to be deducted (#{employee.salary_details.payment_currency}) 
+               input.form-control(type='number' name='salary' min=1 placeholder='Salary' required)
+              .form-group
+               label(for="title") Start Date
+               input.form-control(type='date' name='start_date' required)
+              .form-group
+               label(for="title") End Date
+               input.form-control(type='date' name='end_date' required)
+              .form-group
+               label(for="title") Duration(weeks)
+               input.form-control(type='number' name='duration' placeholder='Duration' min=1  required)
+            
+              .form-group
+               button.btn.btn-primary Save
+          .row
+            .col-md-12
+              table.table
+               thead
+                tr
+                 th Deducted Amount
+                 th Start Date
+                 th End Date
+                 th Duration
+               tbody
+                if employee.suspension_details.length <1
+                 tr
+                  td(colspan='4' style='text-align:center')
+                   | No data found
+                
+                if employee.suspension_details.length > 0
+                 each suspension in employee.suspension_details
+                  tr
+                    td  #{employee.salary_details.payment_currency}  #{suspension.salary}
+                    td #{suspension.start_date}
+                    td #{suspension.end_date}
+                    td #{suspension.duration}
+                  
+          
+        .modal-footer
+            button.btn.btn-secondary(type='button' data-dismiss='modal') Close              
+                
+    // Edit Salary
+    #editSalary.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+     .modal-dialog.modal-lg(role='document')
+      .modal-content
+        .modal-header
+            h5#exampleModalLabel.modal-title Edit Salary
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+          .row
+           .col-md-12
+            form.form(action='/company/edit_employee_salary/#{employee.id}',method='POST')
+              
+                
+              .form-group
+               label(for="title") Salary #{employee.salary_details.payment_currency} (#{employee.salary_details.salary_type})
+               input.form-control(type='number' name='salary' min=1 placeholder='Salary' required)
+             
+            
+              .form-group
+               button.btn.btn-primary Save
+          .row
+            .col-md-12
+              table.table
+               thead
+                tr
+                 th Salary
+                 th Status
+                 th Added On
+               tbody
+                each history in employee.salary_details.salary_history
+                 tr
+                  td #{history.payment_currency} #{history.salary}
+                  td 
+                   if history.status === 'Current'
+                    span.badge.badge-info  Current
+                   if history.status !== 'Current'
+                    | ....
+                  td 
+                    if history.added_on !==undefined
+
+                     | #{history.added_on}
+                    if history.added_on ===undefined
+                     | ....
+        .modal-footer
+            button.btn.btn-secondary(type='button' data-dismiss='modal') Close          
+           
+    // Loans
+    #addRelief.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+     .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+            h5#exampleModalLabel.modal-title Add Relief
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+            form.form(action='/company/add_employee_relief/#{employee.id}',method='POST')
+              .form-group
+               label(for="title") Choose a relief
+               select.form-control#relief(name='type' required)
+                option(value='') Choose a relief
+                each rel in rels
+                 option(value=rel.item) #{rel.item}
+              #insurance_relief
+                .form-group
+                  label(for='name') Type of Policy
+                  select.form-control(name='policy')
+                    option(value='') Choose one option
+                    option(value='Life Insurance') Life Insurance
+                    option(value='Education Insurance') Education Insurance
+                    option(value='Health Insurance') Health Insurance
+                .form-group
+                  label(for='name') Name of Insurance Company
+                  input.form-control(type='text', name='name_of_insurance_company' placeholder='Name of Insurance Company')
+                .form-group
+                  label(for='name') Pin of Insurance Company
+                  input.form-control(type='text', name='pin_of_insurance_company' placeholder='Pin of Insurance Company')
+                .form-group
+                  label(for='name') Sum Assured
+                  input.form-control(type='number', name='sum_assured' min=1 placeholder='Sum Assured')
+                .form-group
+                  label(for='name') Monthly Premium Payable
+                  input.form-control(type='number', name='monthly_premium_payable' min=1 placeholder='Monthly Premium Payable')
+                .form-group
+                  label(for='name') Maturity Period
+                  input.form-control(type='number', name='maturity_period' min=1 placeholder='Maturity Period')
+                
+               
+
+
+              #other  
+                .form-group
+                  label(for="title") Total Amount #{employee.salary_details.payment_currency} (Monthly)
+                  input.form-control(type='number' name='amount' min=1 placeholder='Total Amount' )
+    
+              .form-group
+                  button.btn.btn-primary Save
+        .modal-footer
+            button.btn.btn-secondary(type='button' data-dismiss='modal') Close        
+    // Loans
+    #addLoan.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+     .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+            h5#exampleModalLabel.modal-title Add Loan
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+            form.form(action='/company/add_employee_loan/#{employee.id}',method='POST')
+              .form-group
+               label(for="title") Choose a Loan
+               select.form-control(name='type')
+                option(value='') Choose a Loan
+                each loan in loans
+                 option(value=loan.title) #{loan.title}
+                
+              .form-group
+               label(for="title") Loan Amount (#{employee.salary_details.payment_currency}) 
+               input.form-control(type='number' name='loan_amount' min=1 placeholder='Loan Amount' required)
+              .form-group
+               label(for="title") Total Amount (#{employee.salary_details.payment_currency}) (Monthly)
+               input.form-control(type='number' name='amount' min=1 placeholder='Total Amount' required)
+              .form-group
+               label(for='start') Start Date
+               input.form-control(type='date',name='start_date',required)
+              .form-group
+               label(for='end') End Date
+               input.form-control(type='date',name='end_date',required)
+               
+
+                
+              .form-group
+               label(for="title") Account/Bank Name
+               input.form-control(type='text' name='account_name' placeholder='Account Name/Bank Name' )
+              .form-group
+               label(for="title") Account/Bank Number
+               input.form-control(type='text' name='account_number' placeholder='Account Number' )
+                  
+            
+              .form-group
+               button.btn.btn-primary Save
+        .modal-footer
+            button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+    // Benefits
+    #addBenefit.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+     .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+            h5#exampleModalLabel.modal-title Add New Benefit
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+            form.form(action='/company/add_employee_benefit/#{employee.id}',method='POST')
+              .form-group
+               label(for="title") Choose a benefit
+               select.form-control#benefit_type(name='type' required)
+                option(value='') Choose a benefit
+                each benefit in benefits
+                 option(value=benefit.title) #{benefit.title}
+              #houseallowance
+                .form-group
+                  label(for="title") Type of Employee  
+                  select.form-control(name='type_of_employee')
+                    option(value='') Chose one option
+                    option(value='Director/Whole time service director') Director/Whole time service director
+                    option(value='Agricultural employee') Agricultural employee
+                    option(value='Any other employee') Any other employee
+                .form-group
+                  
+                  label(for="title") Type of Housing 
+                  select.form-control(name='type_of_housing')
+                    option(value='') Chose one option
+                    option(value='Benefit not given') Benefit not given
+                    option(value="Employer's Owned House") Employer's Owned House
+                    option(value="Employer's Rented House") Employer's Rented House
+                    option(value='Agriculture Farm') Agriculture Farm
+                    option(value='House to Non full time service Director') House to Non full time service Director
+
+                .form-group
+                  label(for='title') Market Rate/value
+                  input.form-control(type='number' name='market_rate' placeholder='Market Rate/value')
+                .form-group
+                  label(for='title') Rent Recovered From Employee
+                  input.form-control(type='number' name='rent_recovered_from_employee' value=0 placeholder='Rent Recovered From Employee')
+                .form-group
+                  label(for='title') Net value of housing
+                  input.form-control(type='number' name='net_value_of_housing' placeholder='Net value of housing')
+                .form-group
+                  label(for='title') Total Gross Amount ( Basic Pay + Benefits ) #{employee.salary_details.payment_currency} #{total_gross_pay}
+                  input.form-control(type='hidden' name='total_gross_pay' value=total_gross_pay placeholder='Total Gross Amount')
+                 
+              #static
+               .form-group
+                label(for='name') Total Benefit Amount
+                input.form-control(type="number" placeholder='Total Benefit Amount' name='amount')
+
+
+              #nonecash
+               .form-group
+                label(for='name') Nature of Allowance
+                select.form-control(name='nature_of_allowance')
+                  option(value='') Choose one option
+                  option(value='Gift') Gift
+                  option(value='Other Non Cash Allowances') Other Non Cash Allowances
+               .form-group
+                label(for='name') Total Cost of Allowance p.m
+                input.form-control(type='number' name='total_cost_of_allowance' placeholder='Total Cost of Allowance')
+              // mobile benefit
+              #mobile_benefit
+               .form-group
+                label(for='title') Total Amount of Bill
+                input.form-control(type='number' name='total_amount_of_bill' min=1 placeholder='Total Amount of Bill')
+
+
+              // furniture benefit
+              #furniture_benefit
+               .form-group
+                label(for='title') Type of Furniture
+                select.form-control(name='type_of_furniture')
+                 option(value='') Choose one option
+                 option(value='Hired') Hired
+                 option(value='Owned') Owned
+               .form-group
+                label(for='') Cost of Owned or Leased Furniture
+                input.form-control(type='number' placeholder='Cost of Owned or Leased Furniture' name='cost_of_owned_or_leased_furniture')
+
+              // per diem
+              #perdiem
+               .form-group
+                label(for='title') Number of Days
+                input.form-control(type='number' name='number_of_days' min=1 placeholder='Number of Days')
+               .form-group
+                label(for='title') Total Amount Paid
+                input.form-control(type='number' name='total_amount_paid' min=1 placeholder='Total Amount Paid')
+              
+
+              //meal benefit
+              #mealbenefit
+               .form-group
+                 label(for='title') Cost of Meal Benefit
+                 input.form-control(type='number' name='cost_of_meal_benefit' min=1 placeholder='Cost of Meal Benefit')
+              
+              // car benefit
+              #carbenefit 
+               .form-group
+                label(for="title") Cost of Motor Vehicle  
+                input.form-control(type='number' name='cost_of_motor_vehicle' min=1 placeholder='Cost of Motor Vehicle')
+               .form-group
+                  label(for="title") Car Registration No 
+                  input.form-control(type='text' name='car_registration_no' placeholder='Car Registration No' )
+               .form-group
+                  label(for="title") Car Make
+                  input.form-control(type='text' name='car_make' placeholder='Car Make' )
+               .form-group
+                  label(for="title") Car Body Type
+                  select.form-control(name='car_body_type')
+                   option(value='') Choose one option
+                   option(value='Pick Ups, Panel Vans Uncovered') Pick Ups, Panel Vans Uncovered
+                   option(value='Land Rovers/ Cruisers(excludes Range Rovers and vehicles of similar nature)') Land Rovers/ Cruisers(excludes Range Rovers and vehicles of similar nature)
+                   option(value='Saloon Hatch Backs and Estates') Saloon Hatch Backs and Estates
+               .form-group
+                  label(for="title") CC Ratings
+                  select.form-control(name='cc_rating')
+                   option(value='') Choose one option
+                   each rate in rates
+                    option(value=rate.cubic_centimetres) #{rate.cubic_centimetres} cc
+               .form-group
+                  label(for="title") Type of car cost
+                  select.form-control(name='type_of_car_cost')
+                   option(value='') Choose one option
+                   option(value='Hired') Hired
+                   option(value='Owned') Owned
+               .form-group
+                  label(for="title") Cost of hiring/leasing
+                  input.form-control(type='Number' name='cost_of_hiring'  placeholder='Cost of hiring/leasing' )
+              .form-group
+               label(for="title") Choose one option
+               select.form-control(name='post' required )
+                option(value='') Choose one option
+                option(value='PostPaid') Post Paid
+                option(value='PrePaid') PrePaid
+
+
+               
+               
+              .form-group
+               button.btn.btn-primary Save
+        .modal-footer
+            button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+    // nextkin
+    #nextkin.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+     .modal-dialog.modal-lg(role='document')
+      .modal-content
+        .modal-header
+            h5#exampleModalLabel.modal-title Next of Kin
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+            table.table
+             thead
+              tr
+                th Fullname
+                th Relation
+                th Phone
+                th Email
+             tbody
+              if employee.contact_details.next_of_kin.length < 1
+                tr
+                  td(colspan=4 style='text-align:center')
+                   | No person found.
+              if employee.contact_details.next_of_kin.length > 0
+                tr
+                  td #{employee.contact_details.next_of_kin[0].next_of_kin_fullname}
+                  td #{employee.contact_details.next_of_kin[0].next_of_kin_relation}
+                  td #{employee.contact_details.next_of_kin[0].next_of_kin_phone}
+                  td #{employee.contact_details.next_of_kin[0].next_of_kin_email}
+              if employee.contact_details.next_of_kin.length > 1
+                tr
+                  td #{employee.contact_details.next_of_kin[1].next_of_kin_fullname2}
+                  td #{employee.contact_details.next_of_kin[1].next_of_kin_relation2}
+                  td #{employee.contact_details.next_of_kin[1].next_of_kin_phone2}
+                  td #{employee.contact_details.next_of_kin[1].next_of_kin_email2}
+
+               
+              
+            
+                
+            
+              
+        .modal-footer
+            button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+    // Deductions
+    #addDeduct.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+     .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+            h5#exampleModalLabel.modal-title Add Deduction
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+            form.form(action='/company/add_employee_deduction/#{employee.id}',method='POST')
+              .form-group
+               label(for="title") Choose a deduction
+               select.form-control#deduction_option(name='type')
+                option(value='') Choose a deduction
+                each deduct in deductions
+                 option(value=deduct.title) #{deduct.title}
+              #ded  
+                .form-group
+                  label(for="title") Total Amount (#{employee.salary_details.payment_currency}) 
+                  input.form-control(type='number' name='amount' min=1 placeholder='Total Amount')
+                .form-group
+                  label(for="title") Account/Bank Name
+                  input.form-control(type='text' name='account_name' placeholder='Account Name/Bank Name' value='#{employee.first_name} #{employee.middle_name} #{employee.last_name}' )
+                .form-group
+                  label(for="title") Account/Bank Number
+                  input.form-control(type='text' name='account_number' placeholder='Account Number' )
+                
+              
+               
+              .form-group
+               button.btn.btn-primary Save
+                
+            
+              
+        .modal-footer
+            button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+    
+   
+    script(src='/admin/assets/js/core/jquery.3.2.1.min.js')
+    script(src='/admin/assets/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js')
+    script(src='/admin/assets/js/core/popper.min.js')
+    script(src='/admin/assets/js/core/bootstrap.min.js')
+    script(src='/admin/assets/js/plugin/chartist/chartist.min.js')
+    script(src='/admin/assets/js/plugin/chartist/plugin/chartist-plugin-tooltip.min.js')
+    
+    script(src='/admin/assets/js/plugin/bootstrap-toggle/bootstrap-toggle.min.js')
+    script(src='/admin/assets/js/plugin/jquery-mapael/jquery.mapael.min.js')
+    script(src='/admin/assets/js/plugin/jquery-mapael/maps/world_countries.min.js')
+    script(src='/admin/assets/js/plugin/chart-circle/circles.min.js')
+    script(src='/admin/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js')
+    script(src='/admin/assets/js/ready.min.js')
+    script(src='/admin/assets/js/demo.js')
+
+    // DATABLES
+    script(src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js")
+    script(src="https://cdn.datatables.net/buttons/1.6.4/js/dataTables.buttons.min.js")
+    script(src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.flash.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js")
+    script(src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.html5.min.js")
+    script(src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.print.min.js")
+    script.
+       let x = document.querySelectorAll(".mydiv"); 
+        for (let i = 0, len = x.length; i < len; i++) { 
+            let num = Number(x[i].innerHTML) 
+                      .toLocaleString('en'); 
+            x[i].innerHTML = num; 
+            x[i].classList.add("currSign"); 
+        } 
+    script.
+      $(document).ready(()=>{
+        $('#payment_option').change(function() {
+            const value = $(this).val();
+            
+            if(value==='')
+            {
+              $('#mobile').css({"display":"none"})
+              $('#bank').css({"display":"none"})
+            }
+            if(value==='Bank Transfer')
+            {
+               $('#mobile').css({"display":"none"})
+               $('#bank').css({"display":"block"})
+            }
+            if(value==='Mobile Money')
+            {
+              $('#mobile').css({"display":"block"})
+              $('#bank').css({"display":"none"})
+            }
+        });
+        $('#deduction_option').change(function() {
+            const value = $(this).val();
+            
+            if(value==='')
+            {
+              $('#ded').css({"display":"block"})
+             
+            }
+            else if(value==='NHIF')
+            {
+              $('#ded').css({"display":"none"})
+             
+            }
+            else if(value==='NSSF')
+            {
+              $('#ded').css({"display":"none"})
+             
+            }
+            else
+            {
+                $('#ded').css({"display":"block"})
+            }
+        });
+       
+        $('#relief').change(function() {
+            const value = $(this).val();
+            if(value==='Insurance Relief')
+            {
+              $('#insurance_relief').css({"display":"block"})
+              $('#other').css({"display":"none"})
+            }
+            else if(value==='Personal Relief')
+            {
+              $('#insurance_relief').css({"display":"none"})
+              $('#other').css({"display":"none"})
+            }
+            else
+            {
+             $('#insurance_relief').css({"display":"none"})
+             $('#other').css({"display":"block"})
+            }
+
+
+        })
+
+        $('#benefit_type').change(function() {
+            const value = $(this).val();
+            
+            if(value==='')
+            {
+               $('#carbenefit').css({"display":"none"})
+               $('#mealbenefit').css({"display":"none"})
+               $('#perdiem').css({"display":"none"})
+                $('#mobile_benefit').css({"display":"none"})
+                 $('#furniture_benefit').css({"display":"none"})
+                 $('#nonecash').css({"display":"none"})
+                   $('#static').css({"display":"none"})
+                   $('#houseallowance').css({"display":"none"})
+            }
+            else if(value==='Car Benefit')
+            {
+               $('#carbenefit').css({"display":"block"})
+                $('#mealbenefit').css({"display":"none"})
+                $('#perdiem').css({"display":"none"})
+                $('#mobile_benefit').css({"display":"none"})
+                 $('#furniture_benefit').css({"display":"none"})
+                 $('#nonecash').css({"display":"none"})
+                   $('#static').css({"display":"none"})
+                   $('#houseallowance').css({"display":"none"})
+               
+            }
+            else if(value==='Meal Allowance')
+            {
+                $('#carbenefit').css({"display":"none"})
+                $('#mealbenefit').css({"display":"block"})
+                $('#perdiem').css({"display":"none"})
+                $('#mobile_benefit').css({"display":"none"})
+                 $('#furniture_benefit').css({"display":"none"})
+                 $('#nonecash').css({"display":"none"})
+                   $('#static').css({"display":"none"})
+                   $('#houseallowance').css({"display":"none"})
+            }
+            else if(value==='Per Diem')
+            {
+                $('#carbenefit').css({"display":"none"})
+                $('#mealbenefit').css({"display":"none"})
+                $('#perdiem').css({"display":"block"})
+                $('#mobile_benefit').css({"display":"none"})
+                 $('#furniture_benefit').css({"display":"none"})
+                 $('#nonecash').css({"display":"none"})
+                   $('#static').css({"display":"none"})
+                   $('#houseallowance').css({"display":"none"})
+            }
+            else if(value==='Mobile Benefit')
+            {
+               $('#carbenefit').css({"display":"none"})
+                $('#mealbenefit').css({"display":"none"})
+                $('#perdiem').css({"display":"none"})
+                $('#mobile_benefit').css({"display":"block"})
+                 $('#furniture_benefit').css({"display":"none"})
+                 $('#nonecash').css({"display":"none"})
+                   $('#static').css({"display":"none"})
+                   $('#houseallowance').css({"display":"none"})
+            }
+            else if(value==='Furniture Allowance')
+            {
+              $('#carbenefit').css({"display":"none"})
+                $('#mealbenefit').css({"display":"none"})
+                $('#perdiem').css({"display":"none"})
+                $('#mobile_benefit').css({"display":"none"})
+                $('#furniture_benefit').css({"display":"block"})
+                $('#nonecash').css({"display":"none"})
+                  $('#static').css({"display":"none"})
+                  $('#houseallowance').css({"display":"none"})
+            }
+            else if(value==='Non Cash Allowances')
+            {
+               $('#carbenefit').css({"display":"none"})
+                $('#mealbenefit').css({"display":"none"})
+                $('#perdiem').css({"display":"none"})
+                $('#mobile_benefit').css({"display":"none"})
+                $('#furniture_benefit').css({"display":"none"})
+                $('#nonecash').css({"display":"block"})
+                $('#static').css({"display":"none"})
+                $('#houseallowance').css({"display":"none"})
+            }
+            else if(value==='Housing Allowance')
+            {
+                $('#carbenefit').css({"display":"none"})
+                $('#mealbenefit').css({"display":"none"})
+                $('#perdiem').css({"display":"none"})
+                $('#mobile_benefit').css({"display":"none"})
+                $('#furniture_benefit').css({"display":"none"})
+                $('#nonecash').css({"display":"none"})
+                $('#static').css({"display":"none"})
+                $('#houseallowance').css({"display":"block"})
+
+            }
+            else
+            {
+                $('#carbenefit').css({"display":"none"})
+                $('#mealbenefit').css({"display":"none"})
+                $('#perdiem').css({"display":"none"})
+                $('#mobile_benefit').css({"display":"none"})
+                $('#furniture_benefit').css({"display":"none"})
+                $('#nonecash').css({"display":"none"})
+                $('#static').css({"display":"block"})
+                $('#houseallowance').css({"display":"none"})
+            }
+
+        });
+      })
+
+
+
+
+
+    script.
+       $(document).ready( function () {
+            $('.mytable').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
+            } );
+       })

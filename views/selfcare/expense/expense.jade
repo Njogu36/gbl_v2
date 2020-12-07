@@ -1,0 +1,217 @@
+doctype html
+html
+  head
+    meta(http-equiv='X-UA-Compatible' content='IE=edge,chrome=1')
+    title Expenses | GBL CENTUM
+    meta(content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport')
+    link(rel='shortcut icon', type='image/x-icon', href='/images/icon.png')
+    link(rel='stylesheet' href='/admin/assets/css/bootstrap.min.css')
+    link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i')
+    link(rel='stylesheet' href='/admin/assets/css/ready.css')
+    link(rel='stylesheet' href='/admin/assets/css/demo.css')
+    // DATABLES
+    link(rel="stylesheet", href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css")
+    link(rel="stylesheet", href="https://cdn.datatables.net/buttons/1.6.4/css/buttons.dataTables.min.css")
+  body
+    .wrapper
+      .main-header
+        .logo-header
+          a.logo(href='#')
+            img(src="/images/logo.png",width='70px', alt="")
+          button.navbar-toggler.sidenav-toggler.ml-auto(type='button' data-toggle='collapse' data-target='collapse' aria-controls='sidebar' aria-expanded='false' aria-label='Toggle navigation')
+            span.navbar-toggler-icon
+          button.topbar-toggler.more
+            i.la.la-ellipsis-v
+        nav.navbar.navbar-header.navbar-expand-lg
+          .container-fluid
+            
+            ul.navbar-nav.topbar-nav.ml-md-auto.align-items-center
+              
+              
+              li.nav-item.dropdown
+                a.dropdown-toggle.profile-pic(data-toggle='dropdown' href='#' aria-expanded='false')
+                  img.img-circle(src=user.files.passport_photo alt='user-img' width='36')
+                  span #{user.first_name} #{user.last_name}
+                ul.dropdown-menu.dropdown-user
+                  
+                
+                  a.dropdown-item(href='/log_out')
+                    i.fa.fa-power-off
+                    |  Logout
+                // /.dropdown-user
+      .sidebar
+        .scrollbar-inner.sidebar-wrapper
+          .user
+            .photo
+              img(src=user.files.passport_photo)
+            .info
+              a(data-toggle='collapse' href='#collapseExample' aria-expanded='true')
+                span
+                  | #{user.first_name} #{user.last_name}
+                  span.user-level #{user.hr_details.job_title}
+                  span.caret
+              .clearfix
+              #collapseExample.collapse.in(aria-expanded='true' style='')
+                ul.nav
+                  li
+                    a(href='/profile')
+                      span.link-collapse View Profile
+                  li
+                    a(href='/edit_profile')
+                      span.link-collapse Edit Profile
+                 
+          ul.nav
+            
+           
+            li.nav-item
+              a(href='/leaves')
+                i.la.la-keyboard-o
+                p Leaves
+               
+            li.nav-item
+              a(href='/expenses')
+                i.la.la-th
+                p Expenses
+            li.nav-item
+              a(href='/history')
+                i.la.la-history
+                p Payment History
+               
+            
+             
+                
+            
+      .main-panel
+        .content
+          .container-fluid
+            h4.page-title Expenses
+            .row
+             .col-md-12
+              != messages('message', locals)
+            .row
+             .col-md-12
+              if user.status !== 'Terminated'
+               button.btn.btn-primary(data-toggle="modal" data-target="#applyLeave") Add Expense
+            .row(style='margin-top:20px')
+             .col-md-12
+                      table.table.mytable
+                              thead
+                               tr
+                                
+                                th Type
+                                th Amount
+                                th Receipt
+                                th Added On
+                                th Status
+                                th Actions
+                                
+                                
+                              tbody
+                               each expense in myexpenses
+                                tr
+                                 td=expense.type
+                                 td #{user.salary_details.payment_currency} #{expense.amount}
+                                 td
+                                  a(href=expense.receipt download)
+                                   i.la.la-download
+                                   &nbsp;
+                                   | Download Receipt
+                                 td=expense.added_on
+                                 td
+                                  if expense.status ==='Pending'
+                                   span.badge.badge-dark #{expense.status}
+                                 
+                                  if expense.status ==='Active'
+                                   span.badge.badge-success #{expense.status}
+                                  if expense.status ==='Declined'
+                                   span.badge.badge-danger #{expense.status}
+                                  if expense.status === 'Paid'
+                                   span.badge.badge-info #{expense.status}
+                                 td
+                                  if expense.status === 'Active'
+                                   p ....
+                                  if expense.status === 'Paid'
+                                   p ....
+                                  if expense.status !== 'Active' && expense.status !== 'Paid'
+                                    a(href="/delete_expense/#{expense.id}")
+                                     i.la.la-trash(style='color:red')
+                                   
+      
+      
+        // Modal
+
+        #applyLeave.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+         .modal-dialog(role='document')
+          .modal-content
+           .modal-header
+              h5#exampleModalLabel.modal-title Add Expense
+              button.close(type='button' data-dismiss='modal' aria-label='Close')
+               span(aria-hidden='true') ×
+           .modal-body
+              form.form(action='/apply_expense',method='POST',enctype='multipart/form-data')
+                .form-group
+                  label(for="title") Type of Expense
+                  select.form-control(name='type' required)
+                   option(value='') Choose type of expense
+                    each expense in expenses
+                     option(value=expense.title) #{expense.title}
+                .form-group
+                  label(for='start_date') Upload Receipt
+                  input.form-control(type='file' name='file' accept='.jpg, .png, .jpeg' required)
+                .form-group
+                  label(for='start_date') Amount Spent (KES)
+                  input.form-control(type='number' name='amount' min=10 placeholder='Amount Spent' required)
+                
+                .form-group
+                  label(for="message") Message
+                  textarea.form-control(name="message", cols="30", rows="10")
+              
+                .form-group
+                  button.btn.btn-primary Save
+           .modal-footer
+              button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+              
+              
+              
+           
+            
+        
+   
+    script(src='/admin/assets/js/core/jquery.3.2.1.min.js')
+    script(src='/admin/assets/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js')
+    script(src='/admin/assets/js/core/popper.min.js')
+    script(src='/admin/assets/js/core/bootstrap.min.js')
+    script(src='/admin/assets/js/plugin/chartist/chartist.min.js')
+    script(src='/admin/assets/js/plugin/chartist/plugin/chartist-plugin-tooltip.min.js')
+    
+    script(src='/admin/assets/js/plugin/bootstrap-toggle/bootstrap-toggle.min.js')
+    script(src='/admin/assets/js/plugin/jquery-mapael/jquery.mapael.min.js')
+    script(src='/admin/assets/js/plugin/jquery-mapael/maps/world_countries.min.js')
+    script(src='/admin/assets/js/plugin/chart-circle/circles.min.js')
+    script(src='/admin/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js')
+    script(src='/admin/assets/js/ready.min.js')
+    script(src='/admin/assets/js/demo.js')
+    // DATABLES
+    script(src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js")
+    script(src="https://cdn.datatables.net/buttons/1.6.4/js/dataTables.buttons.min.js")
+    script(src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.flash.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js")
+    script(src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.html5.min.js")
+    script(src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.print.min.js")
+   
+
+
+
+
+
+    script.
+       $(document).ready( function () {
+            $('.mytable').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
+            } );
+       })

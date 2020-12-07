@@ -1,0 +1,150 @@
+doctype html
+html
+  head
+    meta(http-equiv='X-UA-Compatible' content='IE=edge,chrome=1')
+    title Edit Profile | GBL CENTUM
+    meta(content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport')
+    link(rel='shortcut icon', type='image/x-icon', href='/images/icon.png')
+    link(rel='stylesheet' href='/admin/assets/css/bootstrap.min.css')
+    link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i')
+    link(rel='stylesheet' href='/admin/assets/css/ready.css')
+    link(rel='stylesheet' href='/admin/assets/css/demo.css')
+  body
+    .wrapper
+      .main-header
+        .logo-header
+          a.logo(href='#')
+            img(src="/images/logo.png",width='70px', alt="")
+          button.navbar-toggler.sidenav-toggler.ml-auto(type='button' data-toggle='collapse' data-target='collapse' aria-controls='sidebar' aria-expanded='false' aria-label='Toggle navigation')
+            span.navbar-toggler-icon
+          button.topbar-toggler.more
+            i.la.la-ellipsis-v
+        nav.navbar.navbar-header.navbar-expand-lg
+          .container-fluid
+            
+            ul.navbar-nav.topbar-nav.ml-md-auto.align-items-center
+              
+              
+              li.nav-item.dropdown
+                a.dropdown-toggle.profile-pic(data-toggle='dropdown' href='#' aria-expanded='false')
+                  img.img-circle(src=user.files.passport_photo alt='user-img' width='36')
+                  span #{user.first_name} #{user.last_name}
+                ul.dropdown-menu.dropdown-user
+                  
+                
+                  a.dropdown-item(href='/log_out')
+                    i.fa.fa-power-off
+                    |  Logout
+                // /.dropdown-user
+      .sidebar
+        .scrollbar-inner.sidebar-wrapper
+          .user
+            .photo
+              img(src=user.files.passport_photo)
+            .info
+              a(data-toggle='collapse' href='#collapseExample' aria-expanded='true')
+                span
+                  | #{user.first_name} #{user.last_name}
+                  span.user-level #{user.hr_details.job_title}
+                  span.caret
+              .clearfix
+              #collapseExample.collapse.in(aria-expanded='true' style='')
+                ul.nav
+                  
+                  li
+                    a(href='/profile')
+                      span.link-collapse View Profile
+                  li
+                    a(href='/edit_profile')
+                      span.link-collapse Edit Profile
+                 
+          ul.nav
+            
+           
+            li.nav-item
+              a(href='/leaves')
+                i.la.la-keyboard-o
+                p Leaves
+               
+            li.nav-item
+              a(href='/expenses')
+                i.la.la-th
+                p Expenses
+            li.nav-item
+              a(href='/history')
+                i.la.la-history
+                p Payment History
+               
+            
+             
+                
+            
+      .main-panel
+        .content
+          .container-fluid
+            h4.page-title Edit Profile
+            .row
+             .col-md-12
+              != messages('message', locals)
+            .row
+             .col-md-6
+              .card
+               .card-header
+                 .card-title Edit Profile Image
+               .card-body
+                 img(src=user.files.passport_photo,width='50%', alt="")
+                 form(action="/update_image" method='POST' enctype='multipart/form-data')
+                  .form-group
+                    label(for="") Update Passport Photo:
+                    input.form-control(type="file" name='file' required)
+                  .form-group
+                    button.btn.btn-primary Save
+
+          
+             .col-md-6
+               .card
+                 .card-header
+                   .card-title Edit Email
+                 .card-body
+                   form(action="/update_email" method='POST')
+                     .form-group
+                       label(for="") Email:
+                       input.form-control(type="email" name='email' placeholder='Enter Email' value=user.username required)
+                  
+                     .form-group
+                       button.btn.btn-primary Save
+               .card
+                 .card-header
+                   .card-title Edit Password
+                 .card-body
+                   form(action="/update_password" method='POST')
+                     .form-group
+                       label(for="") New Password:
+                       input.form-control(type="password" name='password' placeholder='New Password' required)
+                     .form-group
+                       label(for="") Confirm Password:
+                       input.form-control(type="password" name='password2' placeholder='Confirm Password' required)
+                     .form-group
+                       button.btn.btn-primary Save
+                      
+
+              
+              
+           
+            
+        
+   
+    script(src='/admin/assets/js/core/jquery.3.2.1.min.js')
+    script(src='/admin/assets/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js')
+    script(src='/admin/assets/js/core/popper.min.js')
+    script(src='/admin/assets/js/core/bootstrap.min.js')
+    script(src='/admin/assets/js/plugin/chartist/chartist.min.js')
+    script(src='/admin/assets/js/plugin/chartist/plugin/chartist-plugin-tooltip.min.js')
+    
+    script(src='/admin/assets/js/plugin/bootstrap-toggle/bootstrap-toggle.min.js')
+    script(src='/admin/assets/js/plugin/jquery-mapael/jquery.mapael.min.js')
+    script(src='/admin/assets/js/plugin/jquery-mapael/maps/world_countries.min.js')
+    script(src='/admin/assets/js/plugin/chart-circle/circles.min.js')
+    script(src='/admin/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js')
+    script(src='/admin/assets/js/ready.min.js')
+    script(src='/admin/assets/js/demo.js')

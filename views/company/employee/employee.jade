@@ -1,0 +1,214 @@
+doctype html
+html
+  head
+    meta(http-equiv='X-UA-Compatible' content='IE=edge,chrome=1')
+    title Employees | GBL CENTUM
+    meta(content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport')
+    link(rel='shortcut icon', type='image/x-icon', href='/images/icon.png')
+    link(rel='stylesheet' href='/admin/assets/css/bootstrap.min.css')
+    link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i')
+    link(rel='stylesheet' href='/admin/assets/css/ready.css')
+    link(rel='stylesheet' href='/admin/assets/css/demo.css')
+
+    // DATABLES
+    link(rel="stylesheet", href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css")
+    link(rel="stylesheet", href="https://cdn.datatables.net/buttons/1.6.4/css/buttons.dataTables.min.css")
+  body
+    .wrapper
+      .main-header
+        .logo-header
+          a.logo(href='#')
+            img(src=company.logo,width='70px', alt="")
+          button.navbar-toggler.sidenav-toggler.ml-auto(type='button' data-toggle='collapse' data-target='collapse' aria-controls='sidebar' aria-expanded='false' aria-label='Toggle navigation')
+            span.navbar-toggler-icon
+          button.topbar-toggler.more
+            i.la.la-ellipsis-v
+        nav.navbar.navbar-header.navbar-expand-lg
+          .container-fluid
+            
+            ul.navbar-nav.topbar-nav.ml-md-auto.align-items-center
+              
+              
+              li.nav-item.dropdown
+                a.dropdown-toggle.profile-pic(data-toggle='dropdown' href='#' aria-expanded='false')
+                  img.img-circle(src='/images/user.png' alt='user-img' width='36')
+                  span #{user.first_name} #{user.last_name}
+                ul.dropdown-menu.dropdown-user
+                  
+                
+                  a.dropdown-item(href='/company/log_out')
+                    i.fa.fa-power-off
+                    |  Logout
+                // /.dropdown-user
+      .sidebar
+        .scrollbar-inner.sidebar-wrapper
+          .user
+            .photo
+              img(src='/images/user.png')
+            .info
+              a(data-toggle='collapse' href='#collapseExample' aria-expanded='true')
+                span
+                  | #{user.first_name} #{user.last_name}
+                  span.user-level Company
+                  
+              .clearfix
+             
+                 
+          ul.nav
+            
+            li.nav-item
+              a(href='/company/employees')
+                i.la.la-users
+                p Employees
+                span.badge.badge-primary #{employees.length}
+            li.nav-item
+              a(href='/company/leaves')
+                i.la.la-keyboard-o
+                p Leaves
+                if leaves2.length > 0
+                 span.badge.badge-primary #{leaves2.length}
+            li.nav-item
+              a(href='/company/expenses')
+                i.la.la-th-list
+                p Expenses
+                if expenses2.length > 0
+                 span.badge.badge-primary #{expenses2.length}
+               
+            
+            li.nav-item
+              a(href='/company/reports')
+                i.la.la-signal
+                p Reports
+               
+            if user.role ==='super admin'  || user.role ==='HR admin'  
+              li.nav-item
+                a(href='/company/settings')
+                  i.la.la-gear
+                  p Settings
+             
+                
+            
+      .main-panel
+        .content
+          .container-fluid
+            h4.page-title Employees
+            
+            .row(style='margin-top:20px')
+                    .col-md-12(style='margin-bottom:5px')
+                        != messages('message', locals)
+                    .col-md-12(style='float:right')
+                             a.btn.btn-primary(href='/company/add_new_employee' )
+                              i.la.la-plus
+                              &nbsp;
+                              | Add New Employee
+                             &nbsp;
+                             &nbsp;
+                             a.btn.btn-dark(href='/company/casuals' )
+                              i.la.la-send
+                              &nbsp;
+                              | Casual Employees
+                             a(href="/company/bulk_pay" style='float:right').btn.btn-primary
+                              i.la.la-calculator
+                              &nbsp;
+                              |  Calculate Bulk Salary Payments For #{month}
+                             if pays.length > 0
+                               a(href="/company/bulk_pay" style='float:right;margin-right:5px').btn.btn-info
+                                | View #{month} Payments
+                    
+            
+                
+
+
+
+                     
+            .row
+                    .col-md-12(style='margin-top:30px')
+                       table.table.mytable
+                              thead
+                               tr
+                                th
+                                th Firstname
+                                th Lastname
+                                th Email
+                                th Job Title
+                                th Employee Type
+                                th Department
+                                th Region
+                                th Status
+                                th Actions
+                                
+                              tbody
+                               each employee in employees
+                                tr
+                                  td
+                                    img(src=employee.files.passport_photo width='50px')
+                                  // uploads/passport_photos/passport_photo1605203016379.jpeg
+                                  td=employee.first_name
+                                  td=employee.last_name
+                                  td
+                                   if employee.username !==''
+                                    | #{employee.username}
+                                   if employee.username ===''
+                                    | ....
+                                  td=employee.hr_details.job_title
+                                  td=employee.salary_details.employee_type
+                                  td=employee.hr_details.department
+                                  td=employee.hr_details.region
+                                  td
+                                    if employee.status === 'Active'
+                                     span.badge.badge-primary #{employee.status}
+                                    if employee.status === 'Terminated'
+                                     span.badge.badge-danger #{employee.status}
+                                    if employee.status === 'Suspended'
+                                     span.badge.badge-dark #{employee.status}
+                                  td
+                                    a(href="/company/view_employee/#{employee.id}")
+                                     i.la.la-eye(style='color:green;font-size:1.0em')
+                                
+                                
+              
+              
+           
+            
+        
+   
+    script(src='/admin/assets/js/core/jquery.3.2.1.min.js')
+    script(src='/admin/assets/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js')
+    script(src='/admin/assets/js/core/popper.min.js')
+    script(src='/admin/assets/js/core/bootstrap.min.js')
+    script(src='/admin/assets/js/plugin/chartist/chartist.min.js')
+    script(src='/admin/assets/js/plugin/chartist/plugin/chartist-plugin-tooltip.min.js')
+    
+    script(src='/admin/assets/js/plugin/bootstrap-toggle/bootstrap-toggle.min.js')
+    script(src='/admin/assets/js/plugin/jquery-mapael/jquery.mapael.min.js')
+    script(src='/admin/assets/js/plugin/jquery-mapael/maps/world_countries.min.js')
+    script(src='/admin/assets/js/plugin/chart-circle/circles.min.js')
+    script(src='/admin/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js')
+    script(src='/admin/assets/js/ready.min.js')
+    script(src='/admin/assets/js/demo.js')
+
+    // DATABLES
+    script(src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js")
+    script(src="https://cdn.datatables.net/buttons/1.6.4/js/dataTables.buttons.min.js")
+    script(src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.flash.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js")
+    script(src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.html5.min.js")
+    script(src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.print.min.js")
+   
+
+
+
+
+
+    script.
+       $(document).ready( function () {
+            $('.mytable').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
+            } );
+       })
+

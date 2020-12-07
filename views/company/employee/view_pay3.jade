@@ -1,0 +1,380 @@
+doctype html
+html
+  head
+    meta(http-equiv='X-UA-Compatible' content='IE=edge,chrome=1')
+    title View Pay | GBL CENTUM
+    meta(content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport')
+    link(rel='shortcut icon', type='image/x-icon', href='/images/icon.png')
+    link(rel='stylesheet' href='/admin/assets/css/bootstrap.min.css')
+    link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i')
+    link(rel='stylesheet' href='/admin/assets/css/ready.css')
+    link(rel='stylesheet' href='/admin/assets/css/demo.css')
+    style.
+      .currSign:before { 
+            content: '#{company.currency} '; 
+       } 
+
+
+  body
+    .wrapper
+      .main-header
+        .logo-header
+          a.logo(href='#')
+            img(src=company.logo,width='70px', alt="")
+          button.navbar-toggler.sidenav-toggler.ml-auto(type='button' data-toggle='collapse' data-target='collapse' aria-controls='sidebar' aria-expanded='false' aria-label='Toggle navigation')
+            span.navbar-toggler-icon
+          button.topbar-toggler.more
+            i.la.la-ellipsis-v
+        nav.navbar.navbar-header.navbar-expand-lg
+          .container-fluid
+            
+            ul.navbar-nav.topbar-nav.ml-md-auto.align-items-center
+              
+              
+              li.nav-item.dropdown
+                a.dropdown-toggle.profile-pic(data-toggle='dropdown' href='#' aria-expanded='false')
+                  img.img-circle(src='/images/user.png' alt='user-img' width='36')
+                  span #{user.first_name} #{user.last_name}
+                ul.dropdown-menu.dropdown-user
+                  
+                
+                  a.dropdown-item(href='/company/log_out')
+                    i.fa.fa-power-off
+                    |  Logout
+                // /.dropdown-user
+      .sidebar
+        .scrollbar-inner.sidebar-wrapper
+          .user
+            .photo
+              img(src='/images/user.png')
+            .info
+              a(data-toggle='collapse' href='#collapseExample' aria-expanded='true')
+                span
+                  | #{user.first_name} #{user.last_name}
+                  span.user-level Company
+                  
+              .clearfix
+              
+                 
+          ul.nav
+            
+            li.nav-item
+              a(href='/company/employees')
+                i.la.la-users
+                p Employees
+                span.badge.badge-primary #{employees.length}
+            li.nav-item
+              a(href='/company/leaves')
+                i.la.la-keyboard-o
+                p Leaves
+                if leaves2.length > 0
+                 span.badge.badge-primary #{leaves2.length}
+            li.nav-item
+              a(href='/company/expenses')
+                i.la.la-th-list
+                p Expenses
+                if expenses2.length > 0
+                 span.badge.badge-primary #{expenses2.length}
+               
+            
+            li.nav-item
+              a(href='/company/reports')
+                i.la.la-signal
+                p Reports
+               
+            if user.role ==='super admin'  || user.role ==='HR admin'
+              li.nav-item
+                a(href='/company/settings')
+                  i.la.la-gear
+                  p Settings
+             
+                
+            
+      .main-panel
+        .content
+          .container-fluid
+            h4.page-title 
+             a(href="/company/bulk_pay").badge.badge-primary
+                i.la.la-angle-left
+             &nbsp;
+             | View Pay -  #{pay.no}
+             
+             if pay.status !== 'Pending'
+                
+                a.btn.btn-success(style='float:right;margin-right:10px' onclick='SendEmail();')
+                 i.la.la-file-pdf-o
+                 &nbsp;
+                 | Download PDF
+            .row
+             .col-md-12(style='margin-top:20px')
+              != messages('message', locals)
+            
+               
+                
+            .row(Style='margin-top:30px')
+             .col-md-12
+              #dvContents(style='border: 1px dotted black; padding: 5px; width:1200px')
+               input#name(type='hidden' value='#{pay.employee}')
+               table.table( id="tblCustomers" style='border: 1px solid black' cellspacing="0" rules="all" border="1")
+                
+               
+                tbody
+                 tr
+                  td
+                    img(src=company.logo,width='70px', alt="")
+                  td
+                  td
+                   h4(style='font-weight:bold;text-decoration:underline') No: #{pay.no}
+                 tr
+                  td
+                   h6(style='font-weight:bold;text-decoration:underline') Employee Details
+                   p Employee Name: #{employee.first_name} #{employee.middle_name} #{employee.last_name}
+                   p Employee Email: #{employee.username}
+                   p Job Number: #{employee.hr_details.job_number}
+                   p Job Title: #{employee.hr_details.job_title}
+                   p Department: #{employee.hr_details.department}
+                 
+                  td
+                   h6(style='font-weight:bold;text-decoration:underline') Salary Details
+                   p(style='font-weight:bold') #{pay.month}, #{pay.year}
+                   p Date: #{pay.date}
+                   p Tax: #{pay.income_tax}
+                   p Gross Pay: #{pay.gross_amount}
+                   p Net Pay: #{pay.net_amount}
+                   p Tax Pay: #{pay.tax_amount}
+                   if pay.tax_exemption === true
+                     p Tax Exemption Amount: #{pay.tax_exemption_amount}
+                     p Tax Exemption Certificate: #{pay.tax_certificate_number}
+                   
+                   p Status: 
+                    if pay.status === 'Pending'
+                     span(style='background:black;color:white;padding:4px;border-radius:3px') #{pay.status}
+                    if pay.status === 'Confirmed'
+                     span(style='background:green;color:white;padding:4px;border-radius:3px') #{pay.status}
+                  td
+                   h6(style='font-weight:bold;text-decoration:underline') Payment Details
+                   p Payment Method: #{pay.payment_method}
+                   p Currency: #{pay.payment_currency}
+                   if pay.payment_method ==='Mobile Money'
+                    p Mobile Network: #{pay.payment_details.mobile_network}
+                    p Mobile Number: #{pay.payment_details.mobile_number}
+
+                   if pay.payment_method ==='Bank Transfer'
+                    p Bank Account Name: #{pay.payment_details.bank_account_name}
+                    p Bank Account Number: #{pay.payment_details.bank_account_no}
+                    p Bank Name: #{pay.payment_details.bank_name}
+                    p Bank Branch: #{pay.payment_details.bank_branch}
+                    p Bank Branch Code: #{pay.payment_details.bank_branch_code}
+                 tr
+                  td(colspan=3)
+                   p(style='font-weight:bold') Basic Pay: #{pay.gross_amount}
+                 
+                 // BENEFITS
+                 tr
+                  td(colspan=3)
+                   p(style='font-weight:300;text-decoration:underline') Post Benefits
+
+                 if pay.benefit_details.length > 0
+                  each benefit in pay.benefit_details
+                   if benefit.post ==='PostPaid'
+                    tr
+                      td(colspan=3) #{benefit.type}: 
+                       span.mydiv #{benefit.amount}
+                      
+                  
+                 if pay.benefit_details.length < 1
+                  tr
+                   td(colspan=3)
+                    span No benefits found.
+                 // EXPENSES
+                 tr
+                  td(colspan=3)
+                   p(style='font-weight:300;text-decoration:underline') Expenses
+
+                 if pay.expense_details.length > 0
+                  each expense in pay.expense_details
+                   tr
+                    td(colspan=3) #{expense.type}: #{pay.payment_currency} #{expense.amount}
+                 if pay.expense_details.length < 1
+                  tr
+                   td(colspan=3)
+                    span No expenses found.
+                 tr
+                  td(colspan=3)
+                   p(style='font-weight:bold') Total Gross Pay: #{pay.total_gross_amount}
+                 
+
+                 //  PRE DEDUCTIONS
+                 tr
+                  td(colspan=3)
+                   p(style='font-weight:300;text-decoration:underline') Deductions
+
+                 if pay.deduction_details.length > 0
+                  each deduct in pay.deduction_details
+                   if deduct.tax === 'Before Tax'
+                    tr
+                     td(colspan=3) #{deduct.type}: -#{pay.payment_currency} #{deduct.amount}
+
+                 if pay.deduction_details.length < 1 && pay.pension===false
+                  tr
+                   td(colspan=3)
+                    span No deductions found.
+                 if pay.pension ===true
+                  tr 
+                   td(colspan=3) Pension: -#{pay.employee_pension}
+
+                 // TAXABLE PAY
+                 tr
+                  td(colspan=3)
+                   p(style='font-weight:bold') Taxable Amount: #{pay.taxable_amount}
+                 
+                 // INCOME TAX
+                 tr
+                  td(colspan=3)
+                   p(style='font-weight:bold') Income Tax: 
+                    span.mydiv #{pay.tax_amount2}
+
+                 // TAX EXEMPTION
+                 tr
+                  td(colspan=3)
+                   p(style='font-weight:300;text-decoration:underline') Tax Exemption
+                 if pay.tax_exemption === false
+                  tr
+                   td(colspan=3)
+                    span No tax exemption found.
+                 if pay.tax_exemption === true
+                  tr
+                   td(colspan=3) #{pay.tax_exemption_amount}
+
+                 // RELIEF
+                 tr
+                  td(colspan=3)
+                   p(style='font-weight:300;text-decoration:underline') Relief
+                 if pay.relief_details.length < 1
+                  tr
+                   td(colspan=3)
+                    span No reliefs found.
+                 if pay.relief_details.length > 0
+                  each relief in pay.relief_details
+                   tr
+                    td(colspan=3) #{relief.title}: 
+                     span.mydiv #{relief.amount}
+                 
+                 // PAYE
+                 tr
+                  td(colspan=3)
+                   p(style='font-weight:bold') PAYE: 
+                    span.mydiv #{pay.PAYE2}
+                 tr
+                  td(colspan=3)
+                   p(style='font-weight:bold') Total Gross Pay: #{pay.total_gross_amount}
+                 //  PRE DEDUCTIONS
+                 tr
+                  td(colspan=3)
+                   p(style='font-weight:300;text-decoration:underline') Deductions
+
+                 if pay.deduction_details.length > 0
+                  each deduct in pay.deduction_details
+                  
+                    tr
+                     td(colspan=3) #{deduct.type}: -#{pay.payment_currency} #{deduct.amount}
+
+                 if pay.deduction_details.length < 1 
+                  tr
+                   td(colspan=3)
+                    span No deductions found.
+                 if pay.pension ===true
+                  tr 
+                   td(colspan=3) Pension: -#{pay.employee_pension}
+                 tr
+                  td(colspan=3)
+                   p(style='font-weight:300;text-decoration:underline') Loans
+                 // loans
+                 if pay.loan_details.length<1
+                   tr
+                    td(colspan=3)
+                     span No loans found.
+                 if pay.loan_details.length > 0
+                  each loan in pay.loan_details
+                   tr
+                    td #{loan.type}: -#{pay.payment_currency} #{loan.amount}
+                 
+                 // Pre Benefits
+                 tr
+                  td(colspan=3)
+                   p(style='font-weight:300;text-decoration:underline') Pre Benefits
+
+                 if pay.benefit_details.length > 0
+                  each benefit in pay.benefit_details
+                   if benefit.post ==='PrePaid'
+                    tr
+                      td(colspan=3) #{benefit.type}:  
+                       span.mydiv #{benefit.amount}
+                     
+                  
+                 if pay.benefit_details.length < 1
+                  tr
+                   td(colspan=3)
+                    span No benefits found.
+                 //NET PAY
+               
+                 tr
+                  td(colspan=3)
+                   p(style='font-weight:bold') NET AMOUNT: #{pay.net_amount}
+
+                   
+                 tr
+                 
+                   
+
+              
+           
+            
+        
+   
+    script(src='/admin/assets/js/core/jquery.3.2.1.min.js')
+    script(src='/admin/assets/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js')
+    script(src='/admin/assets/js/core/popper.min.js')
+    script(src='/admin/assets/js/core/bootstrap.min.js')
+    script(src='/admin/assets/js/plugin/chartist/chartist.min.js')
+    script(src='/admin/assets/js/plugin/chartist/plugin/chartist-plugin-tooltip.min.js')
+    
+    script(src='/admin/assets/js/plugin/bootstrap-toggle/bootstrap-toggle.min.js')
+    script(src='/admin/assets/js/plugin/jquery-mapael/jquery.mapael.min.js')
+    script(src='/admin/assets/js/plugin/jquery-mapael/maps/world_countries.min.js')
+    script(src='/admin/assets/js/plugin/chart-circle/circles.min.js')
+    script(src='/admin/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js')
+    script(src='/admin/assets/js/ready.min.js')
+    script(src='/admin/assets/js/demo.js')
+    
+    // PDF
+    script(type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.22/pdfmake.min.js')
+    script(type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js')
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/fonts/Roboto/Roboto-Medium.ttf")
+    script.
+       let x = document.querySelectorAll(".mydiv"); 
+        for (let i = 0, len = x.length; i < len; i++) { 
+            let num = Number(x[i].innerHTML) 
+                      .toLocaleString('en'); 
+            x[i].innerHTML = num; 
+            x[i].classList.add("currSign"); 
+        } 
+    script(type='text/javascript').
+        function SendEmail() {
+        html2canvas(document.getElementById('tblCustomers'), {
+        onrendered: function (canvas) {
+            var name = document.getElementById('name').value
+        var data = canvas.toDataURL();
+        var docDefinition = {
+       
+        content: [{
+        image: data,
+        width: 500
+        }]
+        };
+        pdfMake.createPdf(docDefinition).download( name+" - Pay Slip.pdf");
+        }
+        });
+        }
+
